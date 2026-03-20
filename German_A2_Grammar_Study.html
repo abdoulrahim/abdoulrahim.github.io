@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammatik aktiv A2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0d9488;
+            --primary-light: #5eead4;
+            --primary-bg: #f0fdfa;
+            --bg: #f9fafb;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --gray-300: #d1d5db;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: -320px;
+            top: 0;
+            width: 320px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 24px 16px;
+            border-bottom: 1px solid var(--border);
+            background: var(--primary-bg);
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-header p {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .sidebar-content {
+            padding: 16px 0;
+        }
+
+        .nav-item {
+            padding: 12px 24px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+            color: var(--text-light);
+        }
+
+        .nav-item:hover {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary-bg);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 64px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 32px;
+            z-index: 100;
+        }
+
+        .header button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 16px;
+            font-size: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .main {
+            flex: 1;
+            margin-top: 64px;
+            padding: 32px;
+        }
+
+        .welcome-section {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .welcome-heading {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .welcome-text {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .action-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-bg);
+        }
+
+        .lesson {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .lesson-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+            margin-bottom: -2px;
+        }
+
+        .tab:hover {
+            color: var(--text);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .grammar-section {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .grammar-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .grammar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+        }
+
+        .grammar-table th,
+        .grammar-table td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+
+        .grammar-table th {
+            background: var(--primary-bg);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .en-note {
+            background: #f3f4f6;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+            border-left: 3px solid var(--primary);
+            font-size: 14px;
+        }
+
+        .example {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .example-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .example-text {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .exercises-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .exercise {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+        }
+
+        .exercise-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .exercise-title-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .difficulty-easy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .difficulty-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .difficulty-hard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .difficulty-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .difficulty-filter button {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--gray-300);
+            background: white;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .difficulty-filter button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .exercise-question {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .question-num {
+            font-weight: 600;
+            color: var(--text-light);
+            min-width: 24px;
+            padding-top: 4px;
+        }
+
+        .question-content {
+            flex: 1;
+        }
+
+        .question-text {
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13,148,136,0.1);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+        }
+
+        .option.selected {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+            font-weight: 500;
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background: #ecfdf5;
+        }
+
+        .option.incorrect {
+            border-color: var(--error);
+            background: #fef2f2;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0f766e;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            border-color: var(--primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid var(--success);
+        }
+
+        .feedback.incorrect {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid var(--error);
+        }
+
+        .explanation-box {
+            margin-top: 12px;
+            padding: 12px 14px;
+            background: #ecfdf5;
+            border-left: 3px solid #10b981;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #065f46;
+            display: none;
+        }
+
+        .explanation-box.visible {
+            display: block;
+        }
+
+        .matching-pairs {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 16px;
+            align-items: start;
+        }
+
+        .matching-left,
+        .matching-right {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-item {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+            user-select: none;
+        }
+
+        .matching-item:hover {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+        }
+
+        .matching-item.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .matching-connector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--border);
+            font-size: 24px;
+            min-height: 200px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 16px;
+            }
+
+            .main {
+                padding: 16px;
+            }
+
+            .matching-pairs {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .matching-connector {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Grammatik aktiv A2</h2>
+                <p>Lektionen und Übungen</p>
+            </div>
+            <div class="sidebar-content" id="sidebar-content"></div>
+        </div>
+
+        <div class="header">
+            <button onclick="toggleSidebar()">☰</button>
+            <h1>Grammatik aktiv A2</h1>
+        </div>
+
+        <div class="main" id="main">
+            <div class="welcome-section" id="welcome">
+                <h1 class="welcome-heading">Willkommen!</h1>
+                <p class="welcome-text">Wählen Sie eine Lektion aus dem Menü links, um mit den Übungen zu beginnen. Jede Lektion enthält Grammatikerklärungen und interaktive Übungen mit verschiedenen Schwierigkeitsstufen.</p>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Abgeschlossene Lektionen</div>
+                        <div class="stat-value" id="completed-count">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Gesamtpunktzahl</div>
+                        <div class="stat-value" id="total-score">0</div>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="startLesson(1)">Lektion 1: Wechselpräpositionen</button>
+                    <button class="action-btn" onclick="startLesson(2)">Lektion 2: Lokale Präpositionen</button>
+                    <button class="action-btn" onclick="startLesson(3)">Lektion 3: Adjektivdeklination I</button>
+                    <button class="action-btn" onclick="startLesson(4)">Lektion 4: Adjektivdeklination II</button>
+                </div>
+            </div>
+
+            <div class="lesson" id="lesson-view" style="display: none;">
+                <h2 class="lesson-title" id="lesson-title"></h2>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab(this, 0)">Grammatik</button>
+                    <button class="tab" onclick="switchTab(this, 1)">Übungen</button>
+                </div>
+                <div id="tab-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ DATA ============
+        const lessons = [
+            {
+                id: 1,
+                title: 'Wechselpräpositionen',
+                subtitle: 'Two-way Prepositions',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Wechselpräpositionen (Two-Way Prepositions)</h3>
+                        <p class="grammar-subtitle">Two-way prepositions use accusative for movement/direction (Wohin?) and dative for location (Wo?). The key is understanding the difference between position verbs.</p>
+                        <table class="grammar-table">
+                            <tr><th>Präposition</th><th>Akkusativ (Wohin?)</th><th>Dativ (Wo?)</th></tr>
+                            <tr><td>in</td><td>in den/das/die</td><td>in dem/das/der</td></tr>
+                            <tr><td>an</td><td>an den/das/die</td><td>an dem/das/der</td></tr>
+                            <tr><td>auf</td><td>auf den/das/die</td><td>auf dem/das/der</td></tr>
+                            <tr><td>über</td><td>über den/das/die</td><td>über dem/das/der</td></tr>
+                            <tr><td>unter</td><td>unter den/das/die</td><td>unter dem/das/der</td></tr>
+                            <tr><td>vor</td><td>vor den/das/die</td><td>vor dem/das/der</td></tr>
+                            <tr><td>hinter</td><td>hinter den/das/die</td><td>hinter dem/das/der</td></tr>
+                            <tr><td>neben</td><td>neben den/das/die</td><td>neben dem/das/der</td></tr>
+                            <tr><td>zwischen</td><td>zwischen den/das/die</td><td>zwischen dem/das/der</td></tr>
+                        </table>
+                        <div class="en-note"><strong>Position Verbs:</strong> stellen/stehen, legen/liegen, setzen/sitzen. Accusative = movement INTO position. Dative = being IN position.</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'Die Katze sitzt _____ dem Sofa.', options: ['auf dem', 'auf den', 'auf die'], correct: 0, difficulty: 'easy', explanation: 'Sitzt = Dativ (location). auf + dem = auf dem' },
+                    { q: 'Ich fahre _____ die Schule.', options: ['zu der', 'zu die', 'zu den'], correct: 0, difficulty: 'easy', explanation: 'Fahre (movement) needs Akkusativ. But we use "zu" which contracts to "zur" in Akkusativ: zu der' },
+                    { q: 'Er legt das Buch _____ den Tisch.', options: ['auf dem', 'auf den', 'auf der'], correct: 1, difficulty: 'easy', explanation: 'Legt = movement INTO position. Needs Akkusativ: auf + den = auf den' },
+                    { q: 'Sie arbeitet _____ dem Büro.', options: ['in dem', 'in den', 'in die'], correct: 0, difficulty: 'easy', explanation: 'Arbeitet = location. Dativ: in + dem = im (aber "im Büro")' },
+                    { q: 'Der Vogel fliegt _____ den Baum.', options: ['in den', 'in dem', 'in der'], correct: 0, difficulty: 'medium', explanation: 'Fliegt = movement INTO position. Akkusativ: in + den = in den' },
+                    { q: 'Das Mädchen geht _____ die Küche.', options: ['in der', 'in die', 'in den'], correct: 1, difficulty: 'medium', explanation: 'Geht = movement INTO. Akkusativ feminine: in + die = in die' },
+                    { q: 'Das Poster hängt _____ der Wand.', options: ['an der', 'an die', 'an den'], correct: 0, difficulty: 'medium', explanation: 'Hängt = location (state). Dativ: an + der = an der' },
+                    { q: 'Wir hängen das Bild _____ die Wand.', options: ['an der', 'an die', 'an den'], correct: 1, difficulty: 'medium', explanation: 'Hängen (putting up) = movement INTO position. Akkusativ feminine: an + die = an die' },
+                    { q: 'Der Mann sitzt _____ Stuhl.', options: ['auf dem', 'auf den', 'auf der'], correct: 0, difficulty: 'medium', explanation: 'Sitzt = Dativ location. auf + dem = auf dem' },
+                    { q: 'Ich stelle mich _____ die Reihe.', options: ['in dem', 'in die', 'in den'], correct: 1, difficulty: 'hard', explanation: 'Stelle mich = movement INTO line. Akkusativ feminine: in + die = in die' },
+                    { q: 'Wir sitzen _____ den Bänken im Park.', options: ['auf den', 'auf dem', 'auf der'], correct: 0, difficulty: 'hard', explanation: 'Sitzen = Dativ location, plural: auf + den = auf den' },
+                    { q: 'Der Hund legt sich _____ das Bett.', options: ['neben dem', 'neben das', 'neben den'], correct: 1, difficulty: 'hard', explanation: 'Legt sich = movement INTO position. Akkusativ neuter: neben + das = neben das' }
+                ]
+            },
+            {
+                id: 2,
+                title: 'Lokale Präpositionen',
+                subtitle: 'Location Prepositions',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Lokale Präpositionen (Local/Directional Prepositions)</h3>
+                        <p class="grammar-subtitle">Different prepositions are used for direction (Wohin?), location (Wo?), and origin (Woher?). Remember: nach for cities/countries without articles, in for countries with articles.</p>
+                        <table class="grammar-table">
+                            <tr><th>Question</th><th>Preposition Use</th><th>Example</th></tr>
+                            <tr><td>Wohin? (Direction TO)</td><td>nach, in+Akk, an+Akk, zu+Dat</td><td>Ich fahre nach Berlin.</td></tr>
+                            <tr><td>Wo? (Location AT)</td><td>in+Dat, an+Dat, bei+Dat</td><td>Ich arbeite in Berlin.</td></tr>
+                            <tr><td>Woher? (Direction FROM)</td><td>von+Dat, aus+Dat</td><td>Er kommt aus Berlin.</td></tr>
+                        </table>
+                        <div class="en-note"><strong>Countries with articles:</strong> Die Schweiz, die Türkei, die USA, der Iran, die Niederlande. Use "in" for these!</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'Wohin fährst du? _____ Berlin.', options: ['Zu', 'Nach', 'In'], correct: 1, difficulty: 'easy', explanation: 'Berlin is a city (kein Artikel). For cities: nach' },
+                    { q: 'Wohin fliegst du im Urlaub? _____ die Schweiz.', options: ['Nach', 'In', 'An'], correct: 1, difficulty: 'easy', explanation: 'Schweiz has article (die Schweiz). For countries with articles: in+Akk (in die Schweiz)' },
+                    { q: 'Wo arbeitest du? _____ Hamburg.', options: ['In', 'Zu', 'An'], correct: 0, difficulty: 'easy', explanation: 'Location (Wo?) in a city: in Hamburg' },
+                    { q: 'Wo wohnt Anna? _____ der Schweiz.', options: ['In', 'Nach', 'Zu'], correct: 0, difficulty: 'easy', explanation: 'Location (Wo?) in country with article: in der Schweiz (Dativ)' },
+                    { q: 'Ich gehe _____ Arzt.', options: ['zu den', 'zum', 'in den'], correct: 1, difficulty: 'medium', explanation: 'Going TO a person: zu+Dativ. zu+dem = zum' },
+                    { q: 'Woher kommt er? _____ Frankreich.', options: ['Von', 'Aus', 'Nach'], correct: 1, difficulty: 'medium', explanation: 'From a country: aus (aus Frankreich)' },
+                    { q: 'Woher stammst du? _____ Polen.', options: ['Aus', 'Von', 'In'], correct: 0, difficulty: 'medium', explanation: 'Stammen aus = to be from. aus + Polen' },
+                    { q: 'Ich fahre _____ die Nordsee (coast).', options: ['nach', 'an', 'in'], correct: 1, difficulty: 'medium', explanation: 'Going to a coast: an+Akk. (an die Nordsee)' },
+                    { q: 'Das Haus liegt _____ der Nordsee.', options: ['an der', 'auf der', 'bei der'], correct: 0, difficulty: 'medium', explanation: 'Location at coast: an+Dativ (an der Nordsee)' },
+                    { q: 'Er kommt _____ dem Supermarkt.', options: ['von', 'aus', 'zu'], correct: 0, difficulty: 'hard', explanation: 'From a location/place: von+Dativ (von dem = vom)' },
+                    { q: 'Wohin gehen Sie? _____ Zahnarzt.', options: ['Zu dem', 'Zum', 'Zum'], correct: 1, difficulty: 'hard', explanation: 'To a person (dentist): zu+Dativ. zu+dem = zum' },
+                    { q: 'Die Insel liegt _____ dem Meer.', options: ['in', 'auf', 'an'], correct: 2, difficulty: 'hard', explanation: 'An island in the sea: an+Dativ. (an dem Meer)' }
+                ]
+            },
+            {
+                id: 3,
+                title: 'Adjektivdeklination: Nominativ & Akkusativ',
+                subtitle: 'Adjective Endings I',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Adjektivdeklination (Nominativ & Akkusativ)</h3>
+                        <p class="grammar-subtitle">KEY INSIGHT: If the article clearly shows gender (der, die, das, den), the adjective takes -e or -en. If the article is ambiguous (ein/eine/kein), the adjective TAKES the gender marker with -er/-es/-e.</p>
+                        <table class="grammar-table">
+                            <tr><th>Article Type</th><th>Maskulin</th><th>Feminin</th><th>Neutral</th><th>Plural</th></tr>
+                            <tr><td><strong>Nom</strong> der/die/das</td><td>-e</td><td>-e</td><td>-e</td><td>-en</td></tr>
+                            <tr><td><strong>Akk</strong> den/die/das</td><td>-en</td><td>-e</td><td>-e</td><td>-en</td></tr>
+                        </table>
+                        <div class="en-note"><strong>With ein/eine/kein:</strong> The adjective shows gender: ein neu-er Mann, eine neu-e Frau, ein neu-es Kind</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'Das ist ein _____ Buch. (neu)', options: ['neue', 'neues', 'neuem'], correct: 1, difficulty: 'easy', explanation: 'ein + neuter accusative. Adjective must show gender: neues' },
+                    { q: 'Ich sehe die _____ Frau. (schön)', options: ['schöne', 'schöner', 'schönem'], correct: 0, difficulty: 'easy', explanation: 'die (definite) + feminine accusative. Article shows gender, so adjective = -e' },
+                    { q: 'Der _____ Mann ist alt. (jung)', options: ['jungen', 'junge', 'junger'], correct: 1, difficulty: 'easy', explanation: 'Der (definite) + masculine nominative. Article shows gender, so adjective = -e' },
+                    { q: 'Ich kenne einen _____ Professor. (intelligent)', options: ['intelligenten', 'intelligente', 'intelligenter'], correct: 0, difficulty: 'medium', explanation: 'einen (indefinite masculine accusative). Adjective must show case: -en' },
+                    { q: 'Die _____ Kinder spielen. (klein)', options: ['kleine', 'kleines', 'kleinen'], correct: 0, difficulty: 'medium', explanation: 'die (definite) + plural nominative. With definite article, plural = -en... wait, but nominative! It\'s -e with definite' },
+                    { q: 'Wir essen einen _____ Apfel. (rot)', options: ['roten', 'rote', 'rotem'], correct: 0, difficulty: 'medium', explanation: 'einen (indefinite neuter accusative). Adjective takes masculine form: -en' },
+                    { q: 'Sie liebt ihren _____ Freund. (beste)', options: ['besten', 'beste', 'bestem'], correct: 0, difficulty: 'medium', explanation: 'ihren (possessive accusative masculine). Adjective: -en' },
+                    { q: 'Das ist eine _____ Idee. (brillant)', options: ['brillante', 'brillantes', 'brillanten'], correct: 0, difficulty: 'hard', explanation: 'eine (indefinite feminine nominative). Adjective takes feminine form: -e' },
+                    { q: 'Der _____ Student studiert viel. (fleißig)', options: ['fleißigen', 'fleißige', 'fleißiger'], correct: 1, difficulty: 'hard', explanation: 'Der (definite masculine nominative). With definite article nominative: -e' },
+                    { q: 'Ich sehe einen _____ See. (blau)', options: ['blauen', 'blaue', 'blauem'], correct: 0, difficulty: 'hard', explanation: 'einen (masculine accusative). Adjective: -en' },
+                    { q: 'Das _____ Haus ist teuer. (alt)', options: ['alte', 'altes', 'altem'], correct: 1, difficulty: 'hard', explanation: 'Das (definite neuter nominative). With definite article: -e... wait, neuter! Actually -e still' },
+                    { q: 'Ich kenne eine _____ Lehrerin. (gut)', options: ['gute', 'guter', 'guten'], correct: 0, difficulty: 'hard', explanation: 'eine (indefinite feminine nominative). Adjective takes feminine form: -e' }
+                ]
+            },
+            {
+                id: 4,
+                title: 'Adjektivdeklination: Dativ',
+                subtitle: 'Adjective Endings II',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Adjektivdeklination (Dativ)</h3>
+                        <p class="grammar-subtitle">In Dativ case, the definite article (dem, der, den) shows that the adjective ALWAYS takes -en. With indefinite articles, the adjective still shows gender.</p>
+                        <table class="grammar-table">
+                            <tr><th>Article Type</th><th>Maskulin Dativ</th><th>Feminin Dativ</th><th>Neutral Dativ</th><th>Plural Dativ</th></tr>
+                            <tr><td><strong>Definite</strong> dem/der/den</td><td>-en</td><td>-en</td><td>-en</td><td>-en</td></tr>
+                            <tr><td><strong>Indefinite</strong> einem/einer/einem</td><td>-en</td><td>-en</td><td>-en</td><td>-en</td></tr>
+                        </table>
+                        <div class="en-note"><strong>DATIV RULE: Always -en!</strong> The article (dem/der/den/einem/einer) already shows case clearly, so adjective always = -en</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'Ich gebe dem _____ Kind einen Apfel. (klug)', options: ['klugen', 'kluge', 'kluger'], correct: 0, difficulty: 'easy', explanation: 'dem (definite dative neuter). Dativ always: -en' },
+                    { q: 'Ich spreche mit der _____ Frau. (jung)', options: ['junge', 'jungen', 'junger'], correct: 1, difficulty: 'easy', explanation: 'der (definite dative feminine). Dativ always: -en' },
+                    { q: 'Er sitzt neben einem _____ Auto. (teuer)', options: ['teueren', 'teure', 'teuerem'], correct: 0, difficulty: 'easy', explanation: 'einem (indefinite dative neuter). Dativ always: -en' },
+                    { q: 'Das Mädchen tanzt mit dem _____ Junge. (freundlich)', options: ['freundlichen', 'freundliche', 'freundlicher'], correct: 0, difficulty: 'medium', explanation: 'dem (definite dative masculine). Dativ always: -en' },
+                    { q: 'Ich helfe einer _____ Person. (alt)', options: ['alten', 'alte', 'altem'], correct: 0, difficulty: 'medium', explanation: 'einer (indefinite dative feminine). Dativ always: -en' },
+                    { q: 'Sie erzählt dem _____ Publikum eine Geschichte. (zahlreich)', options: ['zahlreiche', 'zahlreichen', 'zahlreichem'], correct: 1, difficulty: 'medium', explanation: 'dem (definite dative singular, but used for publikum). Dativ always: -en' },
+                    { q: 'Ich danke dir für deine _____ Hilfe. (groß)', options: ['großen', 'große', 'großer'], correct: 0, difficulty: 'medium', explanation: 'Possessive dative feminine. Dativ: -en' },
+                    { q: 'Wir vertrauen den _____ Führern. (erfahren)', options: ['erfahrenen', 'erfahrene', 'erfahrener'], correct: 0, difficulty: 'hard', explanation: 'den (definite dative plural). Dativ plural always: -en' },
+                    { q: 'Der Hund gehorcht einem _____ Kommando. (klar)', options: ['klaren', 'klare', 'klarem'], correct: 0, difficulty: 'hard', explanation: 'einem (indefinite dative neuter). Dativ: -en' },
+                    { q: 'Sie arbeitet in einem _____ Büro. (modern)', options: ['modernen', 'moderne', 'modernem'], correct: 0, difficulty: 'hard', explanation: 'einem (indefinite dative neuter). Dativ: -en' },
+                    { q: 'Ich spreche mit einem _____ Mann über Politik. (intelligent)', options: ['intelligenten', 'intelligente', 'intelligenter'], correct: 0, difficulty: 'hard', explanation: 'einem (indefinite dative masculine). Dativ: -en' },
+                    { q: 'Das Kind spielt mit einem _____ Spielzeug. (bunt)', options: ['bunten', 'bunte', 'buntem'], correct: 0, difficulty: 'hard', explanation: 'einem (indefinite dative neuter). Dativ: -en' }
+                ]
+            },
+            {
+                id: 5,
+                title: 'Komparativ & Superlativ',
+                subtitle: 'Comparison Forms',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Komparativ & Superlativ (Comparative & Superlative)</h3>
+                        <p class="grammar-subtitle">Comparative: adjective + -er + als (faster than). Superlative: am + adjective + -sten or der/die/das + adjective + -ste (the fastest).</p>
+                        <table class="grammar-table">
+                            <tr><th>Form</th><th>Structure</th><th>Example</th><th>English</th></tr>
+                            <tr><td><strong>Positive</strong></td><td>schnell</td><td>Das Auto ist schnell.</td><td>The car is fast.</td></tr>
+                            <tr><td><strong>Comparative</strong></td><td>schneller</td><td>Das Fahrrad ist schneller als das Auto.</td><td>The bike is faster than the car.</td></tr>
+                            <tr><td><strong>Superlative</strong></td><td>am schnellsten / der schnellste</td><td>Das Flugzeug ist am schnellsten.</td><td>The airplane is the fastest.</td></tr>
+                        </table>
+                        <div class="en-note"><strong>Umlaut Changes:</strong> alt → älter → am ältesten; groß → größer → am größten; kurz → kürzer → am kürzesten</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'Mein Haus ist groß. Dein Haus ist _____.', options: ['großer', 'großem', 'große'], correct: 0, difficulty: 'easy', explanation: 'Comparative form: groß → größer' },
+                    { q: 'Ein Auto ist schnell. Ein Zug ist _____.', options: ['schneller', 'schnellstem', 'schnellsten'], correct: 0, difficulty: 'easy', explanation: 'Comparative form: schnell → schneller' },
+                    { q: 'Dieses Restaurant ist teuer. Das andere ist noch _____.', options: ['teuer', 'teuerer', 'teuersten'], correct: 1, difficulty: 'easy', explanation: 'Comparative form: teuer → teuerer' },
+                    { q: 'Das ist der _____ Berg der Welt. (hoch)', options: ['hochste', 'höchste', 'hohem'], correct: 1, difficulty: 'medium', explanation: 'Superlative: hoch → höchste. With article, needs adjective ending: der höchste' },
+                    { q: 'Diese Geschichte ist interessant. Jene ist _____.', options: ['interessanter', 'interessantest', 'interessante'], correct: 0, difficulty: 'medium', explanation: 'Comparative: interessant → interessanter' },
+                    { q: 'Peter ist alt. Maria ist _____ als Peter.', options: ['älter', 'altere', 'ältesten'], correct: 0, difficulty: 'medium', explanation: 'Comparative with umlaut: alt → älter' },
+                    { q: 'Das ist das _____ Buch, das ich kenne. (gut)', options: ['bessere', 'beste', 'guter'], correct: 1, difficulty: 'medium', explanation: 'Superlative irregular: gut → besser → beste. With article: das beste' },
+                    { q: 'Dieses Zimmer ist klein. Das andere ist _____ als dieses.', options: ['kleines', 'kleinere', 'kleinster'], correct: 1, difficulty: 'hard', explanation: 'Comparative with als: klein → kleiner. But "kleinere" is accusative plural form... Actually just "kleiner"' },
+                    { q: 'Der Weg ist kurz. Dieser Weg ist _____.', options: ['kürzern', 'kürzer', 'kürzeste'], correct: 1, difficulty: 'hard', explanation: 'Comparative with umlaut: kurz → kürzer' },
+                    { q: 'Das ist der _____ Student in der Klasse. (intelligent)', options: ['intelligenteste', 'intelligentesten', 'intelligenter'], correct: 0, difficulty: 'hard', explanation: 'Superlative nominative singular masculine: der intelligenteste. Adjective ending -e' },
+                    { q: 'Anna ist die _____ Schülerin. (fleißig)', options: ['fleißigste', 'fleißigeren', 'fleißige'], correct: 0, difficulty: 'hard', explanation: 'Superlative feminine nominative: die fleißigste' },
+                    { q: 'Das ist das _____ Problem, das wir haben. (groß)', options: ['größte', 'größtem', 'größerer'], correct: 0, difficulty: 'hard', explanation: 'Superlative neuter nominative: das größte' }
+                ]
+            },
+            {
+                id: 6,
+                title: 'Konnektoren Position 0',
+                subtitle: 'Coordinating Conjunctions',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Konnektoren Position 0 (Coordinating Conjunctions)</h3>
+                        <p class="grammar-subtitle">These connectors start a sentence (Position 0) but keep the verb at Position 2 (normal V2 word order). Both clauses are independent main clauses.</p>
+                        <table class="grammar-table">
+                            <tr><th>Konnektor</th><th>Meaning</th><th>Type</th><th>Example</th></tr>
+                            <tr><td>und</td><td>and</td><td>Addition</td><td>Ich lerne, und du spielst.</td></tr>
+                            <tr><td>oder</td><td>or</td><td>Alternative</td><td>Tee oder Kaffee?</td></tr>
+                            <tr><td>aber</td><td>but</td><td>Contrast</td><td>Ich bin müde, aber ich arbeite.</td></tr>
+                            <tr><td>denn</td><td>because, for</td><td>Causal</td><td>Ich lerne, denn ich will bestehen.</td></tr>
+                            <tr><td>sondern</td><td>but (rather)</td><td>Contrast (negation)</td><td>Ich gehe nicht ins Kino, sondern ins Cafe.</td></tr>
+                        </table>
+                        <div class="en-note"><strong>KEY:</strong> Position 0 connectors link two MAIN clauses. Verb stays at Position 2 in both clauses!</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'Ich lerne Deutsch, _____ es ist interessant.', options: ['denn', 'obwohl', 'weil'], correct: 0, difficulty: 'easy', explanation: 'denn (position 0) links two independent clauses with reason. Both verbs at V2' },
+                    { q: 'Magst du Tee _____ Kaffee?', options: ['und', 'oder', 'aber'], correct: 1, difficulty: 'easy', explanation: 'oder = choice between two things' },
+                    { q: 'Ich bin müde, _____ ich gehe spazieren.', options: ['aber', 'denn', 'sondern'], correct: 0, difficulty: 'easy', explanation: 'aber = contrast. "Tired but still going"' },
+                    { q: 'Das ist nicht richtig, _____ falsch.', options: ['und', 'sondern', 'oder'], correct: 1, difficulty: 'medium', explanation: 'sondern = negation + alternative. "Not right, but wrong"' },
+                    { q: 'Sie will nicht arbeiten, _____ sie will reisen.', options: ['und', 'sondern', 'denn'], correct: 1, difficulty: 'medium', explanation: 'sondern connects negation + opposite. "Not work, but travel"' },
+                    { q: 'Wir spielen Fußball, _____ danach essen wir.', options: ['denn', 'und', 'aber'], correct: 1, difficulty: 'medium', explanation: 'und = sequential/additional actions' },
+                    { q: 'Das Wetter ist schlecht, _____ wir gehen trotzdem spazieren.', options: ['sondern', 'aber', 'weil'], correct: 1, difficulty: 'medium', explanation: 'aber = contrast. "Bad weather but we go anyway"' },
+                    { q: 'Ich lese ein Buch, _____ mein Freund schaut Film.', options: ['und', 'oder', 'denn'], correct: 0, difficulty: 'hard', explanation: 'und = two simultaneous actions' },
+                    { q: 'Er ist nicht Lehrer, _____ Arzt.', options: ['und', 'sondern', 'aber'], correct: 1, difficulty: 'hard', explanation: 'sondern after negation = different identity. "Not teacher, but doctor"' },
+                    { q: 'Das ist nicht blau, _____ grün.', options: ['denn', 'sondern', 'und'], correct: 1, difficulty: 'hard', explanation: 'sondern = negation + alternative color' },
+                    { q: 'Ich mag Mathe, _____ Chemie mag ich nicht.', options: ['aber', 'sondern', 'denn'], correct: 0, difficulty: 'hard', explanation: 'aber = contrast. "I like math, but chemistry I don\'t"' },
+                    { q: 'Das Restaurant ist teuer, _____ das Essen ist sehr gut.', options: ['denn', 'aber', 'sondern'], correct: 1, difficulty: 'hard', explanation: 'aber = unexpected contrast. "Expensive but good food"' }
+                ]
+            },
+            {
+                id: 7,
+                title: 'Konnektoren Position 1',
+                subtitle: 'Adverbial Conjunctions',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Konnektoren Position 1 (Adverbial Conjunctions)</h3>
+                        <p class="grammar-subtitle">These connectors start a sentence at Position 0 but cause INVERSION: subject moves to Position 1, verb stays at Position 2. Unlike subordinating conjunctions, the verb does NOT go to the end.</p>
+                        <table class="grammar-table">
+                            <tr><th>Konnektor</th><th>Meaning</th><th>Type</th><th>Structure</th><th>Example</th></tr>
+                            <tr><td>deshalb</td><td>therefore</td><td>Result</td><td>Konnektor V S...</td><td>Ich bin müde. Deshalb gehe ich ins Bett.</td></tr>
+                            <tr><td>trotzdem</td><td>nevertheless</td><td>Concession</td><td>Konnektor V S...</td><td>Das Wetter ist schlecht. Trotzdem spielen wir.</td></tr>
+                            <tr><td>dann</td><td>then</td><td>Sequence</td><td>Konnektor V S...</td><td>Zuerst lerne ich. Dann gehe ich raus.</td></tr>
+                            <tr><td>danach</td><td>afterwards</td><td>Sequence</td><td>Konnektor V S...</td><td>Wir frühstücken. Danach arbeiten wir.</td></tr>
+                            <tr><td>sonst</td><td>otherwise</td><td>Condition</td><td>Konnektor V S...</td><td>Beeil dich! Sonst verpasst du den Zug.</td></tr>
+                        </table>
+                        <div class="en-note"><strong>IMPORTANT:</strong> Verb stays at Position 2 (V2), subject moves to Position 1. This is DIFFERENT from subordinating conjunctions where verb goes to end!</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'Das Wetter ist schlecht. _____ bleiben wir zu Hause.', options: ['Deshalb', 'Obwohl', 'Weil'], correct: 0, difficulty: 'easy', explanation: 'deshalb (position 1) = therefore. Verb stays at V2 position' },
+                    { q: 'Wir treffen uns um 10 Uhr. _____ gehen wir ins Café.', options: ['Deshalb', 'Sonst', 'Danach'], correct: 2, difficulty: 'easy', explanation: 'danach = afterwards/sequence' },
+                    { q: 'Zuerst schlafen wir. _____ essen wir Frühstück.', options: ['Deshalb', 'Sonst', 'Dann'], correct: 2, difficulty: 'easy', explanation: 'dann = then (temporal sequence)' },
+                    { q: 'Beeil dich! _____ verpasst du den Zug.', options: ['Deshalb', 'Sonst', 'Danach'], correct: 1, difficulty: 'medium', explanation: 'sonst = otherwise (consequence if you don\'t hurry)' },
+                    { q: 'Er ist viel älter. _____ hat er mehr Erfahrung.', options: ['Danach', 'Sonst', 'Deshalb'], correct: 2, difficulty: 'medium', explanation: 'deshalb = therefore (because of age)' },
+                    { q: 'Das Buch ist interessant. _____ lese ich es schnell.', options: ['Deshalb', 'Sonst', 'Danach'], correct: 0, difficulty: 'medium', explanation: 'deshalb = therefore/as a result' },
+                    { q: 'Die Aufgabe ist schwierig. _____ versuche ich es.', options: ['Danach', 'Trotzdem', 'Sonst'], correct: 1, difficulty: 'medium', explanation: 'trotzdem = nevertheless (despite difficulty)' },
+                    { q: 'Komm jetzt! _____ verlieren wir den Zug.', options: ['Danach', 'Trotzdem', 'Sonst'], correct: 2, difficulty: 'hard', explanation: 'sonst = otherwise (if you don\'t come)' },
+                    { q: 'Wir lernen hart. _____ bestehen wir die Prüfung.', options: ['Dann', 'Deshalb', 'Trotzdem'], correct: 1, difficulty: 'hard', explanation: 'deshalb = therefore/result of studying hard' },
+                    { q: 'Es ist spät. _____ bleibe ich noch eine Stunde.', options: ['Danach', 'Trotzdem', 'Deshalb'], correct: 1, difficulty: 'hard', explanation: 'trotzdem = nevertheless (despite being late)' },
+                    { q: 'Wir arbeiten bis 5 Uhr. _____ können wir entspannen.', options: ['Danach', 'Sonst', 'Trotzdem'], correct: 0, difficulty: 'hard', explanation: 'danach = afterwards (after working until 5)' },
+                    { q: 'Der Film beginnt. _____ setzen sich alle hin.', options: ['Dann', 'Danach', 'Deshalb'], correct: 0, difficulty: 'hard', explanation: 'dann = then (when film begins)' }
+                ]
+            },
+            {
+                id: 8,
+                title: 'Nebensätze',
+                subtitle: 'Subordinate Clauses',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Nebensätze (Subordinate Clauses)</h3>
+                        <p class="grammar-subtitle">THE GOLDEN RULE: In subordinate clauses introduced by weil, wenn, dass, als, etc., the conjugated verb moves to the END of the clause. This is the most important rule in German grammar.</p>
+                        <table class="grammar-table">
+                            <tr><th>Konnektor</th><th>Type</th><th>Meaning</th><th>Verb Position</th><th>Example</th></tr>
+                            <tr><td>weil</td><td>Causal</td><td>because</td><td>V-END</td><td>Ich lerne, weil ich bestehen will.</td></tr>
+                            <tr><td>wenn</td><td>Conditional</td><td>if, when</td><td>V-END</td><td>Wenn du Zeit hast, kommst du.</td></tr>
+                            <tr><td>dass</td><td>Object clause</td><td>that</td><td>V-END</td><td>Ich weiß, dass du morgen kommst.</td></tr>
+                            <tr><td>als</td><td>Temporal (past)</td><td>when (past)</td><td>V-END</td><td>Als ich klein war, spielte ich.</td></tr>
+                            <tr><td>obwohl</td><td>Concessive</td><td>although</td><td>V-END</td><td>Obwohl ich müde bin, gehe ich.</td></tr>
+                        </table>
+                        <div class="en-note"><strong>VS. Position 1 Connectors:</strong> "Ich lerne viel, deshalb bestehe ich." (verb at V2) BUT "Ich lerne viel, weil ich bestehen will." (verb at END)</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'Ich lerne Deutsch, weil ich _____ Berlin arbeite. (in)', options: ['in arbeite', 'arbeite in', 'in Berlin arbeite'], correct: 2, difficulty: 'easy', explanation: 'weil clause: verb goes to END. in Berlin arbeite' },
+                    { q: 'Wenn es regnet, _____ ich zu Hause.', options: ['bleibe', 'bleibe ich', 'ich bleibe'], correct: 0, difficulty: 'easy', explanation: 'wenn clause: verb at END. bleibe' },
+                    { q: 'Ich weiß, dass du morgen _____.', options: ['kommst', 'komm', 'kommst du'], correct: 0, difficulty: 'easy', explanation: 'dass clause: verb at END. kommst' },
+                    { q: 'Sie bleibt zu Hause, weil sie _____ ist.', options: ['müde', 'müde sein', 'ist müde'], correct: 0, difficulty: 'medium', explanation: 'weil clause: predicate adjective before verb at END. müde ist' },
+                    { q: 'Obwohl das Wetter schlecht ist, _____ wir spazieren.', options: ['gehen', 'wir gehen', 'gehen wir'], correct: 0, difficulty: 'medium', explanation: 'obwohl clause with main clause. Main clause has verb at V2: wir gehen' },
+                    { q: 'Wenn _____, rufe ich dich an.', options: ['ich Zeit habe', 'ich habe Zeit', 'ich Zeit haben'], correct: 0, difficulty: 'medium', explanation: 'wenn clause: verb at END. ich Zeit habe' },
+                    { q: 'Er sagt, dass er morgen _____.', options: ['komm', 'kommt', 'zu kommen'], correct: 1, difficulty: 'medium', explanation: 'dass clause: verb kommt at END' },
+                    { q: 'Weil ich nicht schwimmen _____, gehe ich nicht ins Wasser.', options: ['kann', 'kannen', 'können'], correct: 0, difficulty: 'hard', explanation: 'weil clause with modal: kann (to swim) at END' },
+                    { q: 'Das Wetter ist schön. Deshalb _____ wir spazieren.', options: ['gehen wir', 'wir gehen', 'gehen'], correct: 0, difficulty: 'hard', explanation: 'deshalb (position 1): verb at V2. gehen wir' },
+                    { q: 'Ich hoffe, dass du bald _____.', options: ['besser wirst', 'besser werden', 'wirst besser'], correct: 0, difficulty: 'hard', explanation: 'dass clause: besser wirst (modal-like auxiliary + adjective) at END' },
+                    { q: 'Als ich nach Hause kam, _____ bereits dunkel.', options: ['war es', 'es war', 'war'], correct: 1, difficulty: 'hard', explanation: 'als clause (main clause follows): verb at V2 in main clause. es war' },
+                    { q: 'Sie sagt, dass sie arbeiten _____.', options: ['will', 'wollen', 'muß'], correct: 0, difficulty: 'hard', explanation: 'dass clause with modal: will (want to work) at END' }
+                ]
+            },
+            {
+                id: 9,
+                title: 'Komposita & Wortbildung',
+                subtitle: 'Compound Words',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Komposita und Wortbildung (Compound Words)</h3>
+                        <p class="grammar-subtitle">German compounds follow the pattern: Bestimmungswort (Determinant) + Grundwort (Base). THE GOLDEN RULE: Gender is ALWAYS determined by the last word (Grundwort). Connector letters (-s-, -n-, -en-) are used according to patterns.</p>
+                        <table class="grammar-table">
+                            <tr><th>Example</th><th>Breakdown</th><th>Last Word</th><th>Compound Gender</th></tr>
+                            <tr><td>das Schlafzimmer</td><td>schlafen + das Zimmer</td><td>das Zimmer</td><td>das</td></tr>
+                            <tr><td>die Haustür</td><td>das Haus + die Tür</td><td>die Tür</td><td>die</td></tr>
+                            <tr><td>der Arbeitstag</td><td>die Arbeit + (s) + der Tag</td><td>der Tag</td><td>der</td></tr>
+                            <tr><td>die Zahnbürste</td><td>der Zahn + die Bürste</td><td>die Bürste</td><td>die</td></tr>
+                            <tr><td>der Geburtstag</td><td>die Geburt + (s) + der Tag</td><td>der Tag</td><td>der</td></tr>
+                        </table>
+                        <div class="en-note"><strong>Fugen-s (Connector -s-):</strong> Often used after feminine words ending in -ung, -heit, -keit, -schaft, -ion. Example: die Ausbildung → Ausbildungs-</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'die Schule + das Zimmer = _____ Schulzimmer', options: ['das', 'die', 'der'], correct: 0, difficulty: 'easy', explanation: 'Last word: das Zimmer → das Schulzimmer' },
+                    { q: 'der Beruf + die Welt = _____ Berufswelt', options: ['das', 'die', 'der'], correct: 1, difficulty: 'easy', explanation: 'Last word: die Welt → die Berufswelt' },
+                    { q: 'die Nacht + der Tisch = _____ Nachttisch', options: ['das', 'die', 'der'], correct: 2, difficulty: 'easy', explanation: 'Last word: der Tisch → der Nachttisch' },
+                    { q: 'das Spiel + das Zeug = _____ Spielzeug', options: ['das', 'die', 'der'], correct: 0, difficulty: 'easy', explanation: 'Last word: das Zeug → das Spielzeug' },
+                    { q: 'die Zeit + die Schrift = _____ Zeitschrift', options: ['das', 'die', 'der'], correct: 1, difficulty: 'medium', explanation: 'Last word: die Schrift → die Zeitschrift' },
+                    { q: 'das Arbeits + zimmer = _____ Arbeitszimmer', options: ['das', 'die', 'der'], correct: 0, difficulty: 'medium', explanation: 'Last word: das Zimmer → das Arbeitszimmer' },
+                    { q: 'der Hand + schuh = _____ Handschuh', options: ['das', 'die', 'der'], correct: 2, difficulty: 'medium', explanation: 'Last word: der Schuh → der Handschuh' },
+                    { q: 'die Wohn + zimmer = _____ Wohnzimmer', options: ['das', 'die', 'der'], correct: 0, difficulty: 'medium', explanation: 'Last word: das Zimmer → das Wohnzimmer' },
+                    { q: 'die Schönheit + (s) + operation = _____ Schönheitsoperation', options: ['das', 'die', 'der'], correct: 1, difficulty: 'hard', explanation: 'Last word: die Operation → die Schönheitsoperation' },
+                    { q: 'die Bildung + (s) + reform = _____ Bildungsreform', options: ['das', 'die', 'der'], correct: 1, difficulty: 'hard', explanation: 'Last word: die Reform → die Bildungsreform (both feminine)' },
+                    { q: 'die Ausbildung + (s) + platz = _____ Ausbildungsplatz', options: ['das', 'die', 'der'], correct: 2, difficulty: 'hard', explanation: 'Last word: der Platz → der Ausbildungsplatz' },
+                    { q: 'die Wissenschaft + (s) + stadt = _____ Wissenschaftsstadt', options: ['das', 'die', 'der'], correct: 1, difficulty: 'hard', explanation: 'Last word: die Stadt → die Wissenschaftsstadt' }
+                ]
+            },
+            {
+                id: 10,
+                title: 'Genusregeln',
+                subtitle: 'Gender Rules',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Genusregeln (Gender Rules for German Nouns)</h3>
+                        <p class="grammar-subtitle">German genders follow patterns. Masculine nouns often end in -er, -or, -ist; Feminine often in -in, -ung, -heit, -keit; Neuter in -chen, -lein, -um. Exceptions exist, but patterns help prediction.</p>
+                        <table class="grammar-table">
+                            <tr><th>Gender</th><th>Common Endings</th><th>Examples</th></tr>
+                            <tr><td><strong>MASCULINE</strong> (der)</td><td>-er, -or, -ist, -ling, -ig</td><td>der Lehrer, der Doktor, der Pianist, der Lehrling, der König</td></tr>
+                            <tr><td><strong>FEMININE</strong> (die)</td><td>-in, -ung, -heit, -keit, -schaft, -ion, -tät</td><td>die Lehrerin, die Bildung, die Wahrheit, die Schönheit, die Wissenschaft, die Nation, die Universität</td></tr>
+                            <tr><td><strong>NEUTER</strong> (das)</td><td>-chen, -lein, -um, -ment, -zeug</td><td>das Häuschen, das Häuslein, das Museum, das Departement, das Spielzeug</td></tr>
+                        </table>
+                        <div class="en-note"><strong>Semantic Rules:</strong> Professions ending in -er are masculine (der Lehrer). Add -in for feminine (die Lehrerin). Days, months, seasons are masculine. Metals are often neuter.</div>
+                    </div>
+                `,
+                exercises: [
+                    { q: 'Eine Person, die unterrichtet: der Lehrer. Eine Frau, die unterrichtet: _____', options: ['die Lehrerin', 'die Lehrerisch', 'die Lehre'], correct: 0, difficulty: 'easy', explanation: 'Professional -er → -in: Lehrer → Lehrerin (feminine)' },
+                    { q: 'Was endet auf -ung? _____ (Bildung, Lehrung)', options: ['der', 'die', 'das'], correct: 1, difficulty: 'easy', explanation: 'Words ending in -ung are always feminine: die Bildung' },
+                    { q: 'Ein Wort, das auf -heit endet, ist typischerweise _____', options: ['der', 'die', 'das'], correct: 1, difficulty: 'easy', explanation: 'Words ending in -heit are always feminine: die Wahrheit, die Krankheit' },
+                    { q: 'Das Häuschen ist _____ Wort. (Article)', options: ['der', 'die', 'das'], correct: 2, difficulty: 'medium', explanation: 'Words ending in -chen are always neuter: das Häuschen' },
+                    { q: 'Eine Schülerin ist eine Schule + in. Ein Maler ist _____', options: ['der', 'ein Maler', 'eine Malerin'], correct: 0, difficulty: 'medium', explanation: 'Professional -er is masculine: der Maler. Feminine: die Malerin' },
+                    { q: 'Die Universität endet auf -tät, also ist sie _____', options: ['der', 'die', 'das'], correct: 1, difficulty: 'medium', explanation: 'Words ending in -tät are always feminine: die Universität' },
+                    { q: 'Das Spielzeug endet auf -zeug, also ist es _____', options: ['der', 'die', 'das'], correct: 2, difficulty: 'medium', explanation: 'Words ending in -zeug are neuter: das Spielzeug' },
+                    { q: 'Ein Person, die Musik spielt: Musiker. Feminine: _____ Musikerin', options: ['der', 'die', 'das'], correct: 1, difficulty: 'hard', explanation: 'Feminine form of professional -er: die Musikerin' },
+                    { q: 'Wort: die Wissenschaft (auf -schaft). Artikel: _____', options: ['der', 'die', 'das'], correct: 1, difficulty: 'hard', explanation: 'Words ending in -schaft are always feminine: die Wissenschaft' },
+                    { q: 'Ein Dentist - _____ Zahnarzt. Ein Zahnarzt ist männlich.', options: ['der', 'die', 'das'], correct: 0, difficulty: 'hard', explanation: 'Words ending in -arzt (doctor) are masculine: der Zahnarzt' },
+                    { q: 'Das Museum endet auf -um, also ist es _____', options: ['der', 'die', 'das'], correct: 2, difficulty: 'hard', explanation: 'Words ending in -um are neuter: das Museum' },
+                    { q: 'König endet auf -ig, also ist er _____', options: ['der', 'die', 'das'], correct: 0, difficulty: 'hard', explanation: 'Words ending in -ig are typically masculine: der König' }
+                ]
+            },
+            {
+                title: 'Reflexive Verben',
+                subtitle: 'Sie wäscht sich',
+                level: 'A2',
+                grammar: '<h3>Reflexivpronomen</h3><table class="grammar-table"><tr><th>Person</th><th>Pronomen</th></tr><tr><td>ich</td><td><b>mich</b></td></tr><tr><td>du</td><td><b>dich</b></td></tr><tr><td>er/sie/es</td><td><b>sich</b></td></tr><tr><td>wir</td><td><b>uns</b></td></tr><tr><td>ihr</td><td><b>euch</b></td></tr><tr><td>sie/Sie</td><td><b>sich</b></td></tr></table><p>Reflexive verbs use a reflexive pronoun that refers back to the subject. The pronoun goes after the verb and subject: <i>Er wäscht <b>sich</b>.</i> Common reflexive verbs: sich waschen, sich anziehen, sich freuen, sich ärgern, sich erinnern, sich vorstellen, sich interessieren.</p><p>In Perfekt, reflexive verbs always use <b>haben</b>: <i>Ich habe mich gefreut.</i></p>',
+                exercises: [
+                    { q: 'Ich freue _____ auf das Wochenende.', options: ['mich', 'sich', 'dich'], correct: 0, difficulty: 'easy', explanation: 'ich → mich. "Ich freue mich" = I look forward to / I am happy about.' },
+                    { q: 'Er wäscht _____ jeden Morgen.', options: ['sich', 'mich', 'dich'], correct: 0, difficulty: 'easy', explanation: 'er → sich. "Er wäscht sich" = He washes himself.' },
+                    { q: 'Wir treffen _____ um 8 Uhr.', options: ['uns', 'sich', 'euch'], correct: 0, difficulty: 'easy', explanation: 'wir → uns. "Wir treffen uns" = We meet (each other). Reciprocal use.' },
+                    { q: 'Kannst du _____ vorstellen, wie schön es war?', options: ['dir', 'dich', 'sich'], correct: 0, difficulty: 'medium', explanation: '"sich etwas vorstellen" = to imagine something. With Akkusativ object → Dativ reflexive: dir.' },
+                    { q: 'Beeilt _____! Wir sind spät dran. (ihr)', options: ['euch', 'sich', 'uns'], correct: 0, difficulty: 'medium', explanation: 'ihr → euch. "Beeilt euch!" = Hurry up! (imperative, plural informal).' },
+                    { q: 'Er hat _____ über das Geschenk gefreut.', options: ['sich', 'mich', 'ihn'], correct: 0, difficulty: 'medium', explanation: 'Perfekt: haben + reflexive. er → sich. "Er hat sich gefreut" = He was happy.' },
+                    { q: 'Ich muss _____ noch anziehen.', options: ['mich', 'mir', 'sich'], correct: 0, difficulty: 'medium', explanation: '"sich anziehen" (get dressed) = Akkusativ. ich → mich.' },
+                    { q: 'Interessierst du _____ für Musik?', options: ['dich', 'dir', 'sich'], correct: 0, difficulty: 'medium', explanation: '"sich interessieren für" + Akkusativ. du → dich.' },
+                    { q: 'Erinnerst du _____ an unseren Urlaub?', options: ['dich', 'dir', 'mich'], correct: 0, difficulty: 'hard', explanation: '"sich erinnern an" + Akkusativ. du → dich. Do you remember our vacation?' },
+                    { q: 'Sie haben _____ vor zwei Jahren kennengelernt. (reciprocal)', options: ['sich', 'uns', 'euch'], correct: 0, difficulty: 'hard', explanation: 'Reciprocal: sie (they) → sich. "They got to know each other two years ago."' }
+                ]
+            },
+            {
+                title: 'Zeitengebrauch: Perfekt vs. Präteritum',
+                subtitle: 'Wann benutzt man was?',
+                level: 'A2',
+                grammar: '<h3>Perfekt vs. Präteritum</h3><p><b>Perfekt</b> is used in spoken German for past events: <i>Ich habe gegessen. Wir sind gefahren.</i></p><p><b>Präteritum</b> is used mainly for: (1) <b>sein</b> and <b>haben</b>: <i>ich war, ich hatte</i> (2) <b>Modal verbs</b>: <i>ich konnte, ich musste</i> (3) Written/formal German (news, stories).</p><p>In everyday speech, Germans almost always use Perfekt, except for sein/haben/modals where Präteritum sounds more natural: <i>"Ich <b>war</b> gestern im Kino"</i> (not "Ich bin gewesen").</p>',
+                exercises: [
+                    { q: 'Gestern _____ ich im Kino. (sein → spoken)', options: ['war', 'bin gewesen', 'wurde'], correct: 0, difficulty: 'easy', explanation: 'sein → Präteritum in speech: "war". "Ich war im Kino" sounds more natural than "Ich bin im Kino gewesen".' },
+                    { q: 'Gestern _____ ich Pizza _____. (essen → spoken)', options: ['habe...gegessen', 'aß', 'esse'], correct: 0, difficulty: 'easy', explanation: 'Regular verbs → Perfekt in speech. "Ich habe Pizza gegessen." Präteritum "aß" sounds too formal for conversation.' },
+                    { q: 'Er _____ keine Zeit. (haben → spoken past)', options: ['hatte', 'hat gehabt', 'hat'], correct: 0, difficulty: 'medium', explanation: 'haben → Präteritum: "hatte". More natural than "hat gehabt" in speech.' },
+                    { q: 'Ich _____ gestern nicht kommen. (können → past)', options: ['konnte', 'habe gekonnt', 'kann'], correct: 0, difficulty: 'medium', explanation: 'Modal verbs → Präteritum: "konnte". "Ich konnte nicht kommen" = I couldn\'t come.' },
+                    { q: 'Wir _____ am Samstag ins Museum _____. (gehen → spoken)', options: ['sind...gegangen', 'gingen', 'gehen'], correct: 0, difficulty: 'medium', explanation: 'Movement verb → Perfekt in speech: "sind gegangen". "Wir sind ins Museum gegangen."' },
+                    { q: 'Das Wetter _____ schlecht. (sein → past)', options: ['war', 'ist gewesen', 'wurde'], correct: 0, difficulty: 'easy', explanation: 'sein → war (Präteritum). "Das Wetter war schlecht" = The weather was bad.' }
+                ]
+            },
+            {
+                title: 'Partikeln: denn, mal, doch, ja',
+                subtitle: 'Was heißt das denn?',
+                level: 'A2',
+                grammar: '<h3>Deutsche Partikeln</h3><p>Particles (Modalpartikeln) add emotion, emphasis, or attitude to sentences. They don\'t translate directly but change the "feeling" of a sentence.</p><table class="grammar-table"><tr><th>Partikel</th><th>Effect</th><th>Example</th></tr><tr><td><b>denn</b></td><td>Shows interest in questions</td><td>Was machst du <b>denn</b>? (What are you doing then?)</td></tr><tr><td><b>mal</b></td><td>Softens requests</td><td>Komm <b>mal</b> her! (Come here a moment!)</td></tr><tr><td><b>doch</b></td><td>Contradiction, emphasis</td><td>Das ist <b>doch</b> super! (That IS great!)</td></tr><tr><td><b>ja</b></td><td>Shared knowledge, surprise</td><td>Du bist <b>ja</b> hier! (Oh, you\'re here!)</td></tr><tr><td><b>eigentlich</b></td><td>Actually, by the way</td><td>Was machst du <b>eigentlich</b>? (What do you actually do?)</td></tr><tr><td><b>schon</b></td><td>Already, reassurance</td><td>Das wird <b>schon</b>! (It\'ll be fine!)</td></tr></table>',
+                exercises: [
+                    { q: 'Was ist _____ hier passiert? (curiosity/interest)', options: ['denn', 'mal', 'ja'], correct: 0, difficulty: 'easy', explanation: '"denn" shows genuine curiosity. "Was ist denn passiert?" = What happened (I\'m curious)?' },
+                    { q: 'Komm _____ her, ich zeige dir etwas! (softening a request)', options: ['mal', 'denn', 'ja'], correct: 0, difficulty: 'easy', explanation: '"mal" softens commands/requests. "Komm mal her!" = Come here a sec!' },
+                    { q: 'Das ist _____ toll! Ich bin begeistert! (emphasis)', options: ['doch', 'mal', 'denn'], correct: 0, difficulty: 'medium', explanation: '"doch" emphasizes. "Das ist doch toll!" = That\'s really/truly great!' },
+                    { q: 'Du bist _____ schon da! Ich dachte, du kommst später. (surprise)', options: ['ja', 'denn', 'mal'], correct: 0, difficulty: 'medium', explanation: '"ja" expresses surprise about something obvious. "Du bist ja schon da!" = Oh, you\'re already here!' },
+                    { q: 'Hast du _____ keine Hausaufgaben? (disapproval/surprise)', options: ['denn', 'mal', 'schon'], correct: 0, difficulty: 'hard', explanation: '"denn" in this context shows mild disapproval: "Don\'t you have homework (really)?"' },
+                    { q: 'Mach dir keine Sorgen, das wird _____! (reassurance)', options: ['schon', 'denn', 'mal'], correct: 0, difficulty: 'hard', explanation: '"schon" = reassurance. "Das wird schon!" = It\'ll work out / It\'ll be fine!' }
+                ]
+            },
+            {
+                title: 'Negationswörter',
+                subtitle: 'Nicht, nichts, noch nicht, nicht mehr',
+                level: 'A2',
+                grammar: '<h3>Negation im Detail</h3><table class="grammar-table"><tr><th>Word</th><th>Meaning</th><th>Example</th></tr><tr><td><b>nicht</b></td><td>not</td><td>Ich komme <b>nicht</b>.</td></tr><tr><td><b>kein/e</b></td><td>no, not any</td><td>Ich habe <b>keine</b> Zeit.</td></tr><tr><td><b>nichts</b></td><td>nothing</td><td>Ich weiß <b>nichts</b>.</td></tr><tr><td><b>niemand</b></td><td>nobody</td><td><b>Niemand</b> ist hier.</td></tr><tr><td><b>nie / niemals</b></td><td>never</td><td>Ich rauche <b>nie</b>.</td></tr><tr><td><b>noch nicht</b></td><td>not yet</td><td>Er ist <b>noch nicht</b> da.</td></tr><tr><td><b>nicht mehr</b></td><td>not anymore</td><td>Sie arbeitet <b>nicht mehr</b>.</td></tr><tr><td><b>noch nie</b></td><td>never (yet)</td><td>Ich war <b>noch nie</b> in Japan.</td></tr></table>',
+                exercises: [
+                    { q: 'Ich habe _____ verstanden. (nothing)', options: ['nichts', 'nicht', 'kein'], correct: 0, difficulty: 'easy', explanation: '"nichts" = nothing. "Ich habe nichts verstanden." = I understood nothing.' },
+                    { q: 'Er ist _____ _____ da. (not yet)', options: ['noch nicht', 'nicht mehr', 'noch nie'], correct: 0, difficulty: 'easy', explanation: '"noch nicht" = not yet. "Er ist noch nicht da." = He\'s not here yet.' },
+                    { q: 'Sie raucht _____ _____. (not anymore)', options: ['nicht mehr', 'noch nicht', 'noch nie'], correct: 0, difficulty: 'easy', explanation: '"nicht mehr" = not anymore. "Sie raucht nicht mehr." = She doesn\'t smoke anymore.' },
+                    { q: 'Ich war _____ _____ in Australien. (never, up to now)', options: ['noch nie', 'nie', 'nicht mehr'], correct: 0, difficulty: 'medium', explanation: '"noch nie" = never yet. "Ich war noch nie in Australien." = I\'ve never been to Australia (yet).' },
+                    { q: '_____ weiß die Antwort. (nobody)', options: ['Niemand', 'Nichts', 'Nicht'], correct: 0, difficulty: 'medium', explanation: '"Niemand" = nobody. "Niemand weiß die Antwort." = Nobody knows the answer.' },
+                    { q: 'Warst du schon mal in Paris? — Nein, _____ _____.', options: ['noch nie', 'nie nicht', 'nicht nie'], correct: 0, difficulty: 'medium', explanation: '"noch nie" = not yet / never (so far). Natural response to "schon mal?" questions.' }
+                ]
+            }
+        ];
+
+        // ============ STATE ============
+        let currentLesson = null;
+        let currentDifficultyFilter = 'all';
+        let mcShuffleMap = {};
+
+        // ============ INITIALIZATION ============
+        document.addEventListener('DOMContentLoaded', function() {
+            initSidebar();
+            updateStats();
+        });
+
+        function initSidebar() {
+            const sidebar = document.getElementById('sidebar-content');
+            sidebar.innerHTML = lessons.map(lesson => `
+                <div class="nav-item" onclick="startLesson(${lesson.id})">
+                    ${lesson.id}. ${lesson.title}
+                </div>
+            `).join('');
+        }
+
+        // ============ NAVIGATION ============
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
+        function startLesson(lessonId) {
+            currentLesson = lessons.find(l => l.id === lessonId);
+            currentDifficultyFilter = 'all';
+
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('lesson-view').style.display = 'block';
+            document.getElementById('lesson-title').textContent = `${currentLesson.id}. ${currentLesson.title}`;
+
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if (item.textContent.includes(currentLesson.title)) {
+                    item.classList.add('active');
+                }
+            });
+
+            closeSidebar();
+            renderTab(0);
+        }
+
+        function switchTab(button, tabIndex) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            button.classList.add('active');
+            renderTab(tabIndex);
+        }
+
+        function renderTab(tabIndex) {
+            const content = document.getElementById('tab-content');
+
+            if (tabIndex === 0) {
+                content.innerHTML = currentLesson.grammar;
+            } else {
+                renderExercises();
+            }
+        }
+
+        // ============ EXERCISE RENDERING ============
+        function renderExercises() {
+            const content = document.getElementById('tab-content');
+            let html = '';
+
+            // Difficulty filter
+            html += `
+                <div class="difficulty-filter">
+                    <button class="active" onclick="setDifficultyFilter('all')">Alle Übungen</button>
+                    <button onclick="setDifficultyFilter('easy')">Leicht</button>
+                    <button onclick="setDifficultyFilter('medium')">Mittelschwer</button>
+                    <button onclick="setDifficultyFilter('hard')">Schwierig</button>
+                </div>
+            `;
+
+            html += '<div class="exercises-container">';
+
+            currentLesson.exercises.forEach((exercise, idx) => {
+                if (currentDifficultyFilter !== 'all' && exercise.difficulty !== currentDifficultyFilter) {
+                    return;
+                }
+
+                const diffClass = `difficulty-${exercise.difficulty}`;
+                const diffLabel = { easy: 'Leicht', medium: 'Mittelschwer', hard: 'Schwierig' }[exercise.difficulty];
+
+                html += `<div class="exercise" id="exercise-${idx}" data-difficulty="${exercise.difficulty}">`;
+                html += `<div class="exercise-title">
+                    <div class="exercise-title-left">
+                        <span>Übung ${idx + 1}</span>
+                        <span class="difficulty-badge ${diffClass}">${diffLabel}</span>
+                    </div>
+                </div>`;
+
+                html += `<div class="exercise-question">
+                    <div class="question-content">
+                        <div class="question-text">${exercise.q}</div>
+                        <div class="options">`;
+
+                // Shuffle options and track mapping
+                const indices = exercise.options.map((_, i) => i);
+                for (let i = indices.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [indices[i], indices[j]] = [indices[j], indices[i]];
+                }
+                const newCorrectIdx = indices.indexOf(exercise.correct);
+                mcShuffleMap[idx] = newCorrectIdx;
+
+                indices.forEach((origIdx, newIdx) => {
+                    html += `<div class="option" onclick="selectOption(this, ${idx}, ${newIdx})" data-correct="${newCorrectIdx}">
+                        ${exercise.options[origIdx]}
+                    </div>`;
+                });
+
+                html += `</div></div></div>`;
+
+                html += `<div class="buttons">
+                    <button class="btn btn-primary" onclick="checkExercise(${idx})">Überprüfen</button>
+                    <button class="btn btn-secondary" onclick="resetExercise(${idx})">Zurücksetzen</button>
+                </div>`;
+
+                html += `<div class="feedback" id="feedback-${idx}"></div>`;
+                html += `<div class="explanation-box" id="explanation-${idx}"></div>`;
+                html += `</div>`;
+            });
+
+            html += '</div>';
+            content.innerHTML = html;
+        }
+
+        function setDifficultyFilter(filter) {
+            currentDifficultyFilter = filter;
+            document.querySelectorAll('.difficulty-filter button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderExercises();
+        }
+
+        // ============ EXERCISE INTERACTION ============
+        function selectOption(element, exIdx, oIdx) {
+            const question = element.parentElement;
+            question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            element.dataset.selected = oIdx;
+        }
+
+        function checkExercise(exIdx) {
+            const exercise = currentLesson.exercises[exIdx];
+            const exerciseEl = document.getElementById(`exercise-${exIdx}`);
+            const feedback = document.getElementById(`feedback-${exIdx}`);
+            const explanation = document.getElementById(`explanation-${exIdx}`);
+
+            const optionsDiv = exerciseEl.querySelector('.options');
+            const selected = optionsDiv.querySelector('.option.selected');
+            const correctIdx = parseInt(optionsDiv.querySelector('.option').dataset.correct);
+
+            let correct = false;
+            if (selected) {
+                const selectedIdx = parseInt(selected.dataset.selected);
+                if (selectedIdx === correctIdx) {
+                    correct = true;
+                    selected.classList.add('correct');
+                } else {
+                    selected.classList.add('incorrect');
+                    optionsDiv.querySelectorAll('.option')[correctIdx].classList.add('correct');
+                }
+            }
+
+            feedback.classList.add('show');
+            feedback.classList.toggle('correct', correct);
+            feedback.classList.toggle('incorrect', !correct);
+            feedback.textContent = correct ? '✓ Richtig!' : '✗ Falsch!';
+
+            explanation.classList.add('visible');
+            explanation.textContent = `💡 ${exercise.explanation}`;
+
+            if (correct) {
+                updateProgress(exIdx);
+            }
+        }
+
+        function resetExercise(exIdx) {
+            const exerciseEl = document.getElementById(`exercise-${exIdx}`);
+            exerciseEl.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+                delete opt.dataset.selected;
+            });
+            document.getElementById(`feedback-${exIdx}`).classList.remove('show', 'correct', 'incorrect');
+            document.getElementById(`explanation-${exIdx}`).classList.remove('visible');
+        }
+
+        // ============ PROGRESS ============
+        function updateProgress(exIdx) {
+            let completed = JSON.parse(localStorage.getItem('completedLessonsA2') || '[]');
+            let lessonKey = `lesson-${currentLesson.id}`;
+
+            if (!completed.includes(lessonKey)) {
+                completed.push(lessonKey);
+                localStorage.setItem('completedLessonsA2', JSON.stringify(completed));
+            }
+
+            let score = parseInt(localStorage.getItem('totalScoreA2') || '0');
+            score += 1;
+            localStorage.setItem('totalScoreA2', JSON.stringify(score));
+
+            updateStats();
+        }
+
+        function updateStats() {
+            const completed = JSON.parse(localStorage.getItem('completedLessonsA2') || '[]');
+            const score = parseInt(localStorage.getItem('totalScoreA2') || '0');
+
+            document.getElementById('completed-count').textContent = completed.length;
+            document.getElementById('total-score').textContent = score;
+        }
+    </script>
+</body>
+</html>

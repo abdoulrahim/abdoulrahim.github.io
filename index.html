@@ -1,5 +1,190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deutsch Lernen — A1 bis B1</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+.hero{text-align:center;padding:3rem 1.5rem 2rem;background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%)}
+.hero h1{font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,#fbbf24,#f59e0b,#dc2626);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.4rem}
+.hero .flag{font-size:3rem;margin-bottom:.5rem}
+.hero p{color:#94a3b8;font-size:1.05rem;max-width:520px;margin:0 auto}
+.grid{max-width:1100px;margin:0 auto;padding:1.5rem;display:grid;gap:1.5rem}
+.level-section{margin-bottom:.5rem}
+.level-header{display:flex;align-items:center;gap:.7rem;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid #1e293b}
+.level-tag{font-size:.75rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;letter-spacing:.5px}
+.level-tag.a1{background:#16a34a;color:#fff}
+.level-tag.a2{background:#2563eb;color:#fff}
+.level-tag.b1{background:#9333ea;color:#fff}
+.level-tag.all{background:linear-gradient(135deg,#16a34a,#2563eb,#9333ea);color:#fff}
+.level-title{font-size:1.15rem;font-weight:600;color:#cbd5e1}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:1.25rem;text-decoration:none;color:#e2e8f0;transition:all .2s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-3px);border-color:#475569;box-shadow:0 8px 25px rgba(0,0,0,.3)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.card.grammar::before{background:linear-gradient(90deg,#f59e0b,#ef4444)}
+.card.vocab::before{background:linear-gradient(90deg,#3b82f6,#06b6d4)}
+.card.stories::before{background:linear-gradient(90deg,#8b5cf6,#ec4899)}
+.card.articles::before{background:linear-gradient(90deg,#10b981,#34d399)}
+.card.verbs::before{background:linear-gradient(90deg,#ef4444,#f97316)}
+.card-icon{font-size:2rem;margin-bottom:.6rem}
+.card-title{font-size:1.1rem;font-weight:700;margin-bottom:.35rem}
+.card-desc{font-size:.85rem;color:#94a3b8;line-height:1.5}
+.card-stats{display:flex;gap:.8rem;margin-top:.8rem;flex-wrap:wrap}
+.stat{font-size:.75rem;background:#0f172a;padding:.2rem .5rem;border-radius:5px;color:#64748b}
+footer{text-align:center;padding:2rem;color:#475569;font-size:.8rem;border-top:1px solid #1e293b;margin-top:1rem}
+footer a{color:#64748b}
+@media(max-width:600px){.hero h1{font-size:1.8rem}.cards{grid-template-columns:1fr}}
+</style>
+</head>
 <body>
-    <h1>
-        Hi
-    </h1>
+
+<div class="hero">
+  <div class="flag">🇩🇪</div>
+  <h1>Deutsch Lernen</h1>
+  <p>Interactive German learning tools — Grammar, Vocabulary, Stories, Articles &amp; Verb Conjugation from A1 to B1</p>
+</div>
+
+<div class="grid">
+
+  <!-- A1 -->
+  <div class="level-section">
+    <div class="level-header">
+      <span class="level-tag a1">A1</span>
+      <span class="level-title">Anfänger — Beginner</span>
+    </div>
+    <div class="cards">
+      <a href="German_A1_Grammar_Study.html" class="card grammar">
+        <div class="card-icon">📖</div>
+        <div class="card-title">A1 Grammatik</div>
+        <div class="card-desc">Complete A1 grammar with interactive exercises — verbs, cases, prepositions, Perfekt, and more.</div>
+        <div class="card-stats">
+          <span class="stat">35 Lektionen</span>
+          <span class="stat">286 Übungen</span>
+        </div>
+      </a>
+      <a href="German_A1_Vocabulary_Flashcards.html" class="card vocab">
+        <div class="card-icon">🗂️</div>
+        <div class="card-title">A1 Vokabel-Karteikarten</div>
+        <div class="card-desc">Flashcard-style vocabulary practice organized by topic with spaced repetition.</div>
+        <div class="card-stats">
+          <span class="stat">12 Themen</span>
+          <span class="stat">330+ Wörter</span>
+        </div>
+      </a>
+      <a href="German_A1_Articles_Practice.html" class="card articles">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">A1 Artikel-Training</div>
+        <div class="card-desc">Practice der, die, das with nouns from all categories — food, family, city, body, and more.</div>
+        <div class="card-stats">
+          <span class="stat">161 Nomen</span>
+          <span class="stat">13 Kategorien</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- A2 -->
+  <div class="level-section">
+    <div class="level-header">
+      <span class="level-tag a2">A2</span>
+      <span class="level-title">Grundstufe — Elementary</span>
+    </div>
+    <div class="cards">
+      <a href="German_A2_Grammar_Study.html" class="card grammar">
+        <div class="card-icon">📖</div>
+        <div class="card-title">A2 Grammatik</div>
+        <div class="card-desc">A2 grammar topics — Wechselpräpositionen, Nebensätze, reflexive Verben, Partikeln.</div>
+        <div class="card-stats">
+          <span class="stat">14 Themen</span>
+        </div>
+      </a>
+      <a href="German_A2_Vocabulary_Flashcards.html" class="card vocab">
+        <div class="card-icon">🗂️</div>
+        <div class="card-title">A2 Vokabel-Karteikarten</div>
+        <div class="card-desc">Intermediate vocabulary flashcards with example sentences.</div>
+      </a>
+      <a href="German_A2_Articles_Practice.html" class="card articles">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">A2 Artikel-Training</div>
+        <div class="card-desc">Article practice with A2-level nouns and compound words.</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- B1 -->
+  <div class="level-section">
+    <div class="level-header">
+      <span class="level-tag b1">B1</span>
+      <span class="level-title">Mittelstufe — Intermediate</span>
+    </div>
+    <div class="cards">
+      <a href="German_B1_Grammar_Study.html" class="card grammar">
+        <div class="card-icon">📖</div>
+        <div class="card-title">B1 Grammatik</div>
+        <div class="card-desc">Advanced grammar — Präteritum, Konjunktiv II, Passiv, Relativsätze, Doppelkonnektoren.</div>
+        <div class="card-stats">
+          <span class="stat">18 Lektionen</span>
+        </div>
+      </a>
+      <a href="German_B1_Vocabulary_Flashcards.html" class="card vocab">
+        <div class="card-icon">🗂️</div>
+        <div class="card-title">B1 Vokabel-Karteikarten</div>
+        <div class="card-desc">Advanced vocabulary flashcards for B1 topics.</div>
+      </a>
+      <a href="German_B1_Articles_Practice.html" class="card articles">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">B1 Artikel-Training</div>
+        <div class="card-desc">Article practice with abstract and advanced nouns.</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Cross-Level Tools -->
+  <div class="level-section">
+    <div class="level-header">
+      <span class="level-tag all">A1–B1</span>
+      <span class="level-title">Übergreifende Tools</span>
+    </div>
+    <div class="cards">
+      <a href="German_Vocabulary_Builder.html" class="card vocab">
+        <div class="card-icon">📚</div>
+        <div class="card-title">Vokabel-Builder</div>
+        <div class="card-desc">Comprehensive vocabulary tool — Flashcard, Quiz, Article Practice &amp; Spelling modes across all levels.</div>
+        <div class="card-stats">
+          <span class="stat">635+ Wörter</span>
+          <span class="stat">4 Modi</span>
+        </div>
+      </a>
+      <a href="German_Verb_Conjugation_Trainer.html" class="card verbs">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">Verb-Konjugationstrainer</div>
+        <div class="card-desc">Conjugate 52 verbs across 4 tenses — Präsens, Perfekt, Präteritum, Konjunktiv II.</div>
+        <div class="card-stats">
+          <span class="stat">52 Verben</span>
+          <span class="stat">4 Zeiten</span>
+          <span class="stat">3 Modi</span>
+        </div>
+      </a>
+      <a href="German_Story_Grammar_Study.html" class="card stories">
+        <div class="card-icon">📝</div>
+        <div class="card-title">Geschichten mit Grammatik</div>
+        <div class="card-desc">Read stories with click-to-reveal grammar annotations on every word — color-coded by part of speech.</div>
+        <div class="card-stats">
+          <span class="stat">13 Geschichten</span>
+          <span class="stat">600+ Wörter annotiert</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Based on <em>Starten wir! A1</em> (Hueber) &amp; <em>Grammatik aktiv A1–B1</em> (Cornelsen)
+</footer>
+
 </body>
+</html>

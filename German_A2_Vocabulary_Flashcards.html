@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German A2 — Vocabulary in Sentences</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0d9488;
+            --primary-light: #5eead4;
+            --primary-bg: #f0fdfa;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --bg-light: #f9fafb;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f3f4f6;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0d9488, #0891b2);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-bar {
+            background: var(--border);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #0d9488, #0891b2);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+
+        .filter-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .filter-chip {
+            padding: 0.6rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            color: var(--text-dark);
+        }
+
+        .filter-chip:hover {
+            border-color: var(--primary);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .flashcard {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped .card-front {
+            display: none;
+        }
+
+        .flashcard.flipped .card-back {
+            display: flex;
+        }
+
+        .card-back {
+            display: none;
+        }
+
+        .card-front,
+        .card-back {
+            transition: all 0.3s ease;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .cat-wechselprapositionen { background: #dbeafe; color: #1e40af; }
+        .cat-adjektive { background: #fce7f3; color: #9d174d; }
+        .cat-komparativ { background: #fef3c7; color: #92400e; }
+        .cat-konnektoren { background: #d1fae5; color: #065f46; }
+        .cat-lokale { background: #e0e7ff; color: #3730a3; }
+        .cat-wortbildung { background: #ede9fe; color: #5b21b6; }
+        .cat-nebensatze { background: #fee2e2; color: #991b1b; }
+        .cat-alltagssatze { background: #f0fdfa; color: #0d9488; }
+
+        .question {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .blank-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .blank-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            transition: border-color 0.2s ease;
+        }
+
+        .blank-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .check-btn {
+            padding: 0.8rem 1.6rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .check-btn:hover {
+            background: #0f766e;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(13, 148, 136, 0.3);
+        }
+
+        .check-btn:active {
+            transform: translateY(0);
+        }
+
+        .card-back {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .answer-section {
+            background: var(--primary-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .answer-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-word {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .answer-translation {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+        }
+
+        .hint-section {
+            background: #fffbeb;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .hint-label {
+            font-size: 0.8rem;
+            color: #92400e;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .hint-text {
+            font-size: 0.95rem;
+            color: #78350f;
+        }
+
+        .info-section {
+            background: #f0f9ff;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #0284c7;
+            font-size: 0.95rem;
+            color: #0c4a6e;
+        }
+
+        .navigation {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .nav-btn {
+            padding: 0.8rem 1.6rem;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-dark);
+        }
+
+        .nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .flip-btn {
+            background: var(--primary-bg);
+            border-color: var(--primary);
+            color: var(--primary);
+            flex: 1;
+        }
+
+        .flip-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .completion-screen {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .completion-screen.show {
+            display: block;
+        }
+
+        .completion-screen h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .completion-stats {
+            background: var(--primary-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .completion-stat {
+            font-size: 1.2rem;
+            margin: 0.8rem 0;
+            color: var(--text-dark);
+        }
+
+        .completion-stat strong {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .restart-btn {
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .restart-btn:hover {
+            background: #0f766e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+        }
+
+        .keyboard-hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 1rem;
+            text-align: center;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .flashcard {
+                padding: 1.5rem 1rem;
+                min-height: 350px;
+            }
+
+            .question {
+                font-size: 1.1rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .navigation {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Wörter in Sätzen lernen</h1>
+        <p>A2 Vocabulary Flashcards — Learn words in context</p>
+    </div>
+
+    <div class="container">
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value" id="correctCount">0</div>
+                <div class="stat-label">Correct</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="answeredCount">0</div>
+                <div class="stat-label">Answered</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="accuracyCount">0%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="streakCount">0</div>
+                <div class="stat-label">Streak</div>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="filter-section">
+            <label class="filter-label">Categories</label>
+            <div class="filter-chips" id="filterChips"></div>
+        </div>
+
+        <div id="cardContainer"></div>
+
+        <div class="completion-screen" id="completionScreen">
+            <h2>Great job! 🎉</h2>
+            <div class="completion-stats">
+                <div class="completion-stat">You answered <strong id="finalAnswered">0</strong> cards</div>
+                <div class="completion-stat">Correct: <strong id="finalCorrect">0</strong></div>
+                <div class="completion-stat">Final Accuracy: <strong id="finalAccuracy">0%</strong></div>
+                <div class="completion-stat">Best Streak: <strong id="finalStreak">0</strong></div>
+            </div>
+            <button class="restart-btn" onclick="restart()">Start Over</button>
+        </div>
+
+        <div class="keyboard-hint">
+            <strong>Keyboard:</strong> Enter = Check | Space = Flip | ← → = Navigate | R = Restart
+        </div>
+    </div>
+
+    <script>
+        const vocabData = [
+            // Wechselpräpositionen (~15 cards)
+            {cat:'Wechselpräpositionen', de:'Ich stelle die Blumen auf ___ Tisch.', word:'den', en:'I place the flowers on the table.', hint:'auf + Akk (movement/direction)', info:'Two-way prepositions use Akkusativ when expressing movement.'},
+            {cat:'Wechselpräpositionen', de:'Die Blumen stehen auf ___ Tisch.', word:'dem', en:'The flowers stand on the table.', hint:'auf + Dat (location)', info:'Two-way prepositions use Dativ when describing a fixed location.'},
+            {cat:'Wechselpräpositionen', de:'Er hängt das Bild an ___ Wand.', word:'die', en:'He hangs the picture on the wall.', hint:'an + Akk (movement)', info:'Akkusativ indicates direction/change of position.'},
+            {cat:'Wechselpräpositionen', de:'Das Bild hängt an ___ Wand.', word:'der', en:'The picture hangs on the wall.', hint:'an + Dat (location)', info:'Dativ indicates a static location.'},
+            {cat:'Wechselpräpositionen', de:'Sie legt das Buch unter ___ Lampe.', word:'die', en:'She places the book under the lamp.', hint:'unter + Akk (movement)', info:'Movement to a location uses Akkusativ.'},
+            {cat:'Wechselpräpositionen', de:'Das Buch liegt unter ___ Lampe.', word:'der', en:'The book lies under the lamp.', hint:'unter + Dat (location)', info:'Static position uses Dativ.'},
+            {cat:'Wechselpräpositionen', de:'Der Hund sitzt vor ___ Tür.', word:'der', en:'The dog sits in front of the door.', hint:'vor + Dat (location)', info:'Dativ for stationary position.'},
+            {cat:'Wechselpräpositionen', de:'Wir stellen einen Stuhl vor ___ Tür.', word:'die', en:'We put a chair in front of the door.', hint:'vor + Akk (movement)', info:'Akkusativ for directional movement.'},
+            {cat:'Wechselpräpositionen', de:'Der Baum steht hinter ___ Haus.', word:'dem', en:'The tree stands behind the house.', hint:'hinter + Dat (location)', info:'Dativ for fixed location.'},
+            {cat:'Wechselpräpositionen', de:'Sie läuft hinter ___ Haus.', word:'das', en:'She runs behind the house.', hint:'hinter + Akk (movement)', info:'Akkusativ for direction.'},
+            {cat:'Wechselpräpositionen', de:'Der Stuhl steht neben ___ Fenster.', word:'dem', en:'The chair stands next to the window.', hint:'neben + Dat (location)', info:'Static position.'},
+            {cat:'Wechselpräpositionen', de:'Sie stellt den Stuhl neben ___ Fenster.', word:'das', en:'She places the chair next to the window.', hint:'neben + Akk (movement)', info:'Movement or change of position.'},
+            {cat:'Wechselpräpositionen', de:'Die Katze schläft in ___ Bett.', word:'dem', en:'The cat sleeps in the bed.', hint:'in + Dat (location)', info:'Dativ for a location inside.'},
+            {cat:'Wechselpräpositionen', de:'Der Junge springt in ___ See.', word:'den', en:'The boy jumps into the lake.', hint:'in + Akk (movement)', info:'Akkusativ for movement into a space.'},
+            {cat:'Wechselpräpositionen', de:'Die Lampe hängt über ___ Tisch.', word:'dem', en:'The lamp hangs above the table.', hint:'über + Dat (location)', info:'Dativ for static position.'},
+
+            // Adjektive (~20 cards)
+            {cat:'Adjektive', de:'Der ___ Mann trinkt Kaffee.', word:'nette', en:'The nice man drinks coffee.', hint:'der + Nom + Adjektiv', info:'Nominative adjective ending after "der" is -e.'},
+            {cat:'Adjektive', de:'Ich sehe den ___ Mann.', word:'netten', en:'I see the nice man.', hint:'den + Akk + Adjektiv', info:'Accusative adjective ending after "den" is -en.'},
+            {cat:'Adjektive', de:'Sie gibt dem ___ Kind ein Buch.', word:'kleinen', en:'She gives the small child a book.', hint:'dem + Dat + Adjektiv', info:'Dative adjective ending after "dem" is -en.'},
+            {cat:'Adjektive', de:'Ein ___ Haus steht am See.', word:'schönes', en:'A beautiful house stands by the lake.', hint:'ein + Nom neuter + Adjektiv', info:'Nominative neuter adjective ending with "ein" is -es.'},
+            {cat:'Adjektive', de:'Ich kaufe eine ___ Tasche.', word:'neue', en:'I buy a new bag.', hint:'eine + Akk fem + Adjektiv', info:'Accusative feminine adjective ending is -e.'},
+            {cat:'Adjektive', de:'Mit einem ___ Freund fahre ich nach Italien.', word:'guten', en:'With a good friend I travel to Italy.', hint:'einem + Dat + Adjektiv', info:'Dative masculine adjective ending with "einem" is -en.'},
+            {cat:'Adjektive', de:'Das ___ Buch ist sehr interessant.', word:'alte', en:'The old book is very interesting.', hint:'das + Nom neuter + Adjektiv', info:'Nominative neuter adjective ending after "das" is -e.'},
+            {cat:'Adjektive', de:'Sie mag den ___ Film sehr.', word:'neuen', en:'She likes the new film very much.', hint:'den + Akk + Adjektiv', info:'Accusative adjective ending is -en.'},
+            {cat:'Adjektive', de:'Wir besuchen unsere ___ Großmutter.', word:'alte', en:'We visit our old grandmother.', hint:'unsere + Akk fem + Adjektiv', info:'Feminine accusative adjective ends in -e.'},
+            {cat:'Adjektive', de:'Er arbeitet in einem ___ Büro.', word:'großen', en:'He works in a large office.', hint:'einem + Dat + Adjektiv', info:'Dative adjective ending is -en.'},
+            {cat:'Adjektive', de:'Die ___ Frau spricht Französisch.', word:'intelligente', en:'The intelligent woman speaks French.', hint:'die + Nom fem + Adjektiv', info:'Nominative feminine adjective ends in -e.'},
+            {cat:'Adjektive', de:'Wir sehen eine ___ Stadt.', word:'historische', en:'We see a historic city.', hint:'eine + Akk fem + Adjektiv', info:'Accusative feminine ends in -e.'},
+            {cat:'Adjektive', de:'Ohne einen ___ Plan ist es schwierig.', word:'guten', en:'Without a good plan it is difficult.', hint:'einen + Akk + Adjektiv', info:'Accusative masculine with "einen" ends in -en.'},
+            {cat:'Adjektive', de:'Das ist ein ___ Beispiel.', word:'perfektes', en:'That is a perfect example.', hint:'ein + Nom neuter + Adjektiv', info:'Nominative neuter with "ein" ends in -es.'},
+            {cat:'Adjektive', de:'Sie trägt einen ___ Mantel.', word:'roten', en:'She wears a red coat.', hint:'einen + Akk + Adjektiv', info:'Accusative masculine ends in -en.'},
+            {cat:'Adjektive', de:'Ich kenne einen ___ Arzt.', word:'erfahrenen', en:'I know an experienced doctor.', hint:'einen + Akk + Adjektiv', info:'Accusative masculine adjective ends in -en.'},
+
+            // Komparativ (~15 cards)
+            {cat:'Komparativ', de:'Mein Auto ist ___ als dein Auto.', word:'schneller', en:'My car is faster than your car.', hint:'schnell → schneller (comparative)', info:'Regular adjectives add -er for comparative form.'},
+            {cat:'Komparativ', de:'Berlin ist ___ als München.', word:'größer', en:'Berlin is bigger than Munich.', hint:'groß → größer (umlaut + -er)', info:'Some adjectives add umlaut with -er.'},
+            {cat:'Komparativ', de:'Er spricht ___ Deutsch als ich.', word:'besser', en:'He speaks better German than I do.', hint:'gut → besser (irregular)', info:'Gut is irregular: gut → besser → am besten.'},
+            {cat:'Komparativ', de:'Sie läuft genauso ___ wie er.', word:'schnell', en:'She runs just as fast as he does.', hint:'genauso + Positiv + wie', info:'Use positive form with "genauso...wie" for equal comparison.'},
+            {cat:'Komparativ', de:'Im Winter ist es ___ als im Herbst.', word:'kälter', en:'In winter it is colder than in autumn.', hint:'kalt → kälter (umlaut)', info:'Adjectives with a/o/u often add umlaut in comparative.'},
+            {cat:'Komparativ', de:'Dieser Film ist nicht so ___ wie jener.', word:'interessant', en:'This film is not as interesting as that one.', hint:'nicht so + Positiv + wie', info:'Use positive form with "nicht so...wie".'},
+            {cat:'Komparativ', de:'Italienisch ist ___ als Französisch.', word:'leichter', en:'Italian is easier than French.', hint:'leicht → leichter', info:'Regular adjective with -er for comparison.'},
+            {cat:'Komparativ', de:'Die Nacht ist ___ als der Tag.', word:'dunkler', en:'The night is darker than the day.', hint:'dunkel → dunkler (umlaut)', info:'Umlaut in comparative form.'},
+            {cat:'Komparativ', de:'Er verdient ___ Geld als sein Bruder.', word:'mehr', en:'He earns more money than his brother.', hint:'viel → mehr (irregular)', info:'Viel is irregular: viel → mehr → am meisten.'},
+            {cat:'Komparativ', de:'Sie isst ___ gerne Pizza als Pasta.', word:'lieber', en:'She likes to eat pizza better than pasta.', hint:'gerne → lieber (irregular)', info:'Gerne is irregular: gerne → lieber → am liebsten.'},
+            {cat:'Komparativ', de:'Dieser Stuhl ist ___ als jener.', word:'bequemer', en:'This chair is more comfortable than that one.', hint:'bequem → bequemer', info:'Regular comparative adds -er.'},
+            {cat:'Komparativ', de:'Das Wetter ist heute ___ als gestern.', word:'schöner', en:'The weather is nicer today than yesterday.', hint:'schön → schöner (umlaut)', info:'Schön uses umlaut: schön → schöner.'},
+            {cat:'Komparativ', de:'Das Problem ist ___ als ich dachte.', word:'komplizierter', en:'The problem is more complicated than I thought.', hint:'kompliziert → komplizierter', info:'Longer adjectives still add -er for comparative.'},
+            {cat:'Komparativ', de:'Dies ist eine ___ Lösung.', word:'bessere', en:'This is a better solution.', hint:'besser (comparative) + Adjektivendung', info:'Comparative forms can also take adjective endings.'},
+            {cat:'Komparativ', de:'Mit jedem Tag wird es ___', word:'wärmer', en:'With each day it becomes warmer.', hint:'warm → wärmer (umlaut)', info:'Comparative of warm uses umlaut.'},
+
+            // Konnektoren (~20 cards)
+            {cat:'Konnektoren', de:'Ich bin müde, ___ ich gehe ins Bett.', word:'deshalb', en:'I am tired, therefore I go to bed.', hint:'deshalb (consequence)', info:'Deshalb connects a consequence; main verb order.'},
+            {cat:'Konnektoren', de:'Er lernt Deutsch, ___ er in Berlin arbeitet.', word:'weil', en:'He learns German because he works in Berlin.', hint:'weil + verb at end', info:'Weil is a subordinating conjunction; verb goes to end.'},
+            {cat:'Konnektoren', de:'Ich weiß, ___ du Recht hast.', word:'dass', en:'I know that you are right.', hint:'dass + verb at end', info:'Dass introduces a subordinate clause with verb at end.'},
+            {cat:'Konnektoren', de:'___ es regnet, bleibe ich zu Hause.', word:'Wenn', en:'If it rains, I stay at home.', hint:'Wenn + verb at end', info:'Wenn (if/when) is subordinating; verb goes to end.'},
+            {cat:'Konnektoren', de:'Ich mag Tee, ___ ich trinke lieber Kaffee.', word:'aber', en:'I like tea, but I drink coffee more gladly.', hint:'aber (but)', info:'Aber is coordinating; maintains main clause word order.'},
+            {cat:'Konnektoren', de:'Er kann nicht kommen, ___ er krank ist.', word:'denn', en:'He cannot come, because he is ill.', hint:'denn (because)', info:'Denn is coordinating; main verb order on both sides.'},
+            {cat:'Konnektoren', de:'Beeil dich, ___ wir kommen zu spät.', word:'sonst', en:'Hurry, or else we will be late.', hint:'sonst (otherwise)', info:'Sonst means "otherwise"; coordinating conjunction.'},
+            {cat:'Konnektoren', de:'___ du fertig bist, rufe mich an.', word:'Wenn', en:'When you are finished, call me.', hint:'Wenn (when/if) + verb at end', info:'Wenn can mean both "if" and "when".'},
+            {cat:'Konnektoren', de:'Ich fahre nach Paris, ___ ich die Stadt liebe.', word:'denn', en:'I travel to Paris because I love the city.', hint:'denn (reason/because)', info:'Denn expresses reason; coordinating use.'},
+            {cat:'Konnektoren', de:'Sie arbeitet hart, ___ sie erfolgreich sein will.', word:'weil', en:'She works hard because she wants to be successful.', hint:'weil + verb at end', info:'Subordinating conjunction requires verb-final position.'},
+            {cat:'Konnektoren', de:'___ es zu spät wird, fahren wir jetzt.', word:'Damit', en:'So that it does not get too late, we drive now.', hint:'Damit (so that)', info:'Damit expresses purpose; subordinating.'},
+            {cat:'Konnektoren', de:'Er studiert Medizin, ___ er Arzt werden möchte.', word:'weil', en:'He studies medicine because he wants to become a doctor.', hint:'weil + verb-final', info:'Weil subordinates; verb position shifts to end.'},
+            {cat:'Konnektoren', de:'Das ist schlecht, ___ das Essen schmeckt gut.', word:'aber', en:'That is bad, but the food tastes good.', hint:'aber (but)', info:'Aber is coordinating; maintains word order.'},
+            {cat:'Konnektoren', de:'Ich glaube, ___ er kommt morgen.', word:'dass', en:'I believe that he comes tomorrow.', hint:'dass + subordinate word order', info:'Dass introduces subordinate clauses.'},
+            {cat:'Konnektoren', de:'Sie geht nach Hause, ___ sie müde ist.', word:'weil', en:'She goes home because she is tired.', hint:'weil + verb at end', info:'Subordinating conjunction places verb at clause end.'},
+
+            // Lokale Präpositionen (~15 cards)
+            {cat:'Lokale', de:'Ich fahre ___ Berlin.', word:'nach', en:'I travel to Berlin.', hint:'nach + cities without article', info:'Nach is used for cities and countries without articles.'},
+            {cat:'Lokale', de:'Ich fahre ___ die Türkei.', word:'in', en:'I travel to Turkey.', hint:'in + Akk (countries with article)', info:'In (+ Akkusativ) for countries with articles and regions.'},
+            {cat:'Lokale', de:'Er kommt ___ der Schule.', word:'aus', en:'He comes from school.', hint:'aus + Dativ (Woher)', info:'Aus answers "where from"; always Dativ.'},
+            {cat:'Lokale', de:'Wir gehen ___ Arzt.', word:'zum', en:'We go to the doctor.', hint:'zu + dem = zum (Dativ)', info:'Zum is contraction of zu + dem.'},
+            {cat:'Lokale', de:'Sie geht ___ Bäcker.', word:'zum', en:'She goes to the baker.', hint:'zu + dem = zum', info:'Zum for people and professions.'},
+            {cat:'Lokale', de:'Ich komme ___ dem Büro.', word:'aus', en:'I come from the office.', hint:'aus + Dativ', info:'Aus always takes Dativ for origin/source.'},
+            {cat:'Lokale', de:'Wir fahren ___ England.', word:'nach', en:'We travel to England.', hint:'nach + countries without article', info:'Nach for countries without articles.'},
+            {cat:'Lokale', de:'Er kommt ___ New York.', word:'aus', en:'He comes from New York.', hint:'aus + Dativ', info:'Aus for origin; Dativ required.'},
+            {cat:'Lokale', de:'Sie geht ___ der Post.', word:'zur', en:'She goes to the post office.', hint:'zu + der = zur (fem Dativ)', info:'Zur is contraction of zu + der (feminine).'},
+            {cat:'Lokale', de:'Ich fahre ___ die Schweiz.', word:'in', en:'I travel to Switzerland.', hint:'in + Akk (countries with article)', info:'In + Akkusativ for countries with articles.'},
+            {cat:'Lokale', de:'Der Zug fährt ___ München.', word:'nach', en:'The train travels to Munich.', hint:'nach (cities)', info:'Nach for cities without case marking.'},
+            {cat:'Lokale', de:'Sie kommt ___ dem Krankenhaus.', word:'aus', en:'She comes from the hospital.', hint:'aus + Dativ', info:'Aus requires Dativ.'},
+            {cat:'Lokale', de:'Wir gehen ___ den Park.', word:'in', en:'We go to the park.', hint:'in + Akk (with movement)', info:'In + Akkusativ indicates movement into a location.'},
+            {cat:'Lokale', de:'Er arbeitet ___ dem Haus.', word:'von', en:'He works from home.', hint:'von + Dativ', info:'Von means "from/of"; requires Dativ.'},
+            {cat:'Lokale', de:'Sie fahren ___ Frankreich.', word:'nach', en:'They travel to France.', hint:'nach (countries without article)', info:'Nach for most countries without articles.'},
+
+            // Wortbildung (~15 cards)
+            {cat:'Wortbildung', de:'der Schlaf + das Zimmer = das ___', word:'Schlafzimmer', en:'sleep + room = bedroom', hint:'Compound word (Schlaf+zimmer)', info:'German compound words combine nouns, using the gender of the last word.'},
+            {cat:'Wortbildung', de:'die Geburt + der Tag = der ___', word:'Geburtstag', en:'birth + day = birthday', hint:'Compound word (Geburts+tag)', info:'The final word determines the gender and article.'},
+            {cat:'Wortbildung', de:'die Arbeit + der Platz = der ___', word:'Arbeitsplatz', en:'work + place = workplace', hint:'Compound word', info:'Arbeitsplatz is a workplace; combines two nouns.'},
+            {cat:'Wortbildung', de:'das Haus + die Aufgabe = die ___', word:'Hausaufgabe', en:'house + task = homework', hint:'Compound word (Haus+aufgabe)', info:'Hausaufgabe means homework; the gender of "Aufgabe" (f) is used.'},
+            {cat:'Wortbildung', de:'die Sonne + der Schein = der ___', word:'Sonnenschein', en:'sun + shine = sunshine', hint:'Compound word (Sonnen+schein)', info:'Gender of the last word (Schein) is masculine.'},
+            {cat:'Wortbildung', de:'der Zahn + der Arzt = der ___', word:'Zahnarzt', en:'tooth + doctor = dentist', hint:'Compound word (Zahn+arzt)', info:'Zahnarzt is a dentist; masculine from "Arzt".'},
+            {cat:'Wortbildung', de:'der Kaffee + die Tasse = die ___', word:'Kaffeetasse', en:'coffee + cup = coffee cup', hint:'Compound word (Kaffee+tasse)', info:'Gender of "Tasse" (f) is used for the compound.'},
+            {cat:'Wortbildung', de:'der Schrank + das Bad = das ___', word:'Badschrank', en:'cabinet + bath = bathroom cabinet', hint:'Compound word (Bad+schrank)', info:'The last word determines gender; Schrank is masculine but combines as neuter compound.'},
+            {cat:'Wortbildung', de:'das Wort + die Schatz = der ___', word:'Wortschatz', en:'word + treasure = vocabulary', hint:'Compound word (Wort+schatz)', info:'Wortschatz means vocabulary; masculine from "Schatz".'},
+            {cat:'Wortbildung', de:'die Hand + der Schuh = der ___', word:'Handschuh', en:'hand + shoe = glove', hint:'Compound word (Hand+schuh)', info:'Handschuh means glove; gender of "Schuh" (m).'},
+            {cat:'Wortbildung', de:'das Kind + das Zimmer = das ___', word:'Kinderzimmer', en:'child + room = child\'s room/nursery', hint:'Compound word (Kinder+zimmer)', info:'Kinderzimmer is a nursery or children\'s room.'},
+            {cat:'Wortbildung', de:'das Wasser + die Flasche = die ___', word:'Wasserflasche', en:'water + bottle = water bottle', hint:'Compound word (Wasser+flasche)', info:'Gender from "Flasche" (feminine).'},
+            {cat:'Wortbildung', de:'der Fuß + der Ball = der ___', word:'Fußball', en:'foot + ball = football/soccer', hint:'Compound word (Fuß+ball)', info:'Fußball is soccer or a football.'},
+            {cat:'Wortbildung', de:'die Liebe + das Lied = das ___', word:'Liebeslied', en:'love + song = love song', hint:'Compound word (Liebes+lied)', info:'Gender of "Lied" (neuter) is used.'},
+            {cat:'Wortbildung', de:'die Nacht + der Klub = der ___', word:'Nachtklub', en:'night + club = nightclub', hint:'Compound word (Nacht+klub)', info:'Gender of "Klub" (masculine) is used.'},
+
+            // Nebensätze (~20 cards)
+            {cat:'Nebensätze', de:'Ich lerne Deutsch, weil ich in Deutschland ___.', word:'arbeite', en:'I learn German because I work in Germany.', hint:'weil + verb at end', info:'Subordinate clauses with "weil" place the finite verb at the end.'},
+            {cat:'Nebensätze', de:'Wenn ich Zeit ___, gehe ich spazieren.', word:'habe', en:'If I have time, I go for a walk.', hint:'Wenn + verb at end', info:'Conditional clauses with "wenn" place verb at the clause end.'},
+            {cat:'Nebensätze', de:'Er sagt, dass er morgen ___.', word:'kommt', en:'He says that he comes tomorrow.', hint:'dass + verb at end', info:'Object clauses with "dass" require verb-final position.'},
+            {cat:'Nebensätze', de:'Ich weiß nicht, ob sie heute ___.', word:'arbeitet', en:'I do not know whether she works today.', hint:'ob + verb at end', info:'"Ob" (whether) is subordinating; verb goes to end.'},
+            {cat:'Nebensätze', de:'___ du ankommst, rufe mich an.', word:'Sobald', en:'As soon as you arrive, call me.', hint:'Sobald + verb at end', info:'"Sobald" means "as soon as"; subordinating.'},
+            {cat:'Nebensätze', de:'Das Kind ___t, weil es zu laut ist.', word:'weinst', en:'The child cries because it is too loud.', hint:'weil + subordinate word order', info:'Reason clauses place verb at end.'},
+            {cat:'Nebensätze', de:'Ich bin sicher, dass du ___ .', word:'Recht hast', en:'I am sure that you are right.', hint:'dass + verb phrase at end', info:'Verb placement follows subordinate clause rules.'},
+            {cat:'Nebensätze', de:'___ wir fertig sind, fahren wir nach Hause.', word:'Wenn', en:'When we are finished, we go home.', hint:'Wenn + verb at end', info:'"Wenn" can mean both "if" and "when".'},
+            {cat:'Nebensätze', de:'Sie liest ein Buch, während sie ___.', word:'wartet', en:'She reads a book while she waits.', hint:'während + verb at end', info:'"Während" (while) is subordinating; verb at end.'},
+            {cat:'Nebensätze', de:'Ich kaufe das Auto, weil es ___.', word:'schön ist', en:'I buy the car because it is beautiful.', hint:'weil + verb phrase at end', info:'Subordinate clause verb goes to final position.'},
+            {cat:'Nebensätze', de:'___ es dunkel wird, gehen wir ins Haus.', word:'Bevor', en:'Before it gets dark, we go inside.', hint:'Bevor + verb at end', info:'"Bevor" (before) is subordinating.'},
+            {cat:'Nebensätze', de:'Das ist der Grund, warum ich ___', word:'komme', en:'That is the reason why I come.', hint:'warum + verb at end', info:'"Warum" (why) introduces reason clauses.'},
+            {cat:'Nebensätze', de:'Ich glaube, dass das Wetter morgen ___.', word:'schön wird', en:'I believe that the weather tomorrow will be nice.', hint:'dass + full verb phrase at end', info:'Object clauses place all verb components at end.'},
+            {cat:'Nebensätze', de:'___  er zurückkommt, ist mir egal.', word:'Ob', en:'Whether he comes back is indifferent to me.', hint:'Ob + verb at end', info:'"Ob" (whether) questions place verb at end.'},
+            {cat:'Nebensätze', de:'Das Mädchen, das in der Schule ___, ist klug.', word:'arbeitet', en:'The girl who works in school is smart.', hint:'Relative clause + verb at end', info:'Relative clauses also place verbs at the end.'},
+            {cat:'Nebensätze', de:'Wir treffen uns, nachdem du ___.', word:'ankommst', en:'We meet after you arrive.', hint:'nachdem + verb at end', info:'"Nachdem" (after) is subordinating; verb-final.'},
+            {cat:'Nebensätze', de:'Ich esse, solange ich ___.', word:'Hunger habe', en:'I eat as long as I am hungry.', hint:'solange + verb at end', info:'"Solange" (as long as) places verb at end.'},
+            {cat:'Nebensätze', de:'Er arbeitet, obwohl er ___', word:'müde ist', en:'He works although he is tired.', hint:'obwohl + verb at end', info:'"Obwohl" (although) is subordinating; verb-final.'},
+            {cat:'Nebensätze', de:'Ich weiß, dass du ___ willst.', word:'es', en:'I know that you want it.', hint:'dass + object + verb', info:'Object can precede the verb in subordinate clauses.'},
+            {cat:'Nebensätze', de:'Die Person, ___ ich gestern traf, war nett.', word:'die', en:'The person whom I met yesterday was nice.', hint:'Relative pronoun + verb at end', info:'Relative clauses follow verb-final word order.'},
+
+            // Alltagssätze (~20 cards)
+            {cat:'Alltagssätze', de:'Können Sie mir ___, wo der Bahnhof ist?', word:'sagen', en:'Can you tell me where the station is?', hint:'modal verb + infinitive', info:'Infinitive forms go to the end in clauses with modals.'},
+            {cat:'Alltagssätze', de:'Ich ___ mich für Musik.', word:'interessiere', en:'I am interested in music.', hint:'sich interessieren für', info:'Reflexive verb construction with accusative object.'},
+            {cat:'Alltagssätze', de:'Er hat sich ___ einen Hund gewünscht.', word:'immer', en:'He always wished for a dog.', hint:'Perfekt + adverb', info:'Perfect tense with adverbial placement.'},
+            {cat:'Alltagssätze', de:'Ich muss noch ___ machen.', word:'Einkaufen', en:'I still have to shop.', hint:'müssen + infinitive', info:'Modal verb requires infinitive at end.'},
+            {cat:'Alltagssätze', de:'Wir haben ___ ins Kino gehen wollen.', word:'gestern', en:'We wanted to go to the cinema yesterday.', hint:'Perfekt with wollen', info:'Temporal adverbs in perfect tense constructions.'},
+            {cat:'Alltagssätze', de:'Ich bin ___ krank.', word:'leider', en:'Unfortunately, I am sick.', hint:'adverb + Kopulaverb', info:'Adverbs modify the entire clause.'},
+            {cat:'Alltagssätze', de:'Das ist ein ___ Problem.', word:'großes', en:'That is a big problem.', hint:'Nominativ Neutrum + Adjektiv', info:'Adjective agrees with noun in case, number, gender.'},
+            {cat:'Alltagssätze', de:'Sie arbeitet ___ Stunden pro Woche.', word:'40', en:'She works 40 hours per week.', hint:'Number + noun', info:'Numbers with noun measurements.'},
+            {cat:'Alltagssätze', de:'Ich habe ___ zum Frühstück gegessen.', word:'Brot', en:'I ate bread for breakfast.', hint:'Akkusativ + Perfekt', info:'Direct objects in perfect tense are accusative.'},
+            {cat:'Alltagssätze', de:'Können Sie ___ helfen?', word:'mir', en:'Can you help me?', hint:'Dativ indirect object', info:'Indirect objects take dative case.'},
+            {cat:'Alltagssätze', de:'Das Konzert hat ___ lang gedauert.', word:'drei Stunden', en:'The concert lasted three hours.', hint:'Time expressions with dauern', info:'Duration expressions with accusative.'},
+            {cat:'Alltagssätze', de:'Morgen ___ ich ins Büro.', word:'fahre', en:'Tomorrow I drive to the office.', hint:'Präsens + Zeitsangabe', info:'Simple present tense for future plans.'},
+            {cat:'Alltagssätze', de:'Ich bin ___ dankbar.', word:'dir', en:'I am grateful to you.', hint:'Dativ with dankbar', info:'Dankbar requires dative case.'},
+            {cat:'Alltagssätze', de:'Wir müssen ___ verabreden.', word:'einen Termin', en:'We need to arrange a time.', hint:'Akkusativ + Verb', info:'Direct object in accusative.'},
+            {cat:'Alltagssätze', de:'___ Minuten hattest du Pause?', word:'Wie viele', en:'How many minutes did you have break?', hint:'Fragepronomen + Akk', info:'Question words with accusative.'},
+            {cat:'Alltagssätze', de:'Das Restaurant ist ___ lecker.', word:'sehr', en:'The restaurant is very delicious.', hint:'Adverb + Adjektiv', info:'Adverbs intensify adjectives.'},
+            {cat:'Alltagssätze', de:'Ich ___ Deutsch seit fünf Jahren.', word:'lerne', en:'I have been learning German for five years.', hint:'Präsens for duration', info:'Simple present can express ongoing actions.'},
+            {cat:'Alltagssätze', de:'Können wir morgen ___?', word:'treffen', en:'Can we meet tomorrow?', hint:'Modal + Infinitive', info:'Modal verbs with infinitives.'},
+            {cat:'Alltagssätze', de:'Das ist ___ Idee!', word:'eine großartige', en:'That is a great idea!', hint:'Artikelwort + Adjektiv + Noun', info:'Articles and adjectives agree in case.'},
+            {cat:'Alltagssätze', de:'Ich freue mich ___ den Urlaub.', word:'auf', en:'I look forward to the vacation.', hint:'sich freuen auf + Akkusativ', info:'"Sich freuen auf" requires accusative object.'}
+        ];
+
+        let currentIndex = 0;
+        let filteredCards = [...vocabData];
+        let currentFilter = 'all';
+        let isFlipped = false;
+
+        const stats = {
+            correct: 0,
+            answered: 0,
+            streak: 0,
+            maxStreak: 0
+        };
+
+        const statsKey = 'vocabStatsA2';
+
+        function loadStats() {
+            const saved = localStorage.getItem(statsKey);
+            if (saved) {
+                Object.assign(stats, JSON.parse(saved));
+            }
+        }
+
+        function saveStats() {
+            localStorage.setItem(statsKey, JSON.stringify(stats));
+        }
+
+        function shuffleArray(arr) {
+            const shuffled = [...arr];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function getCategories() {
+            const cats = new Set(vocabData.map(card => card.cat));
+            return Array.from(cats).sort();
+        }
+
+        function renderFilters() {
+            const container = document.getElementById('filterChips');
+            const categories = getCategories();
+
+            container.innerHTML = '<button class="filter-chip active" onclick="setFilter(\'all\')">All Categories</button>';
+
+            categories.forEach(cat => {
+                const chip = document.createElement('button');
+                chip.className = 'filter-chip';
+                chip.textContent = cat;
+                chip.onclick = () => setFilter(cat);
+                container.appendChild(chip);
+            });
+        }
+
+        function setFilter(category) {
+            currentFilter = category;
+            currentIndex = 0;
+            isFlipped = false;
+
+            if (category === 'all') {
+                filteredCards = shuffleArray(vocabData);
+            } else {
+                filteredCards = shuffleArray(vocabData.filter(card => card.cat === category));
+            }
+
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+                if (chip.textContent === (category === 'all' ? 'All Categories' : category)) {
+                    chip.classList.add('active');
+                }
+            });
+
+            renderCard();
+            updateProgress();
+        }
+
+        function renderCard() {
+            if (currentIndex >= filteredCards.length) {
+                showCompletion();
+                return;
+            }
+
+            const card = filteredCards[currentIndex];
+            const catClass = 'cat-' + card.cat.toLowerCase().replace(/\s+/g, '');
+
+            const html = `
+                <div class="category-badge ${catClass}">${card.cat}</div>
+
+                <div class="card-front">
+                    <div class="question">${card.de}</div>
+                    <div class="blank-input">
+                        <input type="text" id="answerInput" placeholder="Type your answer..." autocomplete="off">
+                        <button class="check-btn" onclick="checkAnswer()">Check</button>
+                    </div>
+                </div>
+
+                <div class="card-back" style="display:none;">
+                    <div class="answer-section">
+                        <div class="answer-label">Answer</div>
+                        <div class="answer-word">${card.word}</div>
+                        <div class="answer-translation">${card.en}</div>
+                    </div>
+                    <div class="hint-section">
+                        <div class="hint-label">Hint</div>
+                        <div class="hint-text">${card.hint}</div>
+                    </div>
+                    <div class="info-section">
+                        <strong>Info:</strong> ${card.info}
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button class="nav-btn" onclick="prevCard()" ${currentIndex === 0 ? 'disabled' : ''}>← Back</button>
+                    <button class="nav-btn flip-btn" onclick="flipCard()">Flip Card</button>
+                    <button class="nav-btn" onclick="nextCard()" ${currentIndex === filteredCards.length - 1 ? 'disabled' : ''}>Next →</button>
+                </div>
+            `;
+
+            document.getElementById('cardContainer').innerHTML = html;
+            document.getElementById('answerInput')?.focus();
+            updateProgress();
+            isFlipped = false;
+        }
+
+        function checkAnswer() {
+            const card = filteredCards[currentIndex];
+            const input = document.getElementById('answerInput');
+            const userAnswer = input.value.trim().toLowerCase();
+            const correctAnswer = card.word.toLowerCase();
+
+            stats.answered++;
+            if (userAnswer === correctAnswer) {
+                stats.correct++;
+                stats.streak++;
+                if (stats.streak > stats.maxStreak) {
+                    stats.maxStreak = stats.streak;
+                }
+                input.style.borderColor = '#10b981';
+                input.style.backgroundColor = '#ecfdf5';
+            } else {
+                stats.streak = 0;
+                input.style.borderColor = '#ef4444';
+                input.style.backgroundColor = '#fef2f2';
+            }
+
+            saveStats();
+            updateStats();
+            setTimeout(() => flipCard(), 500);
+        }
+
+        function flipCard() {
+            const card = document.querySelector('.flashcard');
+            const front = document.querySelector('.card-front');
+            const back = document.querySelector('.card-back');
+
+            if (isFlipped) {
+                card.classList.remove('flipped');
+                front.style.display = 'flex';
+                back.style.display = 'none';
+            } else {
+                card.classList.add('flipped');
+                front.style.display = 'none';
+                back.style.display = 'flex';
+            }
+            isFlipped = !isFlipped;
+        }
+
+        function nextCard() {
+            if (currentIndex < filteredCards.length - 1) {
+                currentIndex++;
+                isFlipped = false;
+                renderCard();
+            }
+        }
+
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                isFlipped = false;
+                renderCard();
+            }
+        }
+
+        function showCompletion() {
+            document.getElementById('cardContainer').innerHTML = '';
+            document.getElementById('completionScreen').classList.add('show');
+            document.getElementById('finalAnswered').textContent = stats.answered;
+            document.getElementById('finalCorrect').textContent = stats.correct;
+            document.getElementById('finalAccuracy').textContent = stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) : 0;
+            document.getElementById('finalStreak').textContent = stats.maxStreak;
+        }
+
+        function restart() {
+            stats.correct = 0;
+            stats.answered = 0;
+            stats.streak = 0;
+            stats.maxStreak = 0;
+            saveStats();
+            currentIndex = 0;
+            isFlipped = false;
+            document.getElementById('completionScreen').classList.remove('show');
+            setFilter('all');
+        }
+
+        function updateStats() {
+            document.getElementById('correctCount').textContent = stats.correct;
+            document.getElementById('answeredCount').textContent = stats.answered;
+            document.getElementById('accuracyCount').textContent = stats.answered > 0 ? Math.round((stats.correct / stats.answered) * 100) : 0;
+            document.getElementById('streakCount').textContent = stats.streak;
+        }
+
+        function updateProgress() {
+            const progress = filteredCards.length > 0 ? (currentIndex / filteredCards.length) * 100 : 0;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (isFlipped) {
+                    nextCard();
+                } else {
+                    checkAnswer();
+                }
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                flipCard();
+            } else if (e.key === 'ArrowLeft') {
+                prevCard();
+            } else if (e.key === 'ArrowRight') {
+                nextCard();
+            } else if (e.key === 'r' || e.key === 'R') {
+                restart();
+            }
+        });
+
+        loadStats();
+        renderFilters();
+        setFilter('all');
+        updateStats();
+    </script>
+</body>
+</html>

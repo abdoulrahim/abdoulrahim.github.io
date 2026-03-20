@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>German Stories - Grammar Study</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #1a1a2e; line-height: 1.7; }
+.header { background: linear-gradient(135deg, #2d1b69, #6b3fa0); color: white; padding: 30px 20px; text-align: center; }
+.header h1 { font-size: 28px; margin-bottom: 5px; }
+.header p { opacity: 0.85; font-size: 15px; }
+.nav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 16px 20px; background: #fff; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 100; }
+.nav button { padding: 8px 16px; border: 2px solid #ddd; border-radius: 20px; background: #fff; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+.nav button:hover { border-color: #6b3fa0; color: #6b3fa0; }
+.nav button.active { background: #6b3fa0; color: white; border-color: #6b3fa0; }
+.level-tag { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 12px; font-weight: 700; color: white; margin-right: 8px; }
+.level-a1 { background: #e67e22; }
+.level-a2 { background: #2ecc71; }
+.level-b1 { background: #e74c3c; }
+.container { max-width: 860px; margin: 0 auto; padding: 20px; }
+.story { display: none; animation: fadeIn 0.3s; }
+.story.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.story-card { background: white; border-radius: 12px; padding: 28px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.story-title { font-size: 22px; margin-bottom: 4px; color: #2d1b69; }
+.story-topic { font-size: 14px; color: #888; margin-bottom: 18px; }
+.sentence-block { margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid #f0f0f0; }
+.sentence-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.snum { display: inline-block; background: #6b3fa0; color: white; width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; font-size: 13px; font-weight: 700; margin-right: 10px; vertical-align: top; }
+.sentence-de { font-size: 18px; margin-bottom: 6px; line-height: 2; }
+.word { display: inline-block; cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: background 0.15s; position: relative; }
+.word:hover { background: #f3e8ff; }
+.word.clicked { background: #e8d5ff; }
+.popup { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #2d1b69; color: white; padding: 10px 14px; border-radius: 8px; font-size: 13px; width: max-content; max-width: 300px; z-index: 50; box-shadow: 0 4px 15px rgba(0,0,0,0.2); line-height: 1.5; }
+.popup::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #2d1b69; }
+.popup .pw { font-weight: 700; font-size: 15px; color: #c9a0ff; }
+.popup .pe { color: #a8e6cf; }
+.popup .pg { color: #ffd3b6; font-size: 12px; }
+.sentence-en { color: #666; font-size: 14px; font-style: italic; margin-left: 36px; display: none; }
+.sentence-en.show { display: block; }
+.toggle-row { display: flex; gap: 10px; margin-left: 36px; margin-top: 6px; }
+.toggle-btn { font-size: 12px; color: #6b3fa0; cursor: pointer; background: none; border: 1px solid #d4c0f0; border-radius: 12px; padding: 3px 12px; transition: all 0.2s; }
+.toggle-btn:hover { background: #f3e8ff; }
+.toggle-btn.on { background: #6b3fa0; color: white; }
+.legend { background: white; border-radius: 12px; padding: 20px 28px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.legend h3 { margin-bottom: 10px; font-size: 16px; color: #2d1b69; }
+.legend-grid { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; }
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot-verb { background: #e74c3c; }
+.dot-noun { background: #3498db; }
+.dot-adj { background: #f39c12; }
+.dot-prep { background: #2ecc71; }
+.dot-pron { background: #9b59b6; }
+.dot-adv { background: #1abc9c; }
+.dot-conj { background: #e67e22; }
+.dot-art { background: #34495e; }
+.controls-bar { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; }
+.ctrl-btn { padding: 8px 16px; border: 1px solid #d4c0f0; border-radius: 8px; background: white; cursor: pointer; font-size: 13px; color: #6b3fa0; }
+.ctrl-btn:hover { background: #f3e8ff; }
+.ctrl-btn.active-ctrl { background: #6b3fa0; color: white; }
+.grammar-color { padding: 1px 3px; border-radius: 3px; }
+.gc-verb { border-bottom: 2px solid #e74c3c; }
+.gc-noun { border-bottom: 2px solid #3498db; }
+.gc-adj { border-bottom: 2px solid #f39c12; }
+.gc-prep { border-bottom: 2px solid #2ecc71; }
+.gc-pron { border-bottom: 2px solid #9b59b6; }
+.gc-adv { border-bottom: 2px solid #1abc9c; }
+.gc-conj { border-bottom: 2px solid #e67e22; }
+.gc-art { border-bottom: 2px solid #34495e; }
+</style>
+</head>
+<body>
+<div class="header">
+<h1>📖 German Stories - Grammar Study</h1>
+<p>Click any word to see grammar details & English meaning</p>
+</div>
+<div class="nav" id="nav"></div>
+<div class="container">
+<div class="legend">
+<h3>Grammar Color Guide (underlines)</h3>
+<div class="legend-grid">
+<div class="legend-item"><div class="legend-dot dot-verb"></div>Verb</div>
+<div class="legend-item"><div class="legend-dot dot-noun"></div>Noun</div>
+<div class="legend-item"><div class="legend-dot dot-adj"></div>Adjective</div>
+<div class="legend-item"><div class="legend-dot dot-prep"></div>Preposition</div>
+<div class="legend-item"><div class="legend-dot dot-pron"></div>Pronoun</div>
+<div class="legend-item"><div class="legend-dot dot-adv"></div>Adverb</div>
+<div class="legend-item"><div class="legend-dot dot-conj"></div>Conjunction</div>
+<div class="legend-item"><div class="legend-dot dot-art"></div>Article</div>
+</div>
+</div>
+<div class="controls-bar">
+<button class="ctrl-btn" onclick="toggleAllTranslations()">Show/Hide All Translations</button>
+<button class="ctrl-btn" onclick="toggleColorMode()">Toggle Grammar Colors</button>
+</div>
+<div id="stories"></div>
+</div>
+
+<script>
+const stories = [
+// ===== STORY 1: A1 - Mein Arbeitstag =====
+{
+id: "arbeitstag",
+title: "Mein Arbeitstag",
+level: "A1",
+topic: "Konjugation Präsens, Trennbare Verben",
+sentences: [
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, 1st person singular, Nominativ"},
+{w:"komme",e:"come/arrive",g:"Verb, kommen, 1st pers. sing. Präsens (-e ending)"},
+{w:"meistens",e:"usually",g:"Adverb of frequency"},
+{w:"gegen",e:"around",g:"Preposition (temporal, approximate time)"},
+{w:"acht",e:"eight",g:"Number/Adjective"},
+{w:"Uhr",e:"o'clock",g:"Noun, die Uhr, time expression"},
+{w:"ins",e:"into the",g:"Contraction: in + das (Akkusativ, neuter)"},
+{w:"Büro",e:"office",g:"Noun, das Büro (neuter), Akkusativ"},
+{w:"und",e:"and",g:"Conjunction (Position 0, connects clauses)"},
+{w:"schalte",e:"switch/turn",g:"Verb, schalten (trennbar: ein|schalten), stem"},
+{w:"erst einmal",e:"first of all",g:"Adverb phrase"},
+{w:"den",e:"the",g:"Article, definite, maskulin Akkusativ"},
+{w:"Computer",e:"computer",g:"Noun, der Computer (maskulin), Akkusativ"},
+{w:"ein.",e:"on (separable prefix)",g:"Trennbares Präfix of einschalten, goes to end"}
+],
+en: "I usually arrive at the office around eight o'clock and first turn on the computer."
+},
+{
+de: [
+{w:"Die",e:"the",g:"Article, definite, feminin Nominativ"},
+{w:"erste",e:"first",g:"Adjective, ordinal number, with definite article → -e ending"},
+{w:"Stunde",e:"hour",g:"Noun, die Stunde (feminin), Nominativ"},
+{w:"ist",e:"is",g:"Verb, sein, 3rd pers. sing. Präsens"},
+{w:"noch",e:"still",g:"Adverb (particle: emphasis)"},
+{w:"ganz",e:"quite/completely",g:"Adverb, intensifier"},
+{w:"ruhig.",e:"calm/quiet",g:"Adjective, predicative (no ending needed)"}
+],
+en: "The first hour is still quite calm."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, 1st pers. sing., Nominativ"},
+{w:"öffne",e:"open",g:"Verb, öffnen, 1st pers. sing. Präsens"},
+{w:"meine",e:"my",g:"Possessivartikel, feminin Akkusativ (die Mailbox)"},
+{w:"Mailbox",e:"mailbox",g:"Noun, die Mailbox (feminin), Akkusativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"beantworte",e:"answer/reply to",g:"Verb, beantworten, 1st pers. sing. Präsens (untrennbar: be-)"},
+{w:"meine",e:"my",g:"Possessivartikel, Plural Akkusativ"},
+{w:"E-Mails.",e:"emails",g:"Noun, die E-Mail (feminin), Plural Akkusativ"}
+],
+en: "I open my mailbox and answer my emails."
+},
+{
+de: [
+{w:"Herr",e:"Mr.",g:"Noun, der Herr (maskulin), title"},
+{w:"Richter,",e:"Richter,",g:"Proper noun (surname)"},
+{w:"mein",e:"my",g:"Possessivartikel, maskulin Nominativ"},
+{w:"Kollege,",e:"colleague,",g:"Noun, der Kollege (maskulin, n-Deklination), Nominativ"},
+{w:"kommt",e:"comes/arrives",g:"Verb, kommen, 3rd pers. sing. Präsens (-t ending)"},
+{w:"eine",e:"a/one",g:"Article, indefinite, feminin Akkusativ"},
+{w:"halbe",e:"half",g:"Adjective, with indefinite article feminin → -e ending"},
+{w:"Stunde",e:"hour",g:"Noun, die Stunde (feminin), Akkusativ"},
+{w:"später.",e:"later",g:"Adverb, comparative of spät"}
+],
+en: "Mr. Richter, my colleague, arrives half an hour later."
+},
+{
+de: [
+{w:"Er",e:"he",g:"Pronoun, 3rd pers. sing. maskulin, Nominativ"},
+{w:"bringt",e:"brings/takes",g:"Verb, bringen, 3rd pers. sing. Präsens"},
+{w:"erst",e:"first",g:"Adverb (temporal)"},
+{w:"seine",e:"his",g:"Possessivartikel, Plural Akkusativ"},
+{w:"Kinder",e:"children",g:"Noun, das Kind → die Kinder (Plural), Akkusativ"},
+{w:"in",e:"to/into",g:"Preposition, Wechselpräposition + Akkusativ (movement)"},
+{w:"den",e:"the",g:"Article, definite, maskulin Akkusativ"},
+{w:"Kindergarten.",e:"kindergarten",g:"Noun, der Kindergarten (maskulin), Akkusativ"}
+],
+en: "He first takes his children to the kindergarten."
+},
+{
+de: [
+{w:"Wir",e:"we",g:"Pronoun, 1st pers. Plural, Nominativ"},
+{w:"reden",e:"talk/chat",g:"Verb, reden, 1st pers. Plural Präsens (-en ending)"},
+{w:"ein bisschen,",e:"a little,",g:"Adverb phrase (quantity)"},
+{w:"telefonieren",e:"make phone calls",g:"Verb, telefonieren, 1st pers. Plural Präsens"},
+{w:"mit",e:"with",g:"Preposition, always + Dativ"},
+{w:"Kundinnen",e:"(female) customers",g:"Noun, die Kundin → Kundinnen (Plural), Dativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Kunden",e:"customers",g:"Noun, der Kunde → Kunden (Plural, n-Dekl.), Dativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"schreiben",e:"write",g:"Verb, schreiben, 1st pers. Plural Präsens"},
+{w:"E-Mails.",e:"emails",g:"Noun, die E-Mail, Plural Akkusativ"}
+],
+en: "We chat a bit, make phone calls with customers and write emails."
+},
+{
+de: [
+{w:"Mittags",e:"at lunchtime",g:"Adverb (temporal, from der Mittag + -s)"},
+{w:"gehen",e:"go",g:"Verb, gehen, 1st pers. Plural Präsens (Position 2)"},
+{w:"wir",e:"we",g:"Pronoun, 1st pers. Plural, Nominativ (after verb = inversion)"},
+{w:"zusammen",e:"together",g:"Adverb"},
+{w:"mit",e:"with",g:"Preposition + Dativ"},
+{w:"ein paar",e:"a few",g:"Indefinite article phrase (Plural)"},
+{w:"Kolleginnen",e:"(female) colleagues",g:"Noun, die Kollegin → Kolleginnen, Dativ Plural"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Kollegen",e:"colleagues",g:"Noun, der Kollege → Kollegen, Dativ Plural"},
+{w:"aus",e:"from",g:"Preposition + Dativ (origin)"},
+{w:"einer",e:"a/another",g:"Article, indefinite, feminin Dativ"},
+{w:"anderen",e:"other/different",g:"Adjective, Dativ feminin with indef. article → -en ending"},
+{w:"Abteilung",e:"department",g:"Noun, die Abteilung (feminin), Dativ"},
+{w:"essen.",e:"to eat",g:"Verb, essen, Infinitiv (at end: two-part verb gehen...essen)"}
+],
+en: "At lunchtime we go eat together with a few colleagues from another department."
+}
+]
+},
+// ===== STORY 2: A1 - Ein Märchen =====
+{
+id: "maerchen1",
+title: "Ein Märchen",
+level: "A1",
+topic: "Artikel: definit, indefinit, kein Artikel",
+sentences: [
+{
+de: [
+{w:"Es",e:"it",g:"Pronoun, expletive (formal subject)"},
+{w:"war",e:"was",g:"Verb, sein, Präteritum, 3rd pers. sing."},
+{w:"einmal",e:"once (upon a time)",g:"Adverb (fairy tale opening)"},
+{w:"ein",e:"a",g:"Article, indefinite, maskulin Nominativ"},
+{w:"König.",e:"king",g:"Noun, der König (maskulin), Nominativ"}
+],
+en: "Once upon a time there was a king."
+},
+{
+de: [
+{w:"Der",e:"the",g:"Article, definite, maskulin Nominativ (2nd mention → definite)"},
+{w:"König",e:"king",g:"Noun, der König (maskulin), Nominativ"},
+{w:"war",e:"was",g:"Verb, sein, Präteritum, 3rd pers. sing."},
+{w:"sehr",e:"very",g:"Adverb, intensifier"},
+{w:"reich.",e:"rich",g:"Adjective, predicative (no ending)"}
+],
+en: "The king was very rich."
+},
+{
+de: [
+{w:"Er",e:"he",g:"Pronoun, 3rd pers. sing. maskulin, Nominativ"},
+{w:"hatte",e:"had",g:"Verb, haben, Präteritum, 3rd pers. sing."},
+{w:"eine",e:"a",g:"Article, indefinite, feminin Akkusativ"},
+{w:"Tochter.",e:"daughter",g:"Noun, die Tochter (feminin), Akkusativ"}
+],
+en: "He had a daughter."
+},
+{
+de: [
+{w:"Die",e:"the",g:"Article, definite, feminin Nominativ"},
+{w:"Tochter",e:"daughter",g:"Noun, die Tochter (feminin), Nominativ"},
+{w:"war",e:"was",g:"Verb, sein, Präteritum"},
+{w:"wunderschön.",e:"gorgeous/beautiful",g:"Adjective, predicative (compound: wunder+schön)"}
+],
+en: "The daughter was gorgeous."
+},
+{
+de: [
+{w:"Eines",e:"one",g:"Article, indefinite, neuter Genitiv (temporal expression)"},
+{w:"Tages",e:"day",g:"Noun, der Tag → Genitiv: Tages (temporal Genitiv = 'one day')"},
+{w:"kommt",e:"comes",g:"Verb, kommen, 3rd pers. sing. Präsens (historic present)"},
+{w:"ein",e:"a",g:"Article, indefinite, maskulin Nominativ"},
+{w:"Prinz.",e:"prince",g:"Noun, der Prinz (maskulin), Nominativ"}
+],
+en: "One day a prince comes."
+},
+{
+de: [
+{w:"Der",e:"the",g:"Article, definite, maskulin Nominativ"},
+{w:"Prinz",e:"prince",g:"Noun, der Prinz, Nominativ"},
+{w:"möchte",e:"would like to",g:"Verb, möchten (Modalverb), 3rd pers. sing."},
+{w:"die",e:"the",g:"Article, definite, feminin Akkusativ"},
+{w:"Prinzessin",e:"princess",g:"Noun, die Prinzessin (feminin), Akkusativ"},
+{w:"heiraten.",e:"marry",g:"Verb, heiraten, Infinitiv (end position with Modalverb)"}
+],
+en: "The prince would like to marry the princess."
+},
+{
+de: [
+{w:"Aber",e:"but",g:"Conjunction (Position 0, contrast)"},
+{w:"die",e:"the",g:"Article, definite, feminin Nominativ"},
+{w:"Prinzessin",e:"princess",g:"Noun, die Prinzessin, Nominativ"},
+{w:"will",e:"wants to",g:"Verb, wollen (Modalverb), 3rd pers. sing."},
+{w:"ihn",e:"him",g:"Pronoun, 3rd pers. sing. maskulin, Akkusativ"},
+{w:"nicht",e:"not",g:"Negation (negates the verb)"},
+{w:"heiraten.",e:"marry",g:"Verb, heiraten, Infinitiv (end position)"}
+],
+en: "But the princess doesn't want to marry him."
+},
+{
+de: [
+{w:"Da",e:"so/then",g:"Adverb (consequence)"},
+{w:"muss",e:"must/has to",g:"Verb, müssen (Modalverb), 3rd pers. sing."},
+{w:"der",e:"the",g:"Article, definite, maskulin Nominativ"},
+{w:"Prinz",e:"prince",g:"Noun, der Prinz, Nominativ"},
+{w:"seine",e:"his",g:"Possessivartikel, feminin Akkusativ"},
+{w:"Liebe",e:"love",g:"Noun, die Liebe (feminin), Akkusativ"},
+{w:"zeigen.",e:"show/prove",g:"Verb, zeigen, Infinitiv (end position with Modalverb)"}
+],
+en: "So the prince has to prove his love."
+},
+{
+de: [
+{w:"Er",e:"he",g:"Pronoun, Nominativ"},
+{w:"tötet",e:"kills",g:"Verb, töten, 3rd pers. sing. Präsens"},
+{w:"einen",e:"a",g:"Article, indefinite, maskulin Akkusativ"},
+{w:"Drachen.",e:"dragon",g:"Noun, der Drache (maskulin, n-Dekl.), Akkusativ → Drachen"}
+],
+en: "He kills a dragon."
+},
+{
+de: [
+{w:"Zum Schluss",e:"in the end",g:"Prepositional phrase: zu + dem (Dativ) + Schluss"},
+{w:"heiratet",e:"marries",g:"Verb, heiraten, 3rd pers. sing. Präsens"},
+{w:"der",e:"the",g:"Article, definite, maskulin Nominativ"},
+{w:"Prinz",e:"prince",g:"Noun, Nominativ"},
+{w:"die",e:"the",g:"Article, definite, feminin Akkusativ"},
+{w:"Prinzessin.",e:"princess",g:"Noun, die Prinzessin, Akkusativ"}
+],
+en: "In the end the prince marries the princess."
+}
+]
+},
+// ===== STORY 3: A1 - Herr Waltermann =====
+{
+id: "waltermann",
+title: "Herr Waltermann in Frankfurt",
+level: "A1",
+topic: "Ja/Nein-Fragen, Negation, Präsens",
+sentences: [
+{
+de: [
+{w:"Herr",e:"Mr.",g:"Noun, der Herr, title"},
+{w:"Waltermann",e:"Waltermann",g:"Proper noun (surname)"},
+{w:"wohnt",e:"lives",g:"Verb, wohnen, 3rd pers. sing. Präsens"},
+{w:"in",e:"in",g:"Preposition + Dativ (location)"},
+{w:"Frankfurt.",e:"Frankfurt",g:"Proper noun (city, no article)"}
+],
+en: "Mr. Waltermann lives in Frankfurt."
+},
+{
+de: [
+{w:"Er",e:"he",g:"Pronoun, 3rd pers. sing. maskulin, Nominativ"},
+{w:"hat",e:"has",g:"Verb, haben, 3rd pers. sing. Präsens"},
+{w:"in",e:"in/at",g:"Preposition + Dativ (location)"},
+{w:"der",e:"the",g:"Article, definite, feminin Dativ"},
+{w:"Schule",e:"school",g:"Noun, die Schule (feminin), Dativ"},
+{w:"Englisch",e:"English",g:"Noun, (das) Englisch (language, no article)"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Spanisch",e:"Spanish",g:"Noun, (das) Spanisch (language)"},
+{w:"gelernt.",e:"learned",g:"Verb, lernen, Partizip Perfekt (ge+lern+t, regular)"}
+],
+en: "He learned English and Spanish at school."
+},
+{
+de: [
+{w:"Er",e:"he",g:"Pronoun, Nominativ"},
+{w:"arbeitet",e:"works",g:"Verb, arbeiten, 3rd pers. sing. (-et because stem ends in -t)"},
+{w:"in",e:"in",g:"Preposition + Dativ"},
+{w:"einem",e:"a/an",g:"Article, indefinite, neuter Dativ"},
+{w:"Büro",e:"office",g:"Noun, das Büro (neuter), Dativ"},
+{w:"als",e:"as",g:"Preposition (profession, no article after als)"},
+{w:"Programmierer.",e:"programmer",g:"Noun, der Programmierer (maskulin), no article after als"}
+],
+en: "He works in an office as a programmer."
+},
+{
+de: [
+{w:"Er",e:"he",g:"Pronoun, Nominativ"},
+{w:"ist",e:"is",g:"Verb, sein, 3rd pers. sing. Präsens"},
+{w:"vor",e:"ago/before",g:"Preposition + Dativ (temporal)"},
+{w:"zwei",e:"two",g:"Number"},
+{w:"Monaten",e:"months",g:"Noun, der Monat → Monaten (Dativ Plural)"},
+{w:"nach",e:"to",g:"Preposition + Dativ (direction to cities/countries)"},
+{w:"Frankfurt",e:"Frankfurt",g:"Proper noun"},
+{w:"gekommen.",e:"come/moved",g:"Verb, kommen, Partizip Perfekt (ge+komm+en, irregular), Perfekt with sein"}
+],
+en: "He moved to Frankfurt two months ago."
+},
+{
+de: [
+{w:"Er",e:"he",g:"Pronoun, Nominativ"},
+{w:"kennt",e:"knows",g:"Verb, kennen, 3rd pers. sing. Präsens (to know people/places)"},
+{w:"hier",e:"here",g:"Adverb (location)"},
+{w:"noch",e:"yet/still",g:"Adverb (particle)"},
+{w:"keinen",e:"no/not any",g:"Negation article, maskulin Akkusativ (kein+en)"},
+{w:"Menschen.",e:"person/people",g:"Noun, der Mensch (maskulin, n-Dekl.), Akkusativ → Menschen"}
+],
+en: "He doesn't know anyone here yet."
+},
+{
+de: [
+{w:"Er",e:"he",g:"Pronoun, Nominativ"},
+{w:"kommt",e:"comes from",g:"Verb, kommen, 3rd pers. sing. Präsens"},
+{w:"aus",e:"from",g:"Preposition + Dativ (origin)"},
+{w:"München.",e:"Munich",g:"Proper noun (city)"}
+],
+en: "He comes from Munich."
+},
+{
+de: [
+{w:"Seine",e:"his",g:"Possessivartikel, Plural Nominativ"},
+{w:"Verwandten",e:"relatives",g:"Noun, der/die Verwandte (adj. as noun), Plural Nominativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Freunde",e:"friends",g:"Noun, der Freund → Freunde, Plural Nominativ"},
+{w:"wohnen",e:"live",g:"Verb, wohnen, 3rd pers. Plural Präsens"},
+{w:"in",e:"in/near",g:"Preposition + Dativ"},
+{w:"der",e:"the",g:"Article, definite, feminin Dativ"},
+{w:"Nähe",e:"vicinity/near",g:"Noun, die Nähe (feminin), Dativ"},
+{w:"von",e:"of/from",g:"Preposition + Dativ"},
+{w:"München.",e:"Munich",g:"Proper noun"}
+],
+en: "His relatives and friends live near Munich."
+}
+]
+},
+// ===== STORY 4: A2 - Ein Drama =====
+{
+id: "drama",
+title: "Ein Drama",
+level: "A2",
+topic: "Perfekt mit sein und haben",
+sentences: [
+{
+de: [
+{w:"Gestern",e:"yesterday",g:"Adverb (temporal, Position 1 → verb inversion)"},
+{w:"ist",e:"is (aux.)",g:"Verb, sein as auxiliary for Perfekt (movement verb)"},
+{w:"etwas",e:"something",g:"Indefinite pronoun"},
+{w:"Dramatisches",e:"dramatic",g:"Adjective used as noun (neuter, Nominativ, -es ending)"},
+{w:"passiert.",e:"happened",g:"Verb, passieren, Partizip Perfekt (no ge- because -ieren), Perfekt with sein"}
+],
+en: "Yesterday something dramatic happened."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben as auxiliary for Perfekt"},
+{w:"geduscht",e:"showered",g:"Verb, duschen, Partizip Perfekt (ge+dusch+t)"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"gefrühstückt",e:"had breakfast",g:"Verb, frühstücken, Partizip Perfekt (ge+frühstück+t)"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"dann",e:"then",g:"Adverb (temporal sequence)"},
+{w:"bin",e:"am (aux.)",g:"Verb, sein as auxiliary (movement: gehen)"},
+{w:"ich",e:"I",g:"Pronoun, Nominativ (after verb = inversion from dann)"},
+{w:"aus",e:"out of",g:"Preposition + Dativ"},
+{w:"dem",e:"the",g:"Article, definite, neuter Dativ"},
+{w:"Haus",e:"house",g:"Noun, das Haus (neuter), Dativ"},
+{w:"gegangen.",e:"gone/left",g:"Verb, gehen, Partizip Perfekt (ge+gang+en, irregular)"}
+],
+en: "I showered and had breakfast and then I left the house."
+},
+{
+de: [
+{w:"Vor",e:"in front of",g:"Preposition + Dativ (location)"},
+{w:"der",e:"the",g:"Article, definite, feminin Dativ"},
+{w:"Tür",e:"door",g:"Noun, die Tür (feminin), Dativ"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben, auxiliary for Perfekt"},
+{w:"ich",e:"I",g:"Pronoun (inversion)"},
+{w:"gesehen:",e:"seen:",g:"Verb, sehen, Partizip Perfekt (ge+seh+en, irregular)"},
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben, auxiliary"},
+{w:"meinen",e:"my",g:"Possessivartikel, maskulin Akkusativ"},
+{w:"Schlüssel",e:"key",g:"Noun, der Schlüssel (maskulin), Akkusativ"},
+{w:"im",e:"in the",g:"Contraction: in + dem (Dativ)"},
+{w:"Haus",e:"house",g:"Noun, das Haus, Dativ"},
+{w:"vergessen!",e:"forgotten!",g:"Verb, vergessen, Partizip Perfekt (ver+gess+en, no ge- because ver-)"}
+],
+en: "In front of the door I saw: I had forgotten my key in the house!"
+},
+{
+de: [
+{w:"Also",e:"so/therefore",g:"Adverb (consequence)"},
+{w:"bin",e:"am (aux.)",g:"Verb, sein, auxiliary (movement)"},
+{w:"ich",e:"I",g:"Pronoun (inversion)"},
+{w:"durch",e:"through",g:"Preposition + Akkusativ"},
+{w:"das",e:"the",g:"Article, definite, neuter Akkusativ"},
+{w:"Fenster",e:"window",g:"Noun, das Fenster (neuter), Akkusativ"},
+{w:"ins",e:"into the",g:"Contraction: in + das (Akkusativ)"},
+{w:"Haus",e:"house",g:"Noun, das Haus, Akkusativ (movement into)"},
+{w:"gestiegen.",e:"climbed",g:"Verb, steigen, Partizip Perfekt (ge+stieg+en, irregular), with sein"}
+],
+en: "So I climbed through the window into the house."
+},
+{
+de: [
+{w:"In",e:"in/at",g:"Preposition + Dativ (temporal)"},
+{w:"dem",e:"the",g:"Article, definite, maskulin Dativ"},
+{w:"Moment",e:"moment",g:"Noun, der Moment (maskulin), Dativ"},
+{w:"ist",e:"is (aux.)",g:"Verb, sein, auxiliary (Perfekt with kommen)"},
+{w:"ein",e:"a",g:"Article, indefinite, neuter Nominativ"},
+{w:"Polizeiauto",e:"police car",g:"Noun, das Polizeiauto (neuter, Kompositum), Nominativ"},
+{w:"gekommen.",e:"come/arrived",g:"Verb, kommen, Partizip Perfekt (ge+komm+en)"}
+],
+en: "At that moment a police car arrived."
+},
+{
+de: [
+{w:"Die",e:"the",g:"Article, definite, Plural Nominativ"},
+{w:"Polizisten",e:"police officers",g:"Noun, der Polizist → Polizisten (Plural, n-Dekl.), Nominativ"},
+{w:"haben",e:"have (aux.)",g:"Verb, haben, auxiliary for Perfekt"},
+{w:"mich",e:"me",g:"Pronoun, 1st pers. sing. Akkusativ"},
+{w:"im",e:"in the",g:"Contraction: in + dem (Dativ)"},
+{w:"Fenster",e:"window",g:"Noun, das Fenster, Dativ"},
+{w:"gesehen.",e:"seen",g:"Verb, sehen, Partizip Perfekt"}
+],
+en: "The police officers saw me in the window."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben, auxiliary"},
+{w:"lange",e:"for a long time",g:"Adverb (duration)"},
+{w:"mit",e:"with",g:"Preposition + Dativ"},
+{w:"den",e:"the",g:"Article, definite, Dativ Plural"},
+{w:"Polizisten",e:"police officers",g:"Noun, Dativ Plural"},
+{w:"gesprochen",e:"spoken/talked",g:"Verb, sprechen, Partizip Perfekt (ge+sproch+en, irregular)"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"die",e:"the",g:"Article, definite, feminin Akkusativ"},
+{w:"Situation",e:"situation",g:"Noun, die Situation (feminin), Akkusativ"},
+{w:"erklärt.",e:"explained",g:"Verb, erklären, Partizip Perfekt (er+klär+t, no ge- because er-)"}
+],
+en: "I talked to the police officers for a long time and explained the situation."
+},
+{
+de: [
+{w:"Aber",e:"but",g:"Conjunction (Position 0)"},
+{w:"natürlich",e:"of course",g:"Adverb"},
+{w:"bin",e:"am (aux.)",g:"Verb, sein, auxiliary"},
+{w:"ich",e:"I",g:"Pronoun (inversion)"},
+{w:"zu",e:"too",g:"Adverb (degree: too much)"},
+{w:"spät",e:"late",g:"Adjective/Adverb, predicative"},
+{w:"gewesen.",e:"been",g:"Verb, sein, Partizip Perfekt (ge+wes+en, irregular), Perfekt of sein"}
+],
+en: "But of course I was too late."
+}
+]
+},
+// ===== STORY 5: A2 - Meine Reise nach China =====
+{
+id: "china",
+title: "Meine Reise nach China",
+level: "A2",
+topic: "Partizip Perfekt, sein/haben Perfekt",
+sentences: [
+{
+de: [
+{w:"2019",e:"2019",g:"Number (year, no preposition needed)"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben, auxiliary, Position 2"},
+{w:"ich",e:"I",g:"Pronoun (inversion after year)"},
+{w:"eine",e:"a",g:"Article, indefinite, feminin Akkusativ"},
+{w:"Reise",e:"trip/journey",g:"Noun, die Reise (feminin), Akkusativ"},
+{w:"nach",e:"to",g:"Preposition + Dativ (direction to countries)"},
+{w:"China",e:"China",g:"Proper noun (country, no article)"},
+{w:"gemacht.",e:"made/done",g:"Verb, machen, Partizip Perfekt (ge+mach+t), eine Reise machen = take a trip"}
+],
+en: "In 2019 I took a trip to China."
+},
+{
+de: [
+{w:"Wir",e:"we",g:"Pronoun, 1st pers. Plural, Nominativ"},
+{w:"sind",e:"are (aux.)",g:"Verb, sein, auxiliary (fliegen = movement)"},
+{w:"elf",e:"eleven",g:"Number"},
+{w:"Stunden",e:"hours",g:"Noun, die Stunde → Stunden, Akkusativ (duration)"},
+{w:"nach",e:"to",g:"Preposition + Dativ"},
+{w:"Peking",e:"Beijing",g:"Proper noun"},
+{w:"geflogen.",e:"flown",g:"Verb, fliegen, Partizip Perfekt (ge+flog+en, irregular), with sein"}
+],
+en: "We flew eleven hours to Beijing."
+},
+{
+de: [
+{w:"Wir",e:"we",g:"Pronoun, Nominativ"},
+{w:"haben",e:"have (aux.)",g:"Verb, haben, auxiliary"},
+{w:"im",e:"in the",g:"Contraction: in + dem (Dativ)"},
+{w:"Flugzeug",e:"airplane",g:"Noun, das Flugzeug (neuter, Kompositum), Dativ"},
+{w:"schlecht",e:"badly/poorly",g:"Adverb"},
+{w:"geschlafen.",e:"slept",g:"Verb, schlafen, Partizip Perfekt (ge+schlaf+en, irregular)"}
+],
+en: "We slept badly on the airplane."
+},
+{
+de: [
+{w:"Dann",e:"then",g:"Adverb (temporal, Position 1)"},
+{w:"sind",e:"are (aux.)",g:"Verb, sein, auxiliary (fahren = movement)"},
+{w:"wir",e:"we",g:"Pronoun (inversion)"},
+{w:"mit",e:"with/by",g:"Preposition + Dativ (means of transport)"},
+{w:"dem",e:"the",g:"Article, definite, maskulin Dativ"},
+{w:"Bus",e:"bus",g:"Noun, der Bus (maskulin), Dativ"},
+{w:"ins",e:"into the",g:"Contraction: in + das (Akkusativ, movement)"},
+{w:"Hotel",e:"hotel",g:"Noun, das Hotel (neuter), Akkusativ"},
+{w:"gefahren.",e:"driven/gone",g:"Verb, fahren, Partizip Perfekt (ge+fahr+en, irregular), with sein"}
+],
+en: "Then we went to the hotel by bus."
+},
+{
+de: [
+{w:"Wir",e:"we",g:"Pronoun, Nominativ"},
+{w:"sind",e:"are (aux.)",g:"Verb, sein, auxiliary"},
+{w:"zwei",e:"two",g:"Number"},
+{w:"Stunden",e:"hours",g:"Noun, Akkusativ (duration)"},
+{w:"durch",e:"through",g:"Preposition + Akkusativ"},
+{w:"den",e:"the",g:"Article, definite, maskulin Akkusativ"},
+{w:"Palast",e:"palace",g:"Noun, der Palast (maskulin), Akkusativ"},
+{w:"gelaufen.",e:"walked",g:"Verb, laufen, Partizip Perfekt (ge+lauf+en), with sein"}
+],
+en: "We walked through the palace for two hours."
+},
+{
+de: [
+{w:"In",e:"in/near",g:"Preposition + Dativ (location)"},
+{w:"der",e:"the",g:"Article, definite, feminin Dativ"},
+{w:"Nähe",e:"vicinity",g:"Noun, die Nähe (feminin), Dativ"},
+{w:"haben",e:"have (aux.)",g:"Verb, haben, auxiliary"},
+{w:"wir",e:"we",g:"Pronoun (inversion)"},
+{w:"ein paar",e:"a few",g:"Indefinite expression"},
+{w:"Souvenirs",e:"souvenirs",g:"Noun, das Souvenir → Souvenirs, Akkusativ Plural"},
+{w:"eingekauft.",e:"bought/shopped",g:"Verb, einkaufen (trennbar), Partizip Perfekt (ein+ge+kauf+t)"}
+],
+en: "Nearby we bought a few souvenirs."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"war",e:"was",g:"Verb, sein, Präteritum (sein/haben use Präteritum, not Perfekt)"},
+{w:"sehr",e:"very",g:"Adverb"},
+{w:"müde,",e:"tired,",g:"Adjective, predicative"},
+{w:"aber",e:"but",g:"Conjunction (Position 0)"},
+{w:"Peking",e:"Beijing",g:"Proper noun"},
+{w:"ist",e:"is",g:"Verb, sein, Präsens"},
+{w:"toll!",e:"great/awesome!",g:"Adjective, predicative"}
+],
+en: "I was very tired, but Beijing is great!"
+}
+]
+},
+// ===== STORY 6: A2 - Sprachenlernen für den Job =====
+{
+id: "sprachen",
+title: "Sprachenlernen für den Job",
+level: "A2",
+topic: "Präteritum Modalverben, Nebensätze",
+sentences: [
+{
+de: [
+{w:"Letztes",e:"last",g:"Adjective, neuter Akkusativ (temporal, no article → strong ending -es)"},
+{w:"Jahr",e:"year",g:"Noun, das Jahr (neuter), Akkusativ (temporal)"},
+{w:"wollte",e:"wanted to",g:"Verb, wollen, Präteritum, 1st pers. sing."},
+{w:"ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"in",e:"in",g:"Preposition + Dativ"},
+{w:"der",e:"the",g:"Article, definite, feminin Dativ"},
+{w:"Exportabteilung",e:"export department",g:"Noun, die Exportabteilung (feminin, Kompositum), Dativ"},
+{w:"arbeiten.",e:"work",g:"Verb, arbeiten, Infinitiv (end position with Modalverb)"}
+],
+en: "Last year I wanted to work in the export department."
+},
+{
+de: [
+{w:"Aber",e:"but",g:"Conjunction"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"durfte",e:"was allowed to",g:"Verb, dürfen, Präteritum, 1st pers. sing."},
+{w:"nicht,",e:"not,",g:"Negation"},
+{w:"weil",e:"because",g:"Conjunction (subordinating → verb to end)"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"kein",e:"no",g:"Negation article, neuter Akkusativ"},
+{w:"Französisch",e:"French",g:"Noun, (das) Französisch"},
+{w:"konnte.",e:"could/knew",g:"Verb, können, Präteritum (at END of Nebensatz because of weil)"}
+],
+en: "But I wasn't allowed to, because I couldn't speak French."
+},
+{
+de: [
+{w:"Deshalb",e:"therefore",g:"Adverb (Position 1, cause → verb inversion)"},
+{w:"musste",e:"had to",g:"Verb, müssen, Präteritum, 1st pers. sing."},
+{w:"ich",e:"I",g:"Pronoun (inversion)"},
+{w:"Französisch",e:"French",g:"Noun, Akkusativ"},
+{w:"lernen.",e:"learn",g:"Verb, lernen, Infinitiv (end)"}
+],
+en: "Therefore I had to learn French."
+},
+{
+de: [
+{w:"Nach",e:"after",g:"Preposition + Dativ (temporal)"},
+{w:"zwei",e:"two",g:"Number"},
+{w:"Monaten",e:"months",g:"Noun, der Monat → Monaten, Dativ Plural"},
+{w:"konnte",e:"could",g:"Verb, können, Präteritum"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"noch",e:"still",g:"Adverb"},
+{w:"nicht",e:"not",g:"Negation"},
+{w:"viel",e:"much",g:"Adverb/Pronoun (quantity)"},
+{w:"Französisch.",e:"French",g:"Noun"}
+],
+en: "After two months I still couldn't speak much French."
+},
+{
+de: [
+{w:"Also",e:"so",g:"Adverb (consequence)"},
+{w:"musste",e:"had to",g:"Verb, müssen, Präteritum"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"einen",e:"a",g:"Article, indefinite, maskulin Akkusativ"},
+{w:"Sprachkurs",e:"language course",g:"Noun, der Sprachkurs (maskulin, Kompositum), Akkusativ"},
+{w:"in",e:"in",g:"Preposition + Dativ"},
+{w:"Frankreich",e:"France",g:"Proper noun (country)"},
+{w:"machen.",e:"do/take",g:"Verb, machen, Infinitiv"}
+],
+en: "So I had to take a language course in France."
+},
+{
+de: [
+{w:"Nach",e:"after",g:"Preposition + Dativ"},
+{w:"zwei",e:"two",g:"Number"},
+{w:"Wochen",e:"weeks",g:"Noun, die Woche → Wochen, Dativ Plural"},
+{w:"konnte",e:"could",g:"Verb, können, Präteritum"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"viel",e:"much/a lot",g:"Adverb"},
+{w:"sprechen",e:"speak",g:"Verb, Infinitiv"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"verstehen.",e:"understand",g:"Verb, verstehen, Infinitiv (untrennbar: ver-)"}
+],
+en: "After two weeks I could speak and understand a lot."
+}
+]
+},
+// ===== STORY 7: B1 - Stress vor der Arbeit =====
+{
+id: "stress",
+title: "Stress vor der Arbeit",
+level: "B1",
+topic: "Trennbare/Untrennbare Verben, Partizip Perfekt",
+sentences: [
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"bin",e:"am (aux.)",g:"Verb, sein, auxiliary (einsteigen = movement)"},
+{w:"in",e:"into",g:"Preposition + Akkusativ (movement)"},
+{w:"mein",e:"my",g:"Possessivartikel, neuter Akkusativ"},
+{w:"Auto",e:"car",g:"Noun, das Auto (neuter), Akkusativ"},
+{w:"eingestiegen,",e:"got in,",g:"Verb, einsteigen (trennbar), Partizip: ein+ge+stieg+en"},
+{w:"aber",e:"but",g:"Conjunction (Position 0)"},
+{w:"das",e:"the",g:"Article, definite, neuter Nominativ"},
+{w:"Auto",e:"car",g:"Noun, Nominativ"},
+{w:"ist",e:"is (aux.)",g:"Verb, sein, auxiliary"},
+{w:"nicht",e:"not",g:"Negation"},
+{w:"angesprungen.",e:"started",g:"Verb, anspringen (trennbar), Partizip: an+ge+sprung+en"}
+],
+en: "I got into my car, but the car didn't start."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun"},
+{w:"bin",e:"am (aux.)",g:"Verb, sein, auxiliary"},
+{w:"wieder",e:"again",g:"Adverb"},
+{w:"ausgestiegen.",e:"got out",g:"Verb, aussteigen (trennbar), Partizip: aus+ge+stieg+en, with sein"}
+],
+en: "I got out again."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben, auxiliary"},
+{w:"mich",e:"myself",g:"Reflexivpronomen, Akkusativ (sich entscheiden)"},
+{w:"entschieden,",e:"decided,",g:"Verb, entscheiden (untrennbar: ent-), Partizip: entschied+en, no ge-"},
+{w:"die",e:"the",g:"Article, definite, feminin Akkusativ"},
+{w:"Straßenbahn",e:"tram",g:"Noun, die Straßenbahn (feminin), Akkusativ"},
+{w:"zu",e:"to",g:"Particle (zu + Infinitiv)"},
+{w:"nehmen.",e:"take",g:"Verb, nehmen, Infinitiv (Infinitiv mit zu)"}
+],
+en: "I decided to take the tram."
+},
+{
+de: [
+{w:"Da",e:"then/but",g:"Adverb (narrative surprise)"},
+{w:"ist",e:"is (aux.)",g:"Verb, sein, auxiliary"},
+{w:"die",e:"the",g:"Article, definite, feminin Nominativ"},
+{w:"Straßenbahn",e:"tram",g:"Noun, Nominativ"},
+{w:"vor",e:"in front of",g:"Preposition + Dativ (location)"},
+{w:"meiner",e:"my",g:"Possessivartikel, feminin Dativ"},
+{w:"Nase",e:"nose",g:"Noun, die Nase (feminin), Dativ"},
+{w:"ohne",e:"without",g:"Preposition + Akkusativ"},
+{w:"mich",e:"me",g:"Pronoun, 1st pers. Akkusativ"},
+{w:"abgefahren.",e:"departed",g:"Verb, abfahren (trennbar), Partizip: ab+ge+fahr+en, with sein"}
+],
+en: "Then the tram departed right in front of my nose without me."
+},
+{
+de: [
+{w:"Also",e:"so",g:"Adverb"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"bei",e:"at",g:"Preposition + Dativ"},
+{w:"der",e:"the",g:"Article, feminin Dativ"},
+{w:"Arbeit",e:"work",g:"Noun, die Arbeit (feminin), Dativ"},
+{w:"angerufen",e:"called",g:"Verb, anrufen (trennbar), Partizip: an+ge+ruf+en"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"habe",e:"have",g:"Verb, haben, auxiliary"},
+{w:"mitgeteilt,",e:"informed/told,",g:"Verb, mitteilen (trennbar), Partizip: mit+ge+teil+t"},
+{w:"dass",e:"that",g:"Conjunction (subordinating → verb to end)"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"später",e:"later",g:"Adverb, comparative of spät"},
+{w:"komme.",e:"come/will come",g:"Verb, kommen, Präsens (at END of dass-clause)"}
+],
+en: "So I called work and informed them that I would come later."
+},
+{
+de: [
+{w:"Da",e:"then/when",g:"Adverb"},
+{w:"hat",e:"has (aux.)",g:"Verb, haben, auxiliary"},
+{w:"er",e:"he",g:"Pronoun (= der Chef)"},
+{w:"mich",e:"me",g:"Pronoun, Akkusativ"},
+{w:"verstanden.",e:"understood",g:"Verb, verstehen (untrennbar: ver-), Partizip: verstand+en, no ge-"}
+],
+en: "Then he understood me."
+}
+]
+},
+// ===== STORY 8: B1 - Dumm gelaufen =====
+{
+id: "dumm",
+title: "Dumm gelaufen",
+level: "B1",
+topic: "Infinitiv mit zu, Trennbare Verben, Nebensätze",
+sentences: [
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun"},
+{w:"habe",e:"have",g:"Verb, haben (main verb here, not auxiliary)"},
+{w:"immer",e:"always",g:"Adverb (frequency)"},
+{w:"große",e:"great/big",g:"Adjective, feminin Akkusativ with indef. article → -e"},
+{w:"Lust,",e:"desire/urge,",g:"Noun, die Lust (feminin), Akkusativ"},
+{w:"zu",e:"to",g:"Particle (Infinitiv mit zu)"},
+{w:"verreisen.",e:"travel/go on a trip",g:"Verb, verreisen (untrennbar: ver-), Infinitiv"}
+],
+en: "I always have a great desire to travel."
+},
+{
+de: [
+{w:"Also",e:"so",g:"Adverb"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben, auxiliary"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"mich",e:"myself",g:"Reflexivpronomen, Akkusativ (sich entscheiden)"},
+{w:"entschieden,",e:"decided,",g:"Verb, sich entscheiden, Partizip Perfekt"},
+{w:"bald",e:"soon",g:"Adverb (temporal)"},
+{w:"wegzufahren.",e:"to drive away/leave",g:"Verb, wegfahren (trennbar), Infinitiv mit zu: weg+zu+fahren"}
+],
+en: "So I decided to leave soon."
+},
+{
+de: [
+{w:"Es",e:"there",g:"Pronoun, expletive subject"},
+{w:"gab",e:"was/existed",g:"Verb, geben, Präteritum (es gibt = there is)"},
+{w:"eine",e:"a",g:"Article, indefinite, feminin Akkusativ"},
+{w:"tolle",e:"great",g:"Adjective, feminin Akkusativ with indef. article → -e"},
+{w:"Reise",e:"trip",g:"Noun, die Reise (feminin), Akkusativ"},
+{w:"nach",e:"to",g:"Preposition + Dativ"},
+{w:"Alanya,",e:"Alanya,",g:"Proper noun (Turkish city)"},
+{w:"die",e:"which",g:"Relativpronomen, feminin Akkusativ (refers to Reise)"},
+{w:"ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"gleich",e:"immediately",g:"Adverb"},
+{w:"gebucht",e:"booked",g:"Verb, buchen, Partizip Perfekt (ge+buch+t)"},
+{w:"habe.",e:"have (aux.)",g:"Verb, haben, auxiliary (at END of Relativsatz)"}
+],
+en: "There was a great trip to Alanya, which I booked immediately."
+},
+{
+de: [
+{w:"Als",e:"when",g:"Conjunction (subordinating, temporal, one-time past event)"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"abgefahren",e:"departed",g:"Verb, abfahren (trennbar), Partizip Perfekt"},
+{w:"bin,",e:"am (aux.),",g:"Verb, sein, at END of als-clause"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben, Position 2 of main clause"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"ganz",e:"very/completely",g:"Adverb"},
+{w:"früh",e:"early",g:"Adjective/Adverb"},
+{w:"meine",e:"my",g:"Possessivartikel, feminin Akkusativ"},
+{w:"Wohnung",e:"apartment",g:"Noun, die Wohnung (feminin), Akkusativ"},
+{w:"verlassen.",e:"left",g:"Verb, verlassen (untrennbar: ver-), Partizip: verlass+en, no ge-"}
+],
+en: "When I departed, I left my apartment very early."
+},
+{
+de: [
+{w:"Als",e:"when",g:"Conjunction (subordinating)"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"im",e:"in the",g:"Contraction: in + dem (Dativ)"},
+{w:"Taxi",e:"taxi",g:"Noun, das Taxi (neuter), Dativ"},
+{w:"zum",e:"to the",g:"Contraction: zu + dem (Dativ)"},
+{w:"Flughafen",e:"airport",g:"Noun, der Flughafen (maskulin), Dativ"},
+{w:"saß,",e:"sat/was sitting,",g:"Verb, sitzen, Präteritum (saß), at end of als-clause"},
+{w:"habe",e:"have (aux.)",g:"Verb, haben, main clause"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"bemerkt,",e:"noticed,",g:"Verb, bemerken (untrennbar: be-), Partizip: bemerk+t, no ge-"},
+{w:"dass",e:"that",g:"Conjunction (subordinating)"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"mein",e:"my",g:"Possessivartikel, neuter Akkusativ"},
+{w:"Geld",e:"money",g:"Noun, das Geld (neuter), Akkusativ"},
+{w:"vergessen",e:"forgotten",g:"Verb, vergessen (untrennbar: ver-), Partizip"},
+{w:"hatte.",e:"had (aux.)",g:"Verb, haben, Präteritum (at END of dass-clause) → Plusquamperfekt!"}
+],
+en: "When I was sitting in the taxi to the airport, I noticed that I had forgotten my money."
+},
+{
+de: [
+{w:"Wenn",e:"if/when (future)",g:"Conjunction (subordinating, hypothetical/future)"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"das",e:"the",g:"Article, neuter Akkusativ"},
+{w:"nächste",e:"next",g:"Adjective, neuter Akkusativ with def. article → -e"},
+{w:"Mal",e:"time",g:"Noun, das Mal, Akkusativ"},
+{w:"wegfahre,",e:"leave/depart,",g:"Verb, wegfahren (trennbar), Präsens, at END of wenn-clause"},
+{w:"werde",e:"will",g:"Verb, werden, Futur auxiliary, Position 2"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"aufpassen,",e:"pay attention,",g:"Verb, aufpassen (trennbar), Infinitiv (at end with werden)"},
+{w:"dass",e:"that",g:"Conjunction"},
+{w:"ich",e:"I",g:"Pronoun"},
+{w:"alles",e:"everything",g:"Pronoun, indefinite (neuter)"},
+{w:"mitnehme.",e:"take along",g:"Verb, mitnehmen (trennbar), Präsens, at END of dass-clause"}
+],
+en: "Next time I leave, I will make sure that I take everything along."
+}
+]
+},
+// ===== STORY 9: B1 - Ein Märchen (Frog Prince) =====
+{
+id: "maerchen2",
+title: "Ein Märchen: Der Froschprinz",
+level: "B1",
+topic: "Adjektivdeklination, Präteritum, Konjunktiv",
+sentences: [
+{
+de: [
+{w:"Es",e:"there",g:"Pronoun, expletive"},
+{w:"war",e:"was",g:"Verb, sein, Präteritum"},
+{w:"einmal",e:"once",g:"Adverb"},
+{w:"ein",e:"a",g:"Article, indefinite, neuter Nominativ"},
+{w:"sehr",e:"very",g:"Adverb"},
+{w:"schönes",e:"beautiful",g:"Adjective, neuter Nominativ with indef. article → -es ending"},
+{w:"Mädchen.",e:"girl",g:"Noun, das Mädchen (neuter! despite meaning), Nominativ"}
+],
+en: "Once upon a time there was a very beautiful girl."
+},
+{
+de: [
+{w:"Es",e:"she/it",g:"Pronoun, neuter (refers to das Mädchen)"},
+{w:"lebte",e:"lived",g:"Verb, leben, Präteritum, 3rd pers. sing."},
+{w:"in",e:"in",g:"Preposition + Dativ (location)"},
+{w:"einem",e:"a",g:"Article, indefinite, neuter Dativ"},
+{w:"großen",e:"big/large",g:"Adjective, neuter Dativ with indef. article → -en ending"},
+{w:"Schloss",e:"castle",g:"Noun, das Schloss (neuter), Dativ"},
+{w:"mit",e:"with",g:"Preposition + Dativ"},
+{w:"seiner",e:"its/her",g:"Possessivartikel, feminin Dativ (die Mutter)"},
+{w:"lieben",e:"dear/loving",g:"Adjective, feminin Dativ with poss. article → -en"},
+{w:"Mutter",e:"mother",g:"Noun, die Mutter (feminin), Dativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"seinem",e:"its/her",g:"Possessivartikel, maskulin Dativ"},
+{w:"reichen",e:"rich",g:"Adjective, maskulin Dativ with poss. article → -en"},
+{w:"Vater.",e:"father",g:"Noun, der Vater (maskulin), Dativ"}
+],
+en: "She lived in a big castle with her loving mother and her rich father."
+},
+{
+de: [
+{w:"Eines",e:"one",g:"Article, Genitiv temporal"},
+{w:"Tages",e:"day",g:"Noun, der Tag, Genitiv (= 'one day')"},
+{w:"machte",e:"took/made",g:"Verb, machen, Präteritum"},
+{w:"die",e:"the",g:"Article, definite, feminin Nominativ"},
+{w:"junge",e:"young",g:"Adjective, feminin Nominativ with def. article → -e ending"},
+{w:"Frau",e:"woman",g:"Noun, die Frau (feminin), Nominativ"},
+{w:"einen",e:"a",g:"Article, indefinite, maskulin Akkusativ"},
+{w:"langen",e:"long",g:"Adjective, maskulin Akkusativ with indef. article → -en"},
+{w:"Spaziergang",e:"walk/stroll",g:"Noun, der Spaziergang (maskulin), Akkusativ"},
+{w:"durch",e:"through",g:"Preposition + Akkusativ"},
+{w:"den",e:"the",g:"Article, definite, maskulin Akkusativ"},
+{w:"großen",e:"big",g:"Adjective, maskulin Akkusativ with def. article → -en"},
+{w:"Schlosspark.",e:"castle park",g:"Noun, der Schlosspark (maskulin, Kompositum), Akkusativ"}
+],
+en: "One day the young woman took a long walk through the big castle park."
+},
+{
+de: [
+{w:"Da",e:"then",g:"Adverb"},
+{w:"traf",e:"met",g:"Verb, treffen, Präteritum (traf), 3rd pers. sing."},
+{w:"sie",e:"she",g:"Pronoun, feminin Nominativ"},
+{w:"einen",e:"a",g:"Article, indefinite, maskulin Akkusativ"},
+{w:"sehr",e:"very",g:"Adverb"},
+{w:"attraktiven",e:"attractive",g:"Adjective, maskulin Akkusativ with indef. article → -en"},
+{w:"jungen",e:"young",g:"Adjective, maskulin Akkusativ → -en"},
+{w:"Mann.",e:"man",g:"Noun, der Mann (maskulin), Akkusativ"}
+],
+en: "Then she met a very attractive young man."
+},
+{
+de: [
+{w:"Sie",e:"they",g:"Pronoun, 3rd pers. Plural, Nominativ"},
+{w:"verliebten",e:"fell in love",g:"Verb, sich verlieben, Präteritum, Plural (reziprok)"},
+{w:"sich.",e:"themselves",g:"Reflexivpronomen, Akkusativ (sich verlieben = fall in love)"}
+],
+en: "They fell in love."
+},
+{
+de: [
+{w:"Und",e:"and",g:"Conjunction"},
+{w:"als",e:"when",g:"Conjunction (subordinating, one-time past)"},
+{w:"sie",e:"they",g:"Pronoun"},
+{w:"sich",e:"each other",g:"Reflexivpronomen (reziprok: küssen)"},
+{w:"küssten,",e:"kissed,",g:"Verb, küssen, Präteritum (at end of als-clause)"},
+{w:"da",e:"then",g:"Adverb (correlative with als)"},
+{w:"war",e:"was",g:"Verb, sein, Präteritum"},
+{w:"der",e:"the",g:"Article, maskulin Nominativ"},
+{w:"Prinz",e:"prince",g:"Noun, Nominativ"},
+{w:"plötzlich",e:"suddenly",g:"Adverb"},
+{w:"ein",e:"a",g:"Article, indefinite, maskulin Nominativ"},
+{w:"kleiner,",e:"small,",g:"Adjective, maskulin Nominativ with indef. → -er"},
+{w:"grüner,",e:"green,",g:"Adjective, maskulin Nominativ → -er"},
+{w:"hässlicher",e:"ugly",g:"Adjective, maskulin Nominativ with indef. → -er"},
+{w:"Frosch!",e:"frog!",g:"Noun, der Frosch (maskulin), Nominativ"}
+],
+en: "And when they kissed, the prince was suddenly a small, green, ugly frog!"
+}
+]
+},
+// ===== STORY 10: A1 - Valentina Barra =====
+{
+id: "valentina",
+title: "Valentina Barra",
+level: "A1",
+topic: "Präsens, Länder und Sprachen",
+sentences: [
+{
+de: [
+{w:"Hallo,",e:"Hello,",g:"Interjection"},
+{w:"ich",e:"I",g:"Pronoun, 1st pers. sing. Nominativ"},
+{w:"heiße",e:"am called",g:"Verb, heißen, 1st pers. sing. Präsens"},
+{w:"Valentina.",e:"Valentina.",g:"Proper noun (name)"}
+],
+en: "Hello, I am called Valentina."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"komme",e:"come",g:"Verb, kommen, 1st pers. sing. Präsens"},
+{w:"aus",e:"from",g:"Preposition + Dativ (origin)"},
+{w:"der",e:"the",g:"Article, definite, feminin Dativ"},
+{w:"Schweiz",e:"Switzerland",g:"Noun, die Schweiz (feminin), Dativ"}
+],
+en: "I come from Switzerland."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"wohne",e:"live",g:"Verb, wohnen, 1st pers. sing. Präsens"},
+{w:"in",e:"in",g:"Preposition + Dativ (location)"},
+{w:"Köln.",e:"Cologne",g:"Proper noun (city)"}
+],
+en: "I live in Cologne."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"studiere",e:"study",g:"Verb, studieren, 1st pers. sing. Präsens"},
+{w:"IT",e:"IT",g:"Noun (abbreviation)"},
+{w:"Engineering.",e:"Engineering.",g:"Noun (English compound)"}
+],
+en: "I study IT Engineering."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"liebe",e:"love",g:"Verb, lieben, 1st pers. sing. Präsens"},
+{w:"Computer.",e:"computers",g:"Noun, der Computer (maskulin), Akkusativ"}
+],
+en: "I love computers."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"spiele",e:"play",g:"Verb, spielen, 1st pers. sing. Präsens"},
+{w:"Basketball",e:"basketball",g:"Noun, das Basketball (neuter), Akkusativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"jogge.",e:"jog",g:"Verb, joggen, 1st pers. sing. Präsens"}
+],
+en: "I play basketball and I jog."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"spreche",e:"speak",g:"Verb, sprechen, 1st pers. sing. Präsens"},
+{w:"Italienisch,",e:"Italian,",g:"Noun (language)"},
+{w:"sehr",e:"very",g:"Adverb (intensifier)"},
+{w:"gut",e:"well",g:"Adjective/Adverb"},
+{w:"Englisch",e:"English",g:"Noun (language)"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"ein",e:"a",g:"Article, indefinite, neuter Akkusativ"},
+{w:"bisschen",e:"little/bit",g:"Noun (idiom: ein bisschen)"},
+{w:"Deutsch.",e:"German.",g:"Noun (language)"}
+],
+en: "I speak Italian, very good English and a little bit of German."
+},
+{
+de: [
+{w:"Meine",e:"My",g:"Possessivartikel, Plural Nominativ"},
+{w:"Freunde",e:"friends",g:"Noun, der Freund (maskulin), Plural Nominativ"},
+{w:"Francesca",e:"Francesca",g:"Proper noun (name)"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Filippo",e:"Filippo",g:"Proper noun (name)"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"sind",e:"are",g:"Verb, sein, 1st pers. Plural Präsens"},
+{w:"jetzt",e:"now",g:"Adverb (temporal)"},
+{w:"in",e:"in",g:"Preposition + Dativ (location)"},
+{w:"Berlin.",e:"Berlin.",g:"Proper noun (city)"}
+],
+en: "My friends Francesca and Filippo and I are now in Berlin."
+},
+{
+de: [
+{w:"Berlin",e:"Berlin",g:"Proper noun (city)"},
+{w:"ist",e:"is",g:"Verb, sein, 3rd pers. sing. Präsens"},
+{w:"meine",e:"my",g:"Possessivartikel, feminin Nominativ"},
+{w:"Lieblingsstadt!",e:"favorite city!",g:"Noun, die Lieblingsstadt (feminin, Kompositum)"}
+],
+en: "Berlin is my favorite city!"
+}
+]
+},
+// ===== STORY 11: A1 - Andi und seine Familie =====
+{
+id: "andi_familie",
+title: "Andi und seine Familie",
+level: "A1",
+topic: "Possessiva, Familienangehörige, haben",
+sentences: [
+{
+de: [
+{w:"Andi",e:"Andi",g:"Proper noun (name)"},
+{w:"ist",e:"is",g:"Verb, sein, 3rd pers. sing. Präsens"},
+{w:"Champion",e:"champion",g:"Noun, der Champion (maskulin)"},
+{w:"in",e:"in",g:"Preposition + Dativ"},
+{w:"der",e:"the",g:"Article, definite, feminin Dativ"},
+{w:"Formel",e:"Formula",g:"Noun, die Formel (feminin), Dativ"},
+{w:"1.",e:"1.",g:"Number (Roman numeral)"}
+],
+en: "Andi is a champion in Formula 1."
+},
+{
+de: [
+{w:"Sein",e:"His",g:"Possessivartikel, maskulin Nominativ"},
+{w:"Lieblingsauto",e:"favorite car",g:"Noun, das Lieblingsauto (neuter, Kompositum)"},
+{w:"ist",e:"is",g:"Verb, sein, 3rd pers. sing. Präsens"},
+{w:"ein",e:"a",g:"Article, indefinite, maskulin Nominativ"},
+{w:"Mercedes.",e:"Mercedes.",g:"Proper noun (car brand)"}
+],
+en: "His favorite car is a Mercedes."
+},
+{
+de: [
+{w:"Andi",e:"Andi",g:"Proper noun"},
+{w:"kommt",e:"comes",g:"Verb, kommen, 3rd pers. sing. Präsens"},
+{w:"aus",e:"from",g:"Preposition + Dativ"},
+{w:"Hamburg.",e:"Hamburg.",g:"Proper noun (city)"}
+],
+en: "Andi comes from Hamburg."
+},
+{
+de: [
+{w:"Er",e:"He",g:"Pronoun, 3rd pers. sing. maskulin, Nominativ"},
+{w:"liebt",e:"loves",g:"Verb, lieben, 3rd pers. sing. Präsens"},
+{w:"seine",e:"his",g:"Possessivartikel, Plural Akkusativ"},
+{w:"Familie.",e:"family.",g:"Noun, die Familie (feminin), Akkusativ"}
+],
+en: "He loves his family."
+},
+{
+de: [
+{w:"Seine",e:"His",g:"Possessivartikel, feminin Nominativ"},
+{w:"Mutter",e:"mother",g:"Noun, die Mutter (feminin), Nominativ"},
+{w:"heißt",e:"is called",g:"Verb, heißen, 3rd pers. sing. Präsens"},
+{w:"Christine",e:"Christine",g:"Proper noun (name)"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"sein",e:"his",g:"Possessivartikel, maskulin Nominativ"},
+{w:"Vater",e:"father",g:"Noun, der Vater (maskulin), Nominativ"},
+{w:"Manuel.",e:"Manuel.",g:"Proper noun (name)"}
+],
+en: "His mother is called Christine and his father is Manuel."
+},
+{
+de: [
+{w:"Andi",e:"Andi",g:"Proper noun"},
+{w:"hat",e:"has",g:"Verb, haben, 3rd pers. sing. Präsens"},
+{w:"eine",e:"a",g:"Article, indefinite, feminin Akkusativ"},
+{w:"Schwester",e:"sister",g:"Noun, die Schwester (feminin), Akkusativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"zwei",e:"two",g:"Number"},
+{w:"Brüder.",e:"brothers.",g:"Noun, der Bruder (maskulin), Plural Akkusativ"}
+],
+en: "Andi has a sister and two brothers."
+},
+{
+de: [
+{w:"Er",e:"He",g:"Pronoun, Nominativ"},
+{w:"liebt",e:"loves",g:"Verb, lieben, 3rd pers. sing. Präsens"},
+{w:"Anna,",e:"Anna,",g:"Proper noun (name)"},
+{w:"seine",e:"his",g:"Possessivartikel, feminin Akkusativ"},
+{w:"Frau.",e:"wife.",g:"Noun, die Frau (feminin), Akkusativ"}
+],
+en: "He loves Anna, his wife."
+},
+{
+de: [
+{w:"Anna",e:"Anna",g:"Proper noun"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Andi",e:"Andi",g:"Proper noun"},
+{w:"wohnen",e:"live",g:"Verb, wohnen, 3rd pers. Plural Präsens"},
+{w:"in",e:"in",g:"Preposition + Dativ (location)"},
+{w:"Monaco.",e:"Monaco.",g:"Proper noun (country)"}
+],
+en: "Anna and Andi live in Monaco."
+},
+{
+de: [
+{w:"Sie",e:"They",g:"Pronoun, 3rd pers. Plural, Nominativ"},
+{w:"haben",e:"have",g:"Verb, haben, 3rd pers. Plural Präsens"},
+{w:"ein",e:"a",g:"Article, indefinite, neuter Akkusativ"},
+{w:"Baby.",e:"baby.",g:"Noun, das Baby (neuter), Akkusativ"}
+],
+en: "They have a baby."
+}
+]
+},
+// ===== STORY 12: A1 - Frühstück in verschiedenen Ländern =====
+{
+id: "breakfast_world",
+title: "So frühstücken wir",
+level: "A1",
+topic: "Essen, Getränke, Länder",
+sentences: [
+{
+de: [
+{w:"In",e:"In",g:"Preposition + Dativ (location)"},
+{w:"China",e:"China",g:"Proper noun (country)"},
+{w:"essen",e:"eat",g:"Verb, essen, 3rd pers. Plural Präsens"},
+{w:"wir",e:"we",g:"Pronoun, 1st pers. Plural, Nominativ"},
+{w:"Suppe",e:"soup",g:"Noun, die Suppe (feminin), Akkusativ"},
+{w:"zum",e:"for",g:"Contraction: zu + dem (Dativ)"},
+{w:"Frühstück.",e:"breakfast.",g:"Noun, das Frühstück (neuter), Dativ"}
+],
+en: "In China we eat soup for breakfast."
+},
+{
+de: [
+{w:"Wir",e:"We",g:"Pronoun, Nominativ"},
+{w:"essen",e:"eat",g:"Verb, essen, 1st pers. Plural Präsens"},
+{w:"Suppe",e:"soup",g:"Noun, die Suppe (feminin)"},
+{w:"mit",e:"with",g:"Preposition + Dativ"},
+{w:"Reis,",e:"rice,",g:"Noun, der Reis (maskulin), Dativ"},
+{w:"Nudeln",e:"noodles",g:"Noun, die Nudeln (Plural), Dativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Gemüse.",e:"vegetables.",g:"Noun, das Gemüse (neuter), Dativ"}
+],
+en: "We eat soup with rice, noodles and vegetables."
+},
+{
+de: [
+{w:"In",e:"In",g:"Preposition + Dativ"},
+{w:"England",e:"England",g:"Proper noun"},
+{w:"trinken",e:"drink",g:"Verb, trinken, 3rd pers. Plural Präsens"},
+{w:"viele",e:"many",g:"Adjective, Plural Nominativ"},
+{w:"Tee",e:"tea",g:"Noun, der Tee (maskulin), Akkusativ"},
+{w:"mit",e:"with",g:"Preposition + Dativ"},
+{w:"Milch.",e:"milk.",g:"Noun, die Milch (feminin), Dativ"}
+],
+en: "In England many drink tea with milk."
+},
+{
+de: [
+{w:"Es",e:"There",g:"Pronoun, expletive"},
+{w:"gibt",e:"is/are",g:"Verb, geben, 3rd pers. sing. Präsens (es gibt = there is)"},
+{w:"am",e:"on the",g:"Contraction: an + dem (Dativ)"},
+{w:"Wochenende",e:"weekend",g:"Noun, das Wochenende (neuter), Dativ"},
+{w:"Eier,",e:"eggs,",g:"Noun, das Ei → Eier (Plural), Akkusativ"},
+{w:"Speck,",e:"bacon,",g:"Noun, der Speck (maskulin), Akkusativ"},
+{w:"Tomaten",e:"tomatoes",g:"Noun, die Tomate → Tomaten (Plural), Akkusativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Bohnen.",e:"beans.",g:"Noun, die Bohne → Bohnen (Plural), Akkusativ"}
+],
+en: "On the weekend there are eggs, bacon, tomatoes and beans."
+},
+{
+de: [
+{w:"In",e:"In",g:"Preposition + Dativ"},
+{w:"Mexiko",e:"Mexico",g:"Proper noun"},
+{w:"essen",e:"eat",g:"Verb, essen, 3rd pers. Plural Präsens"},
+{w:"wir",e:"we",g:"Pronoun, Nominativ"},
+{w:"Eier",e:"eggs",g:"Noun, das Ei → Eier (Plural), Akkusativ"},
+{w:"mit",e:"with",g:"Preposition + Dativ"},
+{w:"Chilis",e:"chilis",g:"Noun, der Chili → Chilis (Plural), Dativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Bohnen.",e:"beans.",g:"Noun, Dativ Plural"}
+],
+en: "In Mexico we eat eggs with chilis and beans."
+},
+{
+de: [
+{w:"Wir",e:"We",g:"Pronoun, Nominativ"},
+{w:"essen",e:"eat",g:"Verb, essen, 1st pers. Plural Präsens"},
+{w:"auch",e:"also",g:"Adverb"},
+{w:"Tortillas",e:"tortillas",g:"Noun, die Tortilla → Tortillas (Plural), Akkusativ"},
+{w:"mit",e:"with",g:"Preposition + Dativ"},
+{w:"Tomaten,",e:"tomatoes,",g:"Noun, Dativ Plural"},
+{w:"Knoblauch",e:"garlic",g:"Noun, der Knoblauch (maskulin), Dativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"Zwiebeln.",e:"onions.",g:"Noun, die Zwiebel → Zwiebeln (Plural), Dativ"}
+],
+en: "We also eat tortillas with tomatoes, garlic and onions."
+},
+{
+de: [
+{w:"In",e:"In",g:"Preposition + Dativ"},
+{w:"Griechenland",e:"Greece",g:"Proper noun"},
+{w:"frühstücken",e:"have breakfast",g:"Verb, frühstücken, 3rd pers. Plural Präsens"},
+{w:"wir",e:"we",g:"Pronoun, Nominativ"},
+{w:"wenig.",e:"little.",g:"Adverb (quantity)"}
+],
+en: "In Greece we have a light breakfast."
+},
+{
+de: [
+{w:"Wir",e:"We",g:"Pronoun, Nominativ"},
+{w:"trinken",e:"drink",g:"Verb, trinken, 1st pers. Plural Präsens"},
+{w:"Kaffee",e:"coffee",g:"Noun, der Kaffee (maskulin), Akkusativ"},
+{w:"oder",e:"or",g:"Conjunction"},
+{w:"Tee.",e:"tea.",g:"Noun, der Tee (maskulin), Akkusativ"}
+],
+en: "We drink coffee or tea."
+}
+]
+},
+// ===== STORY 13: A1 - In Berlin: Freizeit und Vergnügungen =====
+{
+id: "berlin_nightlife",
+title: "Freizeit in Berlin",
+level: "A1",
+topic: "Aktivitäten, Häufigkeit, Präsens",
+sentences: [
+{
+de: [
+{w:"Berlin",e:"Berlin",g:"Proper noun (city)"},
+{w:"schläft",e:"sleeps",g:"Verb, schlafen, 3rd pers. sing. Präsens"},
+{w:"nie!",e:"never!",g:"Adverb of frequency (negation)"}
+],
+en: "Berlin never sleeps!"
+},
+{
+de: [
+{w:"Wir",e:"We",g:"Pronoun, 1st pers. Plural, Nominativ"},
+{w:"können",e:"can",g:"Verb, können (Modalverb), 1st pers. Plural Präsens"},
+{w:"tanzen",e:"dance",g:"Verb, tanzen, Infinitiv (with Modalverb)"},
+{w:"von",e:"from",g:"Preposition + Dativ"},
+{w:"Montag",e:"Monday",g:"Noun, der Montag (maskulin), Dativ"},
+{w:"bis",e:"to/until",g:"Preposition + Akkusativ"},
+{w:"Sonntag.",e:"Sunday.",g:"Noun, der Sonntag (maskulin), Akkusativ"}
+],
+en: "We can dance from Monday to Sunday."
+},
+{
+de: [
+{w:"Am",e:"On the",g:"Contraction: an + dem (Dativ)"},
+{w:"Wochenende",e:"weekend",g:"Noun, das Wochenende (neuter), Dativ"},
+{w:"bin",e:"am",g:"Verb, sein, 1st pers. sing. Präsens"},
+{w:"ich",e:"I",g:"Pronoun, Nominativ (inversion)"},
+{w:"nie",e:"never",g:"Adverb of frequency"},
+{w:"zu",e:"at",g:"Preposition + Dativ"},
+{w:"Hause.",e:"home.",g:"Noun, das Haus (neuter), Dativ"}
+],
+en: "On the weekend I am never at home."
+},
+{
+de: [
+{w:"Der",e:"The",g:"Article, definite, maskulin Nominativ"},
+{w:"Samstag",e:"Saturday",g:"Noun, der Samstag (maskulin), Nominativ"},
+{w:"ist",e:"is",g:"Verb, sein, 3rd pers. sing. Präsens"},
+{w:"richtig",e:"really",g:"Adjective/Adverb"},
+{w:"cool",e:"cool",g:"Adjective, predicative (English loanword)"},
+{w:"hier.",e:"here.",g:"Adverb (location)"}
+],
+en: "Saturday is really cool here."
+},
+{
+de: [
+{w:"Ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"treffe",e:"meet",g:"Verb, treffen, 1st pers. sing. Präsens"},
+{w:"Freunde",e:"friends",g:"Noun, der Freund → Freunde (Plural), Akkusativ"},
+{w:"und",e:"and",g:"Conjunction"},
+{w:"wir",e:"we",g:"Pronoun, Nominativ"},
+{w:"gehen",e:"go",g:"Verb, gehen, 1st pers. Plural Präsens"},
+{w:"in",e:"to",g:"Preposition + Akkusativ (movement)"},
+{w:"Konzerte",e:"concerts",g:"Noun, das Konzert → Konzerte (Plural), Akkusativ"},
+{w:"oder",e:"or",g:"Conjunction"},
+{w:"ins",e:"to the",g:"Contraction: in + das (Akkusativ)"},
+{w:"Theater.",e:"theater.",g:"Noun, das Theater (neuter), Akkusativ"}
+],
+en: "I meet friends and we go to concerts or to the theater."
+},
+{
+de: [
+{w:"Der",e:"The",g:"Article, definite, maskulin Nominativ"},
+{w:"Freitag",e:"Friday",g:"Noun, der Freitag (maskulin), Nominativ"},
+{w:"ist",e:"is",g:"Verb, sein, 3rd pers. sing. Präsens"},
+{w:"mein",e:"my",g:"Possessivartikel, maskulin Nominativ"},
+{w:"Lieblingstag.",e:"favorite day.",g:"Noun, der Lieblingstag (maskulin, Kompositum), Nominativ"}
+],
+en: "Friday is my favorite day."
+},
+{
+de: [
+{w:"Manchmal",e:"Sometimes",g:"Adverb of frequency"},
+{w:"lade",e:"invite",g:"Verb, laden (einladen, trennbar), 1st pers. sing. Präsens"},
+{w:"ich",e:"I",g:"Pronoun, Nominativ"},
+{w:"Freunde",e:"friends",g:"Noun, Plural Akkusativ"},
+{w:"ein.",e:"in (separable prefix).",g:"Trennbares Präfix of einladen, goes to end"}
+],
+en: "Sometimes I invite friends in."
+},
+{
+de: [
+{w:"Wir",e:"We",g:"Pronoun, Nominativ"},
+{w:"kochen.",e:"cook.",g:"Verb, kochen, 1st pers. Plural Präsens"}
+],
+en: "We cook."
+},
+{
+de: [
+{w:"Das",e:"That",g:"Pronoun, demonstrative, neuter Nominativ"},
+{w:"macht",e:"makes",g:"Verb, machen, 3rd pers. sing. Präsens"},
+{w:"Spaß!",e:"fun!",g:"Noun, der Spaß (maskulin), Akkusativ (idiom: Spaß machen)"}
+],
+en: "That is fun!"
+},
+{
+de: [
+{w:"Oder",e:"Or",g:"Conjunction (Position 0)"},
+{w:"wir",e:"we",g:"Pronoun, Nominativ"},
+{w:"gehen",e:"go",g:"Verb, gehen, 1st pers. Plural Präsens"},
+{w:"ins",e:"to the",g:"Contraction: in + das (Akkusativ)"},
+{w:"Restaurant.",e:"restaurant.",g:"Noun, das Restaurant (neuter), Akkusativ"}
+],
+en: "Or we go to the restaurant."
+},
+{
+de: [
+{w:"Wir",e:"We",g:"Pronoun, Nominativ"},
+{w:"essen",e:"eat",g:"Verb, essen, 1st pers. Plural Präsens"},
+{w:"Hamburger",e:"hamburgers",g:"Noun, der Hamburger (maskulin), Akkusativ"},
+{w:"oder",e:"or",g:"Conjunction"},
+{w:"Sushi.",e:"sushi.",g:"Noun, das Sushi (neuter), Akkusativ"}
+],
+en: "We eat hamburgers or sushi."
+},
+{
+de: [
+{w:"Sehr",e:"Very",g:"Adverb (intensifier)"},
+{w:"oft",e:"often",g:"Adverb of frequency"},
+{w:"essen",e:"eat",g:"Verb, essen, 1st pers. Plural Präsens"},
+{w:"wir",e:"we",g:"Pronoun, Nominativ"},
+{w:"Pizza.",e:"pizza.",g:"Noun, die Pizza (feminin), Akkusativ"}
+],
+en: "Very often we eat pizza."
+},
+{
+de: [
+{w:"Meine",e:"My",g:"Possessivartikel, feminin Nominativ"},
+{w:"Familie",e:"family",g:"Noun, die Familie (feminin), Nominativ"},
+{w:"liebt",e:"loves",g:"Verb, lieben, 3rd pers. sing. Präsens"},
+{w:"Pizza!",e:"pizza!",g:"Noun, die Pizza (feminin), Akkusativ"}
+],
+en: "My family loves pizza!"
+}
+]
+}
+];
+
+// ===== RENDER =====
+const nav = document.getElementById('nav');
+const storiesDiv = document.getElementById('stories');
+let colorsOn = true;
+let allTransVisible = false;
+
+stories.forEach((s, i) => {
+  const btn = document.createElement('button');
+  const lvl = s.level.toLowerCase().replace(' ','');
+  btn.innerHTML = `<span class="level-tag level-${lvl}">${s.level}</span>${s.title}`;
+  btn.onclick = () => showStory(i);
+  if(i === 0) btn.classList.add('active');
+  nav.appendChild(btn);
+
+  let html = `<div class="story ${i===0?'active':''}" id="story-${i}">`;
+  html += `<div class="story-card">`;
+  html += `<div class="story-title"><span class="level-tag level-${lvl}">${s.level}</span> ${s.title}</div>`;
+  html += `<div class="story-topic">Grammar Focus: ${s.topic}</div>`;
+
+  s.sentences.forEach((sent, si) => {
+    html += `<div class="sentence-block">`;
+    html += `<div class="sentence-de"><span class="snum">${si+1}</span>`;
+    sent.de.forEach((wd, wi) => {
+      const gc = getGrammarClass(wd.g);
+      html += `<span class="word gc-${gc}" onclick="togglePopup(this)" data-e="${esc(wd.e)}" data-g="${esc(wd.g)}">`;
+      html += `${wd.w} <span class="popup"><span class="pw">${esc(wd.w)}</span><br><span class="pe">→ ${esc(wd.e)}</span><br><span class="pg">${esc(wd.g)}</span></span>`;
+      html += `</span> `;
+    });
+    html += `</div>`;
+    html += `<div class="toggle-row"><button class="toggle-btn" onclick="toggleTrans(this)">Show English</button></div>`;
+    html += `<div class="sentence-en">${sent.en}</div>`;
+    html += `</div>`;
+  });
+
+  html += `</div></div>`;
+  storiesDiv.innerHTML += html;
+});
+
+function esc(s) { return s.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;'); }
+
+function getGrammarClass(g) {
+  const gl = g.toLowerCase();
+  if(gl.includes('verb') || gl.includes('auxiliar') || gl.includes('partizip') || gl.includes('infinitiv') || gl.includes('präteritum') || gl.includes('präsens')) return 'verb';
+  if(gl.includes('noun') || gl.includes('proper noun')) return 'noun';
+  if(gl.includes('adjective') || gl.includes('adjektiv')) return 'adj';
+  if(gl.includes('preposition') || gl.includes('präposition') || gl.includes('contraction')) return 'prep';
+  if(gl.includes('pronoun') || gl.includes('reflexiv') || gl.includes('possessiv')) return 'pron';
+  if(gl.includes('adverb') || gl.includes('particle') || gl.includes('negation')) return 'adv';
+  if(gl.includes('conjunction') || gl.includes('konjunktion')) return 'conj';
+  if(gl.includes('article') || gl.includes('artikel')) return 'art';
+  return 'noun';
+}
+
+function showStory(idx) {
+  document.querySelectorAll('.story').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('story-'+idx).classList.add('active');
+  nav.children[idx].classList.add('active');
+  document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
+  document.querySelectorAll('.word').forEach(w => w.classList.remove('clicked'));
+}
+
+function togglePopup(el) {
+  const pop = el.querySelector('.popup');
+  const wasVisible = pop.style.display === 'block';
+  document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
+  document.querySelectorAll('.word').forEach(w => w.classList.remove('clicked'));
+  if(!wasVisible) { pop.style.display = 'block'; el.classList.add('clicked'); }
+}
+
+function toggleTrans(btn) {
+  const en = btn.parentElement.nextElementSibling;
+  const show = !en.classList.contains('show');
+  en.classList.toggle('show');
+  btn.textContent = show ? 'Hide English' : 'Show English';
+  btn.classList.toggle('on', show);
+}
+
+function toggleAllTranslations() {
+  allTransVisible = !allTransVisible;
+  document.querySelectorAll('.sentence-en').forEach(en => {
+    en.classList.toggle('show', allTransVisible);
+  });
+  document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.textContent = allTransVisible ? 'Hide English' : 'Show English';
+    btn.classList.toggle('on', allTransVisible);
+  });
+}
+
+function toggleColorMode() {
+  colorsOn = !colorsOn;
+  const classes = ['gc-verb','gc-noun','gc-adj','gc-prep','gc-pron','gc-adv','gc-conj','gc-art'];
+  document.querySelectorAll('.word').forEach(w => {
+    classes.forEach(c => {
+      if(w.classList.contains(c)) { w.style.borderBottom = colorsOn ? '' : 'none'; }
+    });
+  });
+}
+
+document.addEventListener('click', function(e) {
+  if(!e.target.closest('.word')) {
+    document.querySelectorAll('.popup').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.word').forEach(w => w.classList.remove('clicked'));
+  }
+});
+</script>
+</body>
+</html>

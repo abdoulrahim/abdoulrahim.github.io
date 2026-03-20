@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Der, Die, Das — German Articles Practice</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  :root{
+    --der:#3b82f6;--der-bg:#dbeafe;--der-dark:#1e40af;
+    --die:#ec4899;--die-bg:#fce7f3;--die-dark:#9d174d;
+    --das:#8b5cf6;--das-bg:#ede9fe;--das-dark:#5b21b6;
+    --success:#10b981;--success-bg:#d1fae5;
+    --error:#ef4444;--error-bg:#fee2e2;
+    --accent:#f59e0b;--accent-bg:#fef3c7;
+    --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--g50);color:var(--g800);min-height:100vh;}
+
+  .header{background:linear-gradient(135deg,#1e40af,#7c3aed,#be185d);color:white;padding:24px;text-align:center;}
+  .header h1{font-size:24px;font-weight:800;letter-spacing:-0.5px;}
+  .header p{font-size:13px;opacity:0.85;margin-top:4px;}
+  .header .legend{display:flex;justify-content:center;gap:16px;margin-top:12px;flex-wrap:wrap;}
+  .header .legend span{font-size:13px;font-weight:600;padding:4px 12px;border-radius:16px;}
+  .legend .m{background:var(--der-bg);color:var(--der-dark);}
+  .legend .f{background:var(--die-bg);color:var(--die-dark);}
+  .legend .n{background:var(--das-bg);color:var(--das-dark);}
+
+  .stats-bar{display:flex;justify-content:center;gap:20px;padding:14px;background:white;border-bottom:1px solid var(--g200);flex-wrap:wrap;}
+  .stat{text-align:center;}
+  .stat .num{font-size:22px;font-weight:800;}
+  .stat .num.c-correct{color:var(--success);}
+  .stat .num.c-wrong{color:var(--error);}
+  .stat .num.c-streak{color:var(--accent);}
+  .stat .lbl{font-size:10px;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px;}
+
+  .progress-row{padding:10px 24px;background:white;border-bottom:1px solid var(--g200);}
+  .prog-outer{height:6px;background:var(--g100);border-radius:3px;overflow:hidden;}
+  .prog-inner{height:100%;border-radius:3px;transition:width 0.4s;background:linear-gradient(90deg,var(--der),var(--die),var(--das));}
+  .prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--g400);margin-bottom:4px;}
+
+  /* MODE TABS */
+  .mode-bar{display:flex;gap:0;background:white;border-bottom:1px solid var(--g200);}
+  .mode-tab{
+    flex:1;padding:12px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;
+    color:var(--g400);border-bottom:3px solid transparent;transition:all 0.2s;
+  }
+  .mode-tab:hover{color:var(--g700);}
+  .mode-tab.active{color:var(--der-dark);border-bottom-color:var(--der);}
+
+  /* FILTER CHIPS */
+  .filter-row{display:flex;gap:8px;padding:12px 24px;overflow-x:auto;background:white;border-bottom:1px solid var(--g200);}
+  .chip{
+    padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;
+    border:2px solid var(--g200);background:white;color:var(--g600);white-space:nowrap;transition:all 0.2s;
+  }
+  .chip:hover{border-color:var(--der);}
+  .chip.active{background:var(--g900);color:white;border-color:var(--g900);}
+
+  .main{max-width:600px;margin:0 auto;padding:24px;}
+
+  /* ======= MODE 1: Gender Quiz ======= */
+  .quiz-card{
+    background:white;border-radius:16px;padding:40px 32px;text-align:center;
+    box-shadow:0 4px 24px rgba(0,0,0,0.06);margin-bottom:20px;position:relative;
+    border:2px solid var(--g200);transition:border-color 0.3s;
+  }
+  .quiz-card.flash-der{border-color:var(--der);box-shadow:0 0 30px rgba(59,130,246,0.2);}
+  .quiz-card.flash-die{border-color:var(--die);box-shadow:0 0 30px rgba(236,72,153,0.2);}
+  .quiz-card.flash-das{border-color:var(--das);box-shadow:0 0 30px rgba(139,92,246,0.2);}
+
+  .quiz-card .card-num{position:absolute;top:16px;right:20px;font-size:12px;color:var(--g400);}
+  .quiz-card .noun{font-size:36px;font-weight:900;margin-bottom:8px;letter-spacing:-1px;}
+  .quiz-card .noun-en{font-size:14px;color:var(--g400);margin-bottom:6px;font-style:italic;}
+  .quiz-card .plural{font-size:13px;color:var(--g500);margin-bottom:24px;}
+  .quiz-card .sentence{font-size:15px;color:var(--g600);margin-bottom:24px;line-height:1.6;padding:12px 16px;background:var(--g50);border-radius:8px;}
+  .quiz-card .sentence b{color:var(--g900);}
+
+  .gender-btns{display:flex;gap:12px;justify-content:center;margin-bottom:16px;}
+  .gender-btn{
+    padding:14px 28px;border-radius:12px;font-size:18px;font-weight:800;cursor:pointer;
+    border:3px solid;transition:all 0.2s;min-width:100px;
+  }
+  .gender-btn:hover{transform:scale(1.05);}
+  .gender-btn.btn-der{border-color:var(--der);color:var(--der);background:var(--der-bg);}
+  .gender-btn.btn-die{border-color:var(--die);color:var(--die);background:var(--die-bg);}
+  .gender-btn.btn-das{border-color:var(--das);color:var(--das);background:var(--das-bg);}
+  .gender-btn.correct{background:var(--success-bg)!important;border-color:var(--success)!important;color:#065f46!important;}
+  .gender-btn.wrong{background:var(--error-bg)!important;border-color:var(--error)!important;color:#991b1b!important;opacity:0.5;}
+  .gender-btn:disabled{cursor:default;transform:none;}
+
+  .result-line{font-size:15px;font-weight:600;margin-top:12px;min-height:24px;}
+  .result-line.r-correct{color:var(--success);}
+  .result-line.r-wrong{color:var(--error);}
+
+  .tip-box{background:var(--accent-bg);border-radius:8px;padding:10px 14px;font-size:13px;color:#78350f;margin-top:12px;text-align:left;display:none;}
+  .tip-box.show{display:block;}
+
+  /* ======= MODE 2: Sentences ======= */
+  .sent-card{
+    background:white;border-radius:16px;padding:32px;
+    box-shadow:0 4px 24px rgba(0,0,0,0.06);margin-bottom:20px;
+    border:2px solid var(--g200);
+  }
+  .sent-card .sent-num{font-size:12px;color:var(--g400);margin-bottom:12px;}
+  .sent-text{font-size:18px;line-height:2;margin-bottom:16px;}
+  .sent-text .blank-input{
+    width:80px;border:none;border-bottom:3px solid var(--g300);font-size:18px;
+    text-align:center;font-family:inherit;outline:none;background:transparent;
+    transition:border-color 0.2s;font-weight:700;
+  }
+  .sent-text .blank-input:focus{border-bottom-color:var(--der);}
+  .sent-text .blank-input.correct{border-bottom-color:var(--success);color:var(--success);background:var(--success-bg);}
+  .sent-text .blank-input.incorrect{border-bottom-color:var(--error);color:var(--error);background:var(--error-bg);}
+  .sent-hint{font-size:13px;color:var(--g400);font-style:italic;margin-bottom:12px;}
+  .sent-en{font-size:13px;color:var(--g500);margin-top:8px;display:none;}
+  .sent-en.show{display:block;}
+
+  /* ======= MODE 3: Speed Round ======= */
+  .speed-area{text-align:center;}
+  .speed-timer{font-size:48px;font-weight:900;color:var(--g900);margin:16px 0;}
+  .speed-noun{font-size:42px;font-weight:900;margin:24px 0;letter-spacing:-1px;}
+  .speed-score{font-size:18px;color:var(--g600);margin:12px 0;}
+  .speed-start{
+    padding:16px 48px;background:linear-gradient(135deg,var(--der),var(--das));color:white;
+    border:none;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer;
+  }
+  .speed-start:hover{transform:scale(1.05);}
+
+  /* NAV */
+  .nav-row{display:flex;gap:12px;justify-content:center;margin:20px 0;}
+  .nav-btn{
+    padding:12px 28px;border-radius:10px;font-size:14px;font-weight:600;
+    cursor:pointer;transition:all 0.2s;border:none;
+  }
+  .nav-btn.prev{background:var(--g100);color:var(--g700);}
+  .nav-btn.next{background:var(--g900);color:white;}
+  .nav-btn:disabled{opacity:0.3;cursor:default;}
+  .nav-btn:hover:not(:disabled){transform:translateY(-1px);}
+
+  .kbd-hint{text-align:center;font-size:11px;color:var(--g400);margin-top:8px;}
+  .kbd-hint kbd{background:var(--g100);border:1px solid var(--g300);padding:1px 5px;border-radius:3px;font-family:inherit;font-size:10px;}
+
+  /* Completion */
+  .done-card{background:linear-gradient(135deg,var(--success),#059669);color:white;border-radius:16px;padding:48px 32px;text-align:center;margin:24px 0;}
+  .done-card h2{font-size:28px;margin-bottom:8px;}
+  .done-card p{opacity:0.9;margin-bottom:16px;}
+  .done-card button{background:white;color:var(--success);border:none;padding:12px 32px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;}
+
+  @media(max-width:500px){
+    .quiz-card .noun{font-size:28px;}
+    .gender-btn{padding:12px 20px;font-size:16px;min-width:80px;}
+    .main{padding:16px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Der, Die oder Das?</h1>
+  <p>Master German noun genders with sentences</p>
+  <div class="legend">
+    <span class="m">der — maskulin</span>
+    <span class="f">die — feminin</span>
+    <span class="n">das — neutral</span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="num c-correct" id="sCorrect">0</div><div class="lbl">Correct</div></div>
+  <div class="stat"><div class="num c-wrong" id="sWrong">0</div><div class="lbl">Wrong</div></div>
+  <div class="stat"><div class="num" id="sAccuracy">—</div><div class="lbl">Accuracy</div></div>
+  <div class="stat"><div class="num c-streak" id="sStreak">0 🔥</div><div class="lbl">Streak</div></div>
+</div>
+
+<div class="progress-row">
+  <div class="prog-label"><span id="pLabel">Card 1</span><span id="pPct">0%</span></div>
+  <div class="prog-outer"><div class="prog-inner" id="pBar" style="width:0%"></div></div>
+</div>
+
+<div class="mode-bar">
+  <div class="mode-tab active" onclick="setMode('gender')">🎯 Gender Quiz</div>
+  <div class="mode-tab" onclick="setMode('sentences')">✏️ Articles in Sentences</div>
+  <div class="mode-tab" onclick="setMode('speed')">⚡ Speed Round</div>
+</div>
+
+<div class="filter-row" id="filterRow"></div>
+
+<div class="main" id="mainArea"></div>
+
+<script>
+// ============ NOUN DATA ============
+const nouns = [
+  // ---- Maskulin (der) ----
+  {noun:'Mann',article:'der',en:'man',plural:'Männer',cat:'Menschen',tip:'Most male persons are masculine.',
+   sent:'___ Mann isst den Fisch.',sentEn:'The man eats the fish.'},
+  {noun:'Freund',article:'der',en:'friend (m)',plural:'Freunde',cat:'Menschen',tip:'Male friends/people → der.',
+   sent:'Das ist mein bester ___.',sentEn:'That is my best friend.',sentBlank:'Freund'},
+  {noun:'Lehrer',article:'der',en:'teacher (m)',plural:'Lehrer',cat:'Menschen',tip:'-er ending for male professions → der.',
+   sent:'___ Lehrer gibt den Studenten Hausaufgaben.',sentEn:'The teacher gives the students homework.'},
+  {noun:'Arzt',article:'der',en:'doctor',plural:'Ärzte',cat:'Menschen',tip:'Male professions → der.',
+   sent:'Ich gehe zum ___.',sentEn:'I go to the doctor.',sentBlank:'Arzt'},
+  {noun:'Junge',article:'der',en:'boy',plural:'Jungen',cat:'Menschen',tip:'Male persons → der.',
+   sent:'___ Junge spielt Fußball.',sentEn:'The boy plays soccer.'},
+  {noun:'Name',article:'der',en:'name',plural:'Namen',cat:'Alltag',tip:'Nouns ending in -e that are masculine are exceptions.',
+   sent:'Wie ist Ihr ___?',sentEn:'What is your name?',sentBlank:'Name'},
+  {noun:'Tag',article:'der',en:'day',plural:'Tage',cat:'Zeit',tip:'Days, months, seasons → der.',
+   sent:'Guten ___!',sentEn:'Good day!',sentBlank:'Tag'},
+  {noun:'Morgen',article:'der',en:'morning',plural:'Morgen',cat:'Zeit',tip:'Times of day (except die Nacht) → der.',
+   sent:'Am ___ trinke ich Kaffee.',sentEn:'In the morning I drink coffee.',sentBlank:'Morgen'},
+  {noun:'Abend',article:'der',en:'evening',plural:'Abende',cat:'Zeit',tip:'Times of day → der.',
+   sent:'Am ___ sehen wir fern.',sentEn:'In the evening we watch TV.',sentBlank:'Abend'},
+  {noun:'Monat',article:'der',en:'month',plural:'Monate',cat:'Zeit',tip:'Der Monat, der Tag, der Morgen — time words.',
+   sent:'Ein ___ hat 30 oder 31 Tage.',sentEn:'A month has 30 or 31 days.',sentBlank:'Monat'},
+  {noun:'Stuhl',article:'der',en:'chair',plural:'Stühle',cat:'Haus',tip:'No clear pattern — memorize!',
+   sent:'___ Stuhl ist sehr bequem.',sentEn:'The chair is very comfortable.'},
+  {noun:'Tisch',article:'der',en:'table',plural:'Tische',cat:'Haus',tip:'Furniture has mixed genders — learn each.',
+   sent:'Das Buch liegt auf ___ Tisch.',sentEn:'The book is on the table.',sentBlank:'dem'},
+  {noun:'Kühlschrank',article:'der',en:'fridge',plural:'Kühlschränke',cat:'Haus',tip:'Compound nouns: last word determines gender.',
+   sent:'___ Kühlschrank ist leer.',sentEn:'The fridge is empty.'},
+  {noun:'Schrank',article:'der',en:'wardrobe',plural:'Schränke',cat:'Haus',tip:'Der Schrank — masculine.',
+   sent:'___ Schrank kommt aus Italien.',sentEn:'The wardrobe comes from Italy.'},
+  {noun:'Computer',article:'der',en:'computer',plural:'Computer',cat:'Technik',tip:'Many English loanwords → der.',
+   sent:'___ Computer ist neu.',sentEn:'The computer is new.'},
+  {noun:'Film',article:'der',en:'film',plural:'Filme',cat:'Freizeit',tip:'Der Film — masculine.',
+   sent:'___ Film ist sehr gut.',sentEn:'The film is very good.'},
+  {noun:'Kaffee',article:'der',en:'coffee',plural:'—',cat:'Essen',tip:'Drinks: der Kaffee, der Tee, der Saft, der Wein.',
+   sent:'Ich trinke gerne ___.',sentEn:'I like to drink coffee.',sentBlank:'Kaffee'},
+  {noun:'Kuchen',article:'der',en:'cake',plural:'Kuchen',cat:'Essen',tip:'Der Kuchen — masculine.',
+   sent:'Möchtest du ein Stück ___?',sentEn:'Would you like a piece of cake?',sentBlank:'Kuchen'},
+  {noun:'Fisch',article:'der',en:'fish',plural:'Fische',cat:'Essen',tip:'Der Fisch — masculine.',
+   sent:'___ Mann isst ___ Fisch.',sentEn:'The man eats the fish.'},
+  {noun:'Apfel',article:'der',en:'apple',plural:'Äpfel',cat:'Essen',tip:'Most fruits are feminine EXCEPT der Apfel!',
+   sent:'___ Apfel ist rot.',sentEn:'The apple is red.'},
+  {noun:'Hund',article:'der',en:'dog',plural:'Hunde',cat:'Tiere',tip:'Der Hund — masculine.',
+   sent:'___ Hund ist sehr süß.',sentEn:'The dog is very cute.'},
+  {noun:'Löffel',article:'der',en:'spoon',plural:'Löffel',cat:'Haus',tip:'Der Löffel → er.',
+   sent:'Wo ist ___ Löffel?',sentEn:'Where is the spoon?'},
+  {noun:'Bus',article:'der',en:'bus',plural:'Busse',cat:'Verkehr',tip:'Vehicles: der Bus, der Zug, der Wagen.',
+   sent:'___ Bus kommt in fünf Minuten.',sentEn:'The bus comes in five minutes.'},
+  {noun:'Zug',article:'der',en:'train',plural:'Züge',cat:'Verkehr',tip:'Der Zug — masculine.',
+   sent:'___ Zug fährt nach Berlin.',sentEn:'The train goes to Berlin.'},
+  {noun:'Pass',article:'der',en:'passport',plural:'Pässe',cat:'Alltag',tip:'Der Pass — masculine.',
+   sent:'Ich brauche ___ Pass.',sentEn:'I need the passport.',sentBlank:'den'},
+  {noun:'Beruf',article:'der',en:'profession',plural:'Berufe',cat:'Arbeit',tip:'Der Beruf — masculine.',
+   sent:'Was ist Ihr ___?',sentEn:'What is your profession?',sentBlank:'Beruf'},
+  {noun:'Schlüssel',article:'der',en:'key',plural:'Schlüssel',cat:'Alltag',tip:'Der Schlüssel — masculine.',
+   sent:'Wo ist mein ___?',sentEn:'Where is my key?',sentBlank:'Schlüssel'},
+
+  // ---- Feminin (die) ----
+  {noun:'Frau',article:'die',en:'woman/Mrs.',plural:'Frauen',cat:'Menschen',tip:'Female persons → die.',
+   sent:'___ Frau kommt aus Japan.',sentEn:'The woman comes from Japan.'},
+  {noun:'Freundin',article:'die',en:'friend (f)',plural:'Freundinnen',cat:'Menschen',tip:'-in ending (female form) → always die.',
+   sent:'Meine ___ heißt Anna.',sentEn:'My friend is called Anna.',sentBlank:'Freundin'},
+  {noun:'Lehrerin',article:'die',en:'teacher (f)',plural:'Lehrerinnen',cat:'Menschen',tip:'-in ending → die. Rule: all -in endings are feminine.',
+   sent:'___ Lehrerin ist sehr nett.',sentEn:'The teacher is very nice.'},
+  {noun:'Mutter',article:'die',en:'mother',plural:'Mütter',cat:'Menschen',tip:'Die Mutter — feminine.',
+   sent:'Meine ___ kocht sehr gut.',sentEn:'My mother cooks very well.',sentBlank:'Mutter'},
+  {noun:'Schwester',article:'die',en:'sister',plural:'Schwestern',cat:'Menschen',tip:'Die Schwester — feminine.',
+   sent:'Meine ___ wohnt in Hamburg.',sentEn:'My sister lives in Hamburg.',sentBlank:'Schwester'},
+  {noun:'Küche',article:'die',en:'kitchen',plural:'Küchen',cat:'Haus',tip:'-e ending is often feminine.',
+   sent:'___ Küche ist klein aber modern.',sentEn:'The kitchen is small but modern.'},
+  {noun:'Lampe',article:'die',en:'lamp',plural:'Lampen',cat:'Haus',tip:'-e ending → often die.',
+   sent:'___ Lampe ist neu.',sentEn:'The lamp is new.'},
+  {noun:'Tasche',article:'die',en:'bag',plural:'Taschen',cat:'Alltag',tip:'-e ending → often die.',
+   sent:'___ Tasche ist sehr schön.',sentEn:'The bag is very beautiful.'},
+  {noun:'Wohnung',article:'die',en:'apartment',plural:'Wohnungen',cat:'Haus',tip:'-ung ending → ALWAYS die!',
+   sent:'___ Wohnung ist sehr groß.',sentEn:'The apartment is very large.'},
+  {noun:'Zeitung',article:'die',en:'newspaper',plural:'Zeitungen',cat:'Alltag',tip:'-ung → always die.',
+   sent:'Ich lese ___ Zeitung.',sentEn:'I read the newspaper.'},
+  {noun:'Übung',article:'die',en:'exercise',plural:'Übungen',cat:'Arbeit',tip:'-ung → always die.',
+   sent:'___ Übung ist nicht schwer.',sentEn:'The exercise is not difficult.'},
+  {noun:'Musik',article:'die',en:'music',plural:'—',cat:'Freizeit',tip:'-ik ending → always die.',
+   sent:'Ich höre gerne ___.',sentEn:'I like to listen to music.',sentBlank:'Musik'},
+  {noun:'Universität',article:'die',en:'university',plural:'Universitäten',cat:'Arbeit',tip:'-tät ending → always die.',
+   sent:'___ Universität ist sehr gut.',sentEn:'The university is very good.'},
+  {noun:'Freiheit',article:'die',en:'freedom',plural:'—',cat:'Alltag',tip:'-heit ending → always die.',
+   sent:'___ Freiheit ist wichtig.',sentEn:'Freedom is important.'},
+  {noun:'Möglichkeit',article:'die',en:'possibility',plural:'Möglichkeiten',cat:'Alltag',tip:'-keit ending → always die.',
+   sent:'Das ist eine gute ___.',sentEn:'That is a good possibility.',sentBlank:'Möglichkeit'},
+  {noun:'Stadt',article:'die',en:'city',plural:'Städte',cat:'Ort',tip:'Die Stadt — feminine.',
+   sent:'___ Stadt ist wunderschön.',sentEn:'The city is beautiful.'},
+  {noun:'Straße',article:'die',en:'street',plural:'Straßen',cat:'Ort',tip:'-e ending → often die.',
+   sent:'___ Straße ist lang.',sentEn:'The street is long.'},
+  {noun:'Schule',article:'die',en:'school',plural:'Schulen',cat:'Arbeit',tip:'-e ending → often die.',
+   sent:'___ Schule beginnt um 8 Uhr.',sentEn:'School starts at 8 o\'clock.'},
+  {noun:'Katze',article:'die',en:'cat',plural:'Katzen',cat:'Tiere',tip:'-e ending → often die.',
+   sent:'___ Katze schläft auf dem Sofa.',sentEn:'The cat sleeps on the sofa.'},
+  {noun:'Gabel',article:'die',en:'fork',plural:'Gabeln',cat:'Haus',tip:'Die Gabel → sie.',
+   sent:'___ Gabel liegt auf dem Tisch.',sentEn:'The fork is on the table.'},
+  {noun:'U-Bahn',article:'die',en:'subway',plural:'U-Bahnen',cat:'Verkehr',tip:'Die Bahn, die U-Bahn — feminine.',
+   sent:'Ich fahre mit ___ U-Bahn.',sentEn:'I take the subway.'},
+  {noun:'Milch',article:'die',en:'milk',plural:'—',cat:'Essen',tip:'Die Milch — feminine.',
+   sent:'Ich trinke ___ Milch.',sentEn:'I drink the milk.'},
+  {noun:'Pizza',article:'die',en:'pizza',plural:'Pizzen',cat:'Essen',tip:'-a ending from Italian → often die.',
+   sent:'___ Pizza schmeckt gut.',sentEn:'The pizza tastes good.'},
+  {noun:'Nacht',article:'die',en:'night',plural:'Nächte',cat:'Zeit',tip:'Die Nacht is the EXCEPTION among times of day.',
+   sent:'___ Nacht ist lang.',sentEn:'The night is long.'},
+  {noun:'Zeit',article:'die',en:'time',plural:'Zeiten',cat:'Zeit',tip:'Die Zeit — feminine.',
+   sent:'Ich habe keine ___.',sentEn:'I have no time.',sentBlank:'Zeit'},
+  {noun:'Arbeit',article:'die',en:'work',plural:'Arbeiten',cat:'Arbeit',tip:'Die Arbeit — feminine.',
+   sent:'___ Arbeit macht Spaß.',sentEn:'Work is fun.'},
+  {noun:'Sprache',article:'die',en:'language',plural:'Sprachen',cat:'Alltag',tip:'-e ending → often die.',
+   sent:'Deutsch ist eine schöne ___.',sentEn:'German is a beautiful language.',sentBlank:'Sprache'},
+
+  // ---- Neutral (das) ----
+  {noun:'Kind',article:'das',en:'child',plural:'Kinder',cat:'Menschen',tip:'Das Kind — neutral.',
+   sent:'___ Kind spielt im Garten.',sentEn:'The child plays in the garden.'},
+  {noun:'Mädchen',article:'das',en:'girl',plural:'Mädchen',cat:'Menschen',tip:'-chen ending → ALWAYS das! Even for girls.',
+   sent:'___ Mädchen heißt Lisa.',sentEn:'The girl is called Lisa.'},
+  {noun:'Baby',article:'das',en:'baby',plural:'Babys',cat:'Menschen',tip:'Das Baby — neutral.',
+   sent:'___ Baby schläft.',sentEn:'The baby is sleeping.'},
+  {noun:'Haus',article:'das',en:'house',plural:'Häuser',cat:'Haus',tip:'Das Haus — neutral.',
+   sent:'___ Haus ist sehr groß.',sentEn:'The house is very large.'},
+  {noun:'Zimmer',article:'das',en:'room',plural:'Zimmer',cat:'Haus',tip:'-er ending nouns can be any gender — memorize!',
+   sent:'___ Zimmer ist klein.',sentEn:'The room is small.'},
+  {noun:'Fenster',article:'das',en:'window',plural:'Fenster',cat:'Haus',tip:'Das Fenster — neutral.',
+   sent:'Mach bitte ___ Fenster auf!',sentEn:'Please open the window!'},
+  {noun:'Bett',article:'das',en:'bed',plural:'Betten',cat:'Haus',tip:'Das Bett — neutral.',
+   sent:'___ Bett ist bequem.',sentEn:'The bed is comfortable.'},
+  {noun:'Regal',article:'das',en:'shelf',plural:'Regale',cat:'Haus',tip:'Das Regal — neutral.',
+   sent:'___ Regal ist praktisch.',sentEn:'The shelf is practical.'},
+  {noun:'Buch',article:'das',en:'book',plural:'Bücher',cat:'Freizeit',tip:'Das Buch — neutral.',
+   sent:'___ Buch ist interessant.',sentEn:'The book is interesting.'},
+  {noun:'Handy',article:'das',en:'mobile phone',plural:'Handys',cat:'Technik',tip:'Das Handy — neutral (German word, not English!).',
+   sent:'Wo ist mein ___?',sentEn:'Where is my phone?',sentBlank:'Handy'},
+  {noun:'Auto',article:'das',en:'car',plural:'Autos',cat:'Verkehr',tip:'Das Auto — neutral.',
+   sent:'Ich fahre mit ___ Auto.',sentEn:'I drive by car.'},
+  {noun:'Fahrrad',article:'das',en:'bicycle',plural:'Fahrräder',cat:'Verkehr',tip:'Das Fahrrad — neutral.',
+   sent:'___ Fahrrad ist kaputt.',sentEn:'The bicycle is broken.'},
+  {noun:'Taxi',article:'das',en:'taxi',plural:'Taxis',cat:'Verkehr',tip:'Das Taxi — neutral.',
+   sent:'Wir nehmen ___ Taxi.',sentEn:'We take a taxi.'},
+  {noun:'Messer',article:'das',en:'knife',plural:'Messer',cat:'Haus',tip:'Das Messer → es.',
+   sent:'___ Messer ist scharf.',sentEn:'The knife is sharp.'},
+  {noun:'Wasser',article:'das',en:'water',plural:'—',cat:'Essen',tip:'Das Wasser — neutral.',
+   sent:'Ich trinke ein Glas ___.',sentEn:'I drink a glass of water.',sentBlank:'Wasser'},
+  {noun:'Brot',article:'das',en:'bread',plural:'Brote',cat:'Essen',tip:'Das Brot — neutral.',
+   sent:'___ Brot ist frisch.',sentEn:'The bread is fresh.'},
+  {noun:'Ei',article:'das',en:'egg',plural:'Eier',cat:'Essen',tip:'Das Ei — neutral.',
+   sent:'___ Ei ist noch warm.',sentEn:'The egg is still warm.'},
+  {noun:'Obst',article:'das',en:'fruit',plural:'—',cat:'Essen',tip:'Das Obst — neutral (collective noun).',
+   sent:'___ Obst ist gesund.',sentEn:'Fruit is healthy.'},
+  {noun:'Brötchen',article:'das',en:'bread roll',plural:'Brötchen',cat:'Essen',tip:'-chen ending → always das!',
+   sent:'Möchtest du ein ___?',sentEn:'Would you like a bread roll?',sentBlank:'Brötchen'},
+  {noun:'Wochenende',article:'das',en:'weekend',plural:'Wochenenden',cat:'Zeit',tip:'Das Wochenende — neutral.',
+   sent:'Am ___ schlafe ich lange.',sentEn:'On the weekend I sleep in.',sentBlank:'Wochenende'},
+  {noun:'Frühstück',article:'das',en:'breakfast',plural:'—',cat:'Essen',tip:'Das Frühstück — neutral.',
+   sent:'___ Frühstück ist fertig!',sentEn:'Breakfast is ready!'},
+  {noun:'Büro',article:'das',en:'office',plural:'Büros',cat:'Arbeit',tip:'Das Büro — neutral.',
+   sent:'Ich arbeite im ___.',sentEn:'I work in the office.',sentBlank:'Büro'},
+  {noun:'Haustier',article:'das',en:'pet',plural:'Haustiere',cat:'Tiere',tip:'Das Tier → das Haustier (compound noun, last part decides).',
+   sent:'Hast du ein ___?',sentEn:'Do you have a pet?',sentBlank:'Haustier'},
+  {noun:'Kaninchen',article:'das',en:'rabbit',plural:'Kaninchen',cat:'Tiere',tip:'-chen ending → always das!',
+   sent:'___ Kaninchen ist weiß.',sentEn:'The rabbit is white.'},
+  {noun:'Geld',article:'das',en:'money',plural:'—',cat:'Alltag',tip:'Das Geld — neutral.',
+   sent:'Ich habe kein ___.',sentEn:'I have no money.',sentBlank:'Geld'},
+  {noun:'Problem',article:'das',en:'problem',plural:'Probleme',cat:'Alltag',tip:'Das Problem — neutral.',
+   sent:'___ ist kein Problem.',sentEn:'That is no problem.',sentBlank:'Das'},
+  {noun:'Land',article:'das',en:'country',plural:'Länder',cat:'Ort',tip:'Das Land — neutral.',
+   sent:'___ Land ist sehr schön.',sentEn:'The country is very beautiful.'},
+  {noun:'Kino',article:'das',en:'cinema',plural:'Kinos',cat:'Freizeit',tip:'Das Kino — neutral.',
+   sent:'Gehen wir ins ___?',sentEn:'Shall we go to the cinema?',sentBlank:'Kino'},
+
+  // ===== Food & Drink =====
+  {noun:'Bier',article:'das',en:'beer',plural:'Biere',cat:'Essen',tip:'Das Bier — neutral.',
+   sent:'Ich trinke gerne ___.',sentEn:'I like to drink beer.',sentBlank:'Bier'},
+  {noun:'Tee',article:'der',en:'tea',plural:'—',cat:'Essen',tip:'Der Tee — masculine.',
+   sent:'Möchte ich ___ oder Kaffee?',sentEn:'Would I like tea or coffee?',sentBlank:'Tee'},
+  {noun:'Pizza',article:'die',en:'pizza',plural:'Pizzen',cat:'Essen',tip:'-a ending → often die.',
+   sent:'___ Pizza schmeckt wunderbar.',sentEn:'The pizza tastes wonderful.'},
+  {noun:'Wein',article:'der',en:'wine',plural:'Weine',cat:'Essen',tip:'Der Wein — masculine.',
+   sent:'Trinken Sie gerne ___?',sentEn:'Do you like to drink wine?'},
+  {noun:'Milch',article:'die',en:'milk',plural:'—',cat:'Essen',tip:'Die Milch — feminine.',
+   sent:'Das Kind trinkt ___.',sentEn:'The child drinks milk.'},
+  {noun:'Butter',article:'die',en:'butter',plural:'—',cat:'Essen',tip:'Die Butter — feminine.',
+   sent:'Ich möchte ___ auf dem Brot.',sentEn:'I want butter on the bread.'},
+  {noun:'Reis',article:'der',en:'rice',plural:'—',cat:'Essen',tip:'Der Reis — masculine.',
+   sent:'___ Reis ist weiß.',sentEn:'The rice is white.'},
+  {noun:'Öl',article:'das',en:'oil',plural:'Öle',cat:'Essen',tip:'Das Öl — neutral.',
+   sent:'Wir kochen mit ___.',sentEn:'We cook with oil.'},
+  {noun:'Salat',article:'der',en:'salad',plural:'Salate',cat:'Essen',tip:'Der Salat — masculine.',
+   sent:'___ Salat ist frisch.',sentEn:'The salad is fresh.'},
+  {noun:'Tomate',article:'die',en:'tomato',plural:'Tomaten',cat:'Essen',tip:'Die Tomate — feminine.',
+   sent:'___ Tomate ist rot.',sentEn:'The tomato is red.'},
+  {noun:'Banane',article:'die',en:'banana',plural:'Bananen',cat:'Essen',tip:'Die Banane — feminine.',
+   sent:'___ Banane ist gelb.',sentEn:'The banana is yellow.'},
+  {noun:'Orange',article:'die',en:'orange',plural:'Orangen',cat:'Essen',tip:'Die Orange — feminine.',
+   sent:'Ich esse eine ___.',sentEn:'I eat an orange.'},
+  {noun:'Kartoffel',article:'die',en:'potato',plural:'Kartoffeln',cat:'Essen',tip:'Die Kartoffel — feminine.',
+   sent:'___ Kartoffel ist lecker.',sentEn:'The potato is delicious.'},
+  {noun:'Möhre',article:'die',en:'carrot',plural:'Möhren',cat:'Essen',tip:'Die Möhre — feminine.',
+   sent:'Magst du ___?',sentEn:'Do you like carrots?'},
+  {noun:'Gemüse',article:'das',en:'vegetables',plural:'—',cat:'Essen',tip:'Das Gemüse — neutral (collective).',
+   sent:'___ Gemüse ist gesund.',sentEn:'The vegetables are healthy.'},
+  {noun:'Fleisch',article:'das',en:'meat',plural:'—',cat:'Essen',tip:'Das Fleisch — neutral.',
+   sent:'Ich esse ___ nicht.',sentEn:'I don\'t eat meat.'},
+  {noun:'Fisch',article:'der',en:'fish',plural:'Fische',cat:'Essen',tip:'Der Fisch — masculine.',
+   sent:'___ Fisch ist frisch.',sentEn:'The fish is fresh.'},
+  {noun:'Hähnchen',article:'das',en:'chicken',plural:'Hähnchen',cat:'Essen',tip:'Das Hähnchen — neutral.',
+   sent:'___ Hähnchen ist zart.',sentEn:'The chicken is tender.'},
+  {noun:'Hamburger',article:'der',en:'hamburger',plural:'Hamburger',cat:'Essen',tip:'Der Hamburger — masculine.',
+   sent:'Ich esse einen ___.',sentEn:'I eat a hamburger.'},
+  {noun:'Joghurt',article:'der',en:'yogurt',plural:'Joghurts',cat:'Essen',tip:'Der Joghurt — masculine.',
+   sent:'___ Joghurt ist cremig.',sentEn:'The yogurt is creamy.'},
+  {noun:'Käse',article:'der',en:'cheese',plural:'Käsesorten',cat:'Essen',tip:'Der Käse — masculine.',
+   sent:'Magst du ___?',sentEn:'Do you like cheese?'},
+  {noun:'Zitrone',article:'die',en:'lemon',plural:'Zitronen',cat:'Essen',tip:'Die Zitrone — feminine.',
+   sent:'___ Zitrone ist sauer.',sentEn:'The lemon is sour.'},
+  {noun:'Orangensaft',article:'der',en:'orange juice',plural:'Orangensäfte',cat:'Essen',tip:'Der Orangensaft — masculine.',
+   sent:'Trinkst du ___?',sentEn:'Are you drinking orange juice?'},
+  {noun:'Apfelsaft',article:'der',en:'apple juice',plural:'Apfelsäfte',cat:'Essen',tip:'Der Apfelsaft — masculine.',
+   sent:'Ich möchte ___ bitte.',sentEn:'I would like apple juice please.'},
+
+  // ===== Family =====
+  {noun:'Vater',article:'der',en:'father',plural:'Väter',cat:'Menschen',tip:'Der Vater — masculine.',
+   sent:'Mein ___ arbeitet im Büro.',sentEn:'My father works in the office.'},
+  {noun:'Mutter',article:'die',en:'mother',plural:'Mütter',cat:'Menschen',tip:'Die Mutter — feminine.',
+   sent:'Meine ___ kocht gerne.',sentEn:'My mother likes to cook.'},
+  {noun:'Bruder',article:'der',en:'brother',plural:'Brüder',cat:'Menschen',tip:'Der Bruder — masculine.',
+   sent:'Mein ___ spielt Fußball.',sentEn:'My brother plays soccer.'},
+  {noun:'Schwester',article:'die',en:'sister',plural:'Schwestern',cat:'Menschen',tip:'Die Schwester — feminine.',
+   sent:'Meine ___ ist Studentin.',sentEn:'My sister is a student.'},
+  {noun:'Großvater',article:'der',en:'grandfather',plural:'Großväter',cat:'Menschen',tip:'Der Großvater — masculine.',
+   sent:'Mein ___ ist sehr alt.',sentEn:'My grandfather is very old.'},
+  {noun:'Großmutter',article:'die',en:'grandmother',plural:'Großmütter',cat:'Menschen',tip:'Die Großmutter — feminine.',
+   sent:'Meine ___ ist nett.',sentEn:'My grandmother is nice.'},
+  {noun:'Junge',article:'der',en:'boy',plural:'Jungen',cat:'Menschen',tip:'Der Junge — masculine.',
+   sent:'___ Junge spielt gerne.',sentEn:'The boy likes to play.'},
+  {noun:'Geschwister',article:'die',en:'siblings',plural:'—',cat:'Menschen',tip:'Die Geschwister — feminine (always plural).',
+   sent:'Meine ___ sind nett.',sentEn:'My siblings are nice.'},
+
+  // ===== Technology =====
+  {noun:'Smartphone',article:'das',en:'smartphone',plural:'Smartphones',cat:'Technik',tip:'Das Smartphone — neutral (English loanword).',
+   sent:'Ich habe ein ___.',sentEn:'I have a smartphone.'},
+  {noun:'Laptop',article:'der',en:'laptop',plural:'Laptops',cat:'Technik',tip:'Der Laptop — masculine.',
+   sent:'Mein ___ ist neu.',sentEn:'My laptop is new.'},
+  {noun:'App',article:'die',en:'app',plural:'Apps',cat:'Technik',tip:'Die App — feminine.',
+   sent:'Diese ___ ist praktisch.',sentEn:'This app is practical.'},
+
+  // ===== Jobs =====
+  {noun:'Koch',article:'der',en:'cook (m)',plural:'Köche',cat:'Arbeit',tip:'Der Koch — masculine.',
+   sent:'___ Koch macht gute Suppe.',sentEn:'The cook makes good soup.'},
+  {noun:'Köchin',article:'die',en:'cook (f)',plural:'Köchinnen',cat:'Arbeit',tip:'Die Köchin — feminine (-in ending).',
+   sent:'___ Köchin arbeitet hier.',sentEn:'The cook works here.'},
+  {noun:'Friseur',article:'der',en:'barber',plural:'Friseure',cat:'Arbeit',tip:'Der Friseur — masculine.',
+   sent:'Gehe ich zum ___?',sentEn:'Do I go to the barber?'},
+  {noun:'Friseurin',article:'die',en:'hairdresser (f)',plural:'Friseurinnen',cat:'Arbeit',tip:'Die Friseurin — feminine.',
+   sent:'___ Friseurin schneidet Haare.',sentEn:'The hairdresser cuts hair.'},
+  {noun:'Architekt',article:'der',en:'architect (m)',plural:'Architekten',cat:'Arbeit',tip:'Der Architekt — masculine.',
+   sent:'___ Architekt plant Häuser.',sentEn:'The architect plans houses.'},
+  {noun:'Architektin',article:'die',en:'architect (f)',plural:'Architektinnen',cat:'Arbeit',tip:'Die Architektin — feminine.',
+   sent:'___ Architektin arbeitet.',sentEn:'The architect works.'},
+  {noun:'Ingenieur',article:'der',en:'engineer',plural:'Ingenieure',cat:'Arbeit',tip:'Der Ingenieur — masculine.',
+   sent:'___ Ingenieur ist intelligent.',sentEn:'The engineer is intelligent.'},
+  {noun:'Polizist',article:'der',en:'police officer (m)',plural:'Polizisten',cat:'Arbeit',tip:'Der Polizist — masculine (n-Deklination).',
+   sent:'___ Polizist hilft.',sentEn:'The police officer helps.'},
+  {noun:'Polizistin',article:'die',en:'police officer (f)',plural:'Polizistinnen',cat:'Arbeit',tip:'Die Polizistin — feminine.',
+   sent:'___ Polizistin ist mutig.',sentEn:'The police officer is brave.'},
+  {noun:'Verkäufer',article:'der',en:'salesman',plural:'Verkäufer',cat:'Arbeit',tip:'Der Verkäufer — masculine.',
+   sent:'___ Verkäufer arbeitet im Geschäft.',sentEn:'The salesman works in the shop.'},
+  {noun:'Verkäuferin',article:'die',en:'saleswoman',plural:'Verkäuferinnen',cat:'Arbeit',tip:'Die Verkäuferin — feminine.',
+   sent:'___ Verkäuferin ist hilfsbereit.',sentEn:'The saleswoman is helpful.'},
+  {noun:'Manager',article:'der',en:'manager (m)',plural:'Manager',cat:'Arbeit',tip:'Der Manager — masculine.',
+   sent:'___ Manager leitet das Projekt.',sentEn:'The manager leads the project.'},
+  {noun:'Managerin',article:'die',en:'manager (f)',plural:'Managerinnen',cat:'Arbeit',tip:'Die Managerin — feminine.',
+   sent:'___ Managerin ist erfolgreich.',sentEn:'The manager is successful.'},
+  {noun:'Student',article:'der',en:'student (m)',plural:'Studenten',cat:'Arbeit',tip:'Der Student — masculine.',
+   sent:'___ Student lernt viel.',sentEn:'The student studies a lot.'},
+  {noun:'Studentin',article:'die',en:'student (f)',plural:'Studentinnen',cat:'Arbeit',tip:'Die Studentin — feminine.',
+   sent:'___ Studentin ist fleißig.',sentEn:'The student is diligent.'},
+
+  // ===== City & Home =====
+  {noun:'Land',article:'das',en:'country',plural:'Länder',cat:'Ort',tip:'Das Land — neutral.',
+   sent:'Welches ___ magst du?',sentEn:'Which country do you like?'},
+  {noun:'Wohnung',article:'die',en:'apartment',plural:'Wohnungen',cat:'Haus',tip:'Die Wohnung (-ung ending → always die).',
+   sent:'___ Wohnung ist klein.',sentEn:'The apartment is small.'},
+  {noun:'Zimmer',article:'das',en:'room',plural:'Zimmer',cat:'Haus',tip:'Das Zimmer — neutral.',
+   sent:'___ Zimmer ist groß.',sentEn:'The room is large.'},
+  {noun:'Bad',article:'das',en:'bathroom',plural:'Bäder',cat:'Haus',tip:'Das Bad — neutral.',
+   sent:'___ Bad ist sauber.',sentEn:'The bathroom is clean.'},
+  {noun:'Garten',article:'der',en:'garden',plural:'Gärten',cat:'Haus',tip:'Der Garten — masculine.',
+   sent:'___ Garten ist grün.',sentEn:'The garden is green.'},
+  {noun:'Park',article:'der',en:'park',plural:'Parks',cat:'Ort',tip:'Der Park — masculine.',
+   sent:'Ich gehe in ___ Park.',sentEn:'I go to the park.'},
+  {noun:'Restaurant',article:'das',en:'restaurant',plural:'Restaurants',cat:'Ort',tip:'Das Restaurant — neutral.',
+   sent:'___ Restaurant ist gemütlich.',sentEn:'The restaurant is cozy.'},
+  {noun:'Bahnhof',article:'der',en:'train station',plural:'Bahnhöfe',cat:'Ort',tip:'Der Bahnhof — masculine.',
+   sent:'___ Bahnhof ist groß.',sentEn:'The train station is large.'},
+  {noun:'Universität',article:'die',en:'university',plural:'Universitäten',cat:'Arbeit',tip:'Die Universität (-tät ending → always die).',
+   sent:'___ Universität ist alt.',sentEn:'The university is old.'},
+
+  // ===== Transport =====
+  {noun:'Bus',article:'der',en:'bus',plural:'Busse',cat:'Verkehr',tip:'Der Bus — masculine.',
+   sent:'___ Bus kommt pünktlich.',sentEn:'The bus comes on time.'},
+  {noun:'Taxi',article:'das',en:'taxi',plural:'Taxis',cat:'Verkehr',tip:'Das Taxi — neutral.',
+   sent:'Ich nehme ein ___.',sentEn:'I take a taxi.'},
+  {noun:'Zug',article:'der',en:'train',plural:'Züge',cat:'Verkehr',tip:'Der Zug — masculine.',
+   sent:'___ Zug fährt schnell.',sentEn:'The train goes fast.'},
+  {noun:'Flugzeug',article:'das',en:'airplane',plural:'Flugzeuge',cat:'Verkehr',tip:'Das Flugzeug (compound: last part decides).',
+   sent:'___ Flugzeug fliegt hoch.',sentEn:'The airplane flies high.'},
+  {noun:'Fahrrad',article:'das',en:'bicycle',plural:'Fahrräder',cat:'Verkehr',tip:'Das Fahrrad — neutral.',
+   sent:'Mein ___ ist kaputt.',sentEn:'My bicycle is broken.'},
+
+  // ===== Body =====
+  {noun:'Kopf',article:'der',en:'head',plural:'Köpfe',cat:'Körper',tip:'Der Kopf — masculine.',
+   sent:'Mein ___ tut weh.',sentEn:'My head hurts.'},
+  {noun:'Arm',article:'der',en:'arm',plural:'Arme',cat:'Körper',tip:'Der Arm — masculine.',
+   sent:'Mein ___ ist lang.',sentEn:'My arm is long.'},
+  {noun:'Bein',article:'das',en:'leg',plural:'Beine',cat:'Körper',tip:'Das Bein — neutral.',
+   sent:'Mein ___ tut weh.',sentEn:'My leg hurts.'},
+  {noun:'Fuß',article:'der',en:'foot',plural:'Füße',cat:'Körper',tip:'Der Fuß — masculine.',
+   sent:'Mein ___ ist müde.',sentEn:'My foot is tired.'},
+  {noun:'Hand',article:'die',en:'hand',plural:'Hände',cat:'Körper',tip:'Die Hand — feminine.',
+   sent:'Meine ___ ist warm.',sentEn:'My hand is warm.'},
+  {noun:'Bauch',article:'der',en:'belly',plural:'Bäuche',cat:'Körper',tip:'Der Bauch — masculine.',
+   sent:'Mein ___ tut weh.',sentEn:'My belly hurts.'},
+  {noun:'Rücken',article:'der',en:'back',plural:'Rücken',cat:'Körper',tip:'Der Rücken — masculine.',
+   sent:'Mein ___ ist breit.',sentEn:'My back is wide.'},
+  {noun:'Auge',article:'das',en:'eye',plural:'Augen',cat:'Körper',tip:'Das Auge — neutral.',
+   sent:'Mein ___ ist blau.',sentEn:'My eye is blue.'},
+  {noun:'Nase',article:'die',en:'nose',plural:'Nasen',cat:'Körper',tip:'Die Nase — feminine.',
+   sent:'Meine ___ ist groß.',sentEn:'My nose is big.'},
+  {noun:'Mund',article:'der',en:'mouth',plural:'Münder',cat:'Körper',tip:'Der Mund — masculine.',
+   sent:'Mein ___ ist rot.',sentEn:'My mouth is red.'},
+
+  // ===== Weather =====
+  {noun:'Sonne',article:'die',en:'sun',plural:'Sonnen',cat:'Wetter',tip:'Die Sonne — feminine.',
+   sent:'___ Sonne scheint hell.',sentEn:'The sun shines brightly.'},
+  {noun:'Regen',article:'der',en:'rain',plural:'—',cat:'Wetter',tip:'Der Regen — masculine.',
+   sent:'___ Regen ist kühl.',sentEn:'The rain is cool.'},
+  {noun:'Wind',article:'der',en:'wind',plural:'Winde',cat:'Wetter',tip:'Der Wind — masculine.',
+   sent:'___ Wind ist stark.',sentEn:'The wind is strong.'},
+  {noun:'Schnee',article:'der',en:'snow',plural:'—',cat:'Wetter',tip:'Der Schnee — masculine.',
+   sent:'___ Schnee ist weiß.',sentEn:'The snow is white.'},
+  {noun:'Wetter',article:'das',en:'weather',plural:'—',cat:'Wetter',tip:'Das Wetter — neutral.',
+   sent:'Das ___ ist schön.',sentEn:'The weather is beautiful.'},
+];
+
+// ========== STATE ==========
+let mode = 'gender';
+let filtered = [...nouns];
+let idx = 0;
+let answered = false;
+let stats = JSON.parse(localStorage.getItem('artStats') || '{"c":0,"w":0,"streak":0,"best":0}');
+let activeFilter = 'Alle';
+let speedActive = false;
+let speedTimer = null;
+let speedTime = 30;
+let speedScore = 0;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+// ========== FILTERS ==========
+function renderFilters(){
+  const cats=['Alle',...new Set(nouns.map(n=>n.cat))];
+  document.getElementById('filterRow').innerHTML=cats.map(c=>
+    `<div class="chip ${activeFilter===c?'active':''}" onclick="setFilter('${c}')">${c} (${c==='Alle'?nouns.length:nouns.filter(x=>x.cat===c).length})</div>`
+  ).join('');
+}
+function setFilter(c){
+  activeFilter=c;
+  filtered=c==='Alle'?[...nouns]:nouns.filter(x=>x.cat===c);
+  shuffle(filtered);idx=0;answered=false;
+  renderFilters();render();
+}
+
+// ========== MODES ==========
+function setMode(m){
+  mode=m;idx=0;answered=false;
+  if(speedTimer){clearInterval(speedTimer);speedTimer=null;}speedActive=false;
+  document.querySelectorAll('.mode-tab').forEach((t,i)=>{
+    t.classList.toggle('active',['gender','sentences','speed'][i]===m);
+  });
+  shuffle(filtered);render();
+}
+
+// ========== RENDER ==========
+function render(){
+  updateStats();updateProgress();
+  if(mode==='gender') renderGender();
+  else if(mode==='sentences') renderSentences();
+  else renderSpeed();
+}
+
+// ----- MODE 1: GENDER QUIZ -----
+function renderGender(){
+  if(idx>=filtered.length){showDone();return;}
+  const n=filtered[idx];
+  document.getElementById('mainArea').innerHTML=`
+    <div class="quiz-card" id="quizCard">
+      <div class="card-num">${idx+1} / ${filtered.length}</div>
+      <div class="noun">${n.noun}</div>
+      <div class="noun-en">${n.en}</div>
+      <div class="plural">Plural: die ${n.plural}</div>
+      <div class="sentence">${n.sent.replace('___','<b>___</b>')}</div>
+      <div class="gender-btns">
+        <button class="gender-btn btn-der" id="btn-der" onclick="pickGender('der')">der</button>
+        <button class="gender-btn btn-die" id="btn-die" onclick="pickGender('die')">die</button>
+        <button class="gender-btn btn-das" id="btn-das" onclick="pickGender('das')">das</button>
+      </div>
+      <div class="result-line" id="resultLine"></div>
+      <div class="tip-box" id="tipBox">💡 ${n.tip}</div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn prev" onclick="go(-1)" ${idx===0?'disabled':''}>← Back</button>
+      <button class="nav-btn next" onclick="go(1)" id="nextBtn" ${!answered?'disabled':''}>Next →</button>
+    </div>
+    <div class="kbd-hint"><kbd>1</kbd> der &nbsp; <kbd>2</kbd> die &nbsp; <kbd>3</kbd> das &nbsp; <kbd>→</kbd> Next</div>
+  `;
+}
+
+function pickGender(choice){
+  if(answered)return;
+  answered=true;
+  const n=filtered[idx];
+  const correct=choice===n.article;
+  const card=document.getElementById('quizCard');
+  const res=document.getElementById('resultLine');
+  const tip=document.getElementById('tipBox');
+
+  // Highlight buttons
+  ['der','die','das'].forEach(a=>{
+    const btn=document.getElementById('btn-'+a);
+    btn.disabled=true;
+    if(a===n.article) btn.classList.add('correct');
+    else if(a===choice&&!correct) btn.classList.add('wrong');
+  });
+
+  // Flash card
+  card.classList.add('flash-'+n.article.replace('der','der').replace('die','die').replace('das','das'));
+
+  if(correct){
+    res.textContent='✓ Richtig! — '+n.article+' '+n.noun;
+    res.className='result-line r-correct';
+    stats.c++;stats.streak++;
+    if(stats.streak>stats.best)stats.best=stats.streak;
+  } else {
+    res.textContent='✗ '+n.article+' '+n.noun+' (not '+choice+')';
+    res.className='result-line r-wrong';
+    stats.w++;stats.streak=0;
+  }
+  tip.classList.add('show');
+  document.getElementById('nextBtn').disabled=false;
+  localStorage.setItem('artStats',JSON.stringify(stats));
+  updateStats();
+}
+
+// ----- MODE 2: SENTENCES -----
+function renderSentences(){
+  if(idx>=filtered.length){showDone();return;}
+  const n=filtered[idx];
+  // Determine what to blank: either the article or a word
+  let sentHTML, answer, hint;
+  if(n.sentBlank){
+    // Blank a specific word
+    sentHTML=n.sent.replace(n.sentBlank,`<input class="blank-input" id="sentInput" placeholder="..." autocomplete="off">`);
+    answer=n.sentBlank;
+    hint=`Fill in the missing word. (${n.article} ${n.noun} = ${n.en})`;
+  } else {
+    // Blank the article
+    sentHTML=n.sent.replace('___',`<input class="blank-input" id="sentInput" placeholder="..." autocomplete="off">`);
+    answer=n.article.charAt(0).toUpperCase()+n.article.slice(1);
+    // Also accept lowercase
+    hint=`What article goes here? (${n.noun} = ${n.en})`;
+  }
+
+  document.getElementById('mainArea').innerHTML=`
+    <div class="sent-card">
+      <div class="sent-num">${idx+1} / ${filtered.length} &nbsp;·&nbsp; ${n.article} ${n.noun} (${n.en})</div>
+      <div class="sent-text">${sentHTML}</div>
+      <div class="sent-hint">💡 ${hint}</div>
+      <div class="nav-row" style="justify-content:flex-start;margin-top:16px;">
+        <button class="nav-btn next" onclick="checkSentence('${answer.replace(/'/g,"\\'")}')">Check ✓</button>
+      </div>
+      <div class="result-line" id="sentResult" style="margin-top:12px;"></div>
+      <div class="sent-en" id="sentEn">🇬🇧 ${n.sentEn}</div>
+      <div class="tip-box" id="tipBox">💡 ${n.tip}</div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn prev" onclick="go(-1)" ${idx===0?'disabled':''}>← Back</button>
+      <button class="nav-btn next" onclick="go(1)" id="nextBtn" disabled>Next →</button>
+    </div>
+    <div class="kbd-hint"><kbd>Enter</kbd> Check &nbsp; <kbd>→</kbd> Next</div>
+  `;
+  document.getElementById('sentInput')?.focus();
+}
+
+function checkSentence(answer){
+  if(answered)return;
+  const input=document.getElementById('sentInput');
+  if(!input)return;
+  const val=input.value.trim();
+  if(!val)return;
+  answered=true;
+
+  const correct=val.toLowerCase()===answer.toLowerCase();
+  input.classList.add(correct?'correct':'incorrect');
+  input.disabled=true;
+
+  const res=document.getElementById('sentResult');
+  if(correct){
+    res.textContent='✓ Richtig!';res.className='result-line r-correct';
+    stats.c++;stats.streak++;if(stats.streak>stats.best)stats.best=stats.streak;
+  } else {
+    res.textContent=`✗ Answer: ${answer}`;res.className='result-line r-wrong';
+    stats.w++;stats.streak=0;
+  }
+  document.getElementById('sentEn').classList.add('show');
+  document.getElementById('tipBox').classList.add('show');
+  document.getElementById('nextBtn').disabled=false;
+  localStorage.setItem('artStats',JSON.stringify(stats));
+  updateStats();
+}
+
+// ----- MODE 3: SPEED -----
+function renderSpeed(){
+  if(!speedActive){
+    document.getElementById('mainArea').innerHTML=`
+      <div class="speed-area">
+        <div style="margin:40px 0;">
+          <p style="font-size:16px;color:var(--g600);margin-bottom:8px;">How fast can you go?</p>
+          <p style="font-size:14px;color:var(--g400);">Pick <b>der</b>, <b>die</b>, or <b>das</b> for each noun.<br>30 seconds on the clock!</p>
+        </div>
+        <button class="speed-start" onclick="startSpeed()">Start ⚡</button>
+      </div>
+    `;
+  }
+}
+
+function startSpeed(){
+  speedActive=true;speedTime=30;speedScore=0;
+  shuffle(filtered);idx=0;
+  renderSpeedCard();
+  speedTimer=setInterval(()=>{
+    speedTime--;
+    document.getElementById('speedClock').textContent=speedTime;
+    if(speedTime<=0){clearInterval(speedTimer);speedTimer=null;endSpeed();}
+  },1000);
+}
+
+function renderSpeedCard(){
+  if(idx>=filtered.length){shuffle(filtered);idx=0;}
+  const n=filtered[idx];
+  document.getElementById('mainArea').innerHTML=`
+    <div class="speed-area">
+      <div class="speed-timer" id="speedClock">${speedTime}</div>
+      <div class="speed-noun">${n.noun}</div>
+      <div class="speed-score">Score: ${speedScore}</div>
+      <div class="gender-btns">
+        <button class="gender-btn btn-der" onclick="speedPick('der')">der</button>
+        <button class="gender-btn btn-die" onclick="speedPick('die')">die</button>
+        <button class="gender-btn btn-das" onclick="speedPick('das')">das</button>
+      </div>
+      <div style="font-size:13px;color:var(--g400);margin-top:8px;">${n.en}</div>
+    </div>
+  `;
+}
+
+function speedPick(choice){
+  const n=filtered[idx];
+  if(choice===n.article){speedScore++;stats.c++;stats.streak++;if(stats.streak>stats.best)stats.best=stats.streak;}
+  else{stats.w++;stats.streak=0;}
+  stats.c;localStorage.setItem('artStats',JSON.stringify(stats));
+  idx++;renderSpeedCard();
+}
+
+function endSpeed(){
+  speedActive=false;
+  document.getElementById('mainArea').innerHTML=`
+    <div class="done-card">
+      <h2>⚡ Time's up!</h2>
+      <p>You got <b>${speedScore}</b> correct in 30 seconds!</p>
+      <p>${speedScore>=20?'Amazing! 🏆':speedScore>=15?'Great job! 🌟':speedScore>=10?'Good work! 👍':'Keep practicing! 💪'}</p>
+      <button onclick="renderSpeed()">Play Again</button>
+    </div>
+  `;
+  updateStats();
+}
+
+// ========== NAVIGATION ==========
+function go(dir){
+  idx+=dir;if(idx<0)idx=0;
+  answered=false;render();
+}
+
+function showDone(){
+  const pct=stats.c+stats.w>0?Math.round(stats.c/(stats.c+stats.w)*100):0;
+  document.getElementById('mainArea').innerHTML=`
+    <div class="done-card">
+      <h2>🎉 Runde geschafft!</h2>
+      <p>You completed all ${filtered.length} nouns!</p>
+      <p>Accuracy: ${pct}% · Best streak: ${stats.best} 🔥</p>
+      <button onclick="shuffle(filtered);idx=0;answered=false;render();">Shuffle & Restart 🔄</button>
+    </div>
+  `;
+}
+
+// ========== STATS & PROGRESS ==========
+function updateStats(){
+  document.getElementById('sCorrect').textContent=stats.c;
+  document.getElementById('sWrong').textContent=stats.w;
+  const total=stats.c+stats.w;
+  document.getElementById('sAccuracy').textContent=total>0?Math.round(stats.c/total*100)+'%':'—';
+  document.getElementById('sStreak').textContent=stats.streak+' 🔥';
+}
+function updateProgress(){
+  const p=filtered.length>0?Math.round(idx/filtered.length*100):0;
+  document.getElementById('pLabel').textContent=`Card ${Math.min(idx+1,filtered.length)} of ${filtered.length}`;
+  document.getElementById('pPct').textContent=p+'%';
+  document.getElementById('pBar').style.width=p+'%';
+}
+
+// ========== KEYBOARD ==========
+document.addEventListener('keydown',e=>{
+  if(mode==='gender'&&!answered){
+    if(e.key==='1')pickGender('der');
+    else if(e.key==='2')pickGender('die');
+    else if(e.key==='3')pickGender('das');
+  }
+  if(mode==='speed'&&speedActive){
+    if(e.key==='1')speedPick('der');
+    else if(e.key==='2')speedPick('die');
+    else if(e.key==='3')speedPick('das');
+  }
+  if(mode==='sentences'&&!answered&&e.key==='Enter'){
+    const ans=document.getElementById('sentInput')?.dataset?.answer;
+    // Just trigger the check button
+    document.querySelector('.nav-btn.next')?.click();
+  }
+  if(e.key==='ArrowRight'&&answered)go(1);
+  if(e.key==='ArrowLeft')go(-1);
+});
+
+// ========== INIT ==========
+shuffle(filtered);
+renderFilters();
+render();
+</script>
+</body>
+</html>

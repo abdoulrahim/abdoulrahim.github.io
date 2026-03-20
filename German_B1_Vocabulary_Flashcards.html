@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German B1 — Vocabulary in Sentences</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #be185d;
+            --primary-light: #f472b6;
+            --primary-bg: #fdf2f8;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --error: #ef4444;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9fafb;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #be185d, #9333ea);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: sticky;
+            top: 120px;
+            z-index: 9;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            padding: 1rem;
+            background: white;
+            position: sticky;
+            top: 195px;
+            z-index: 9;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #be185d, #9333ea);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Filter Chips */
+        .filter-container {
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-chip {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--primary);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem 4rem 1rem;
+        }
+
+        /* Flashcard */
+        .flashcard-container {
+            perspective: 1000px;
+            margin-bottom: 2rem;
+        }
+
+        .flashcard {
+            width: 100%;
+            min-height: 400px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        .card-front {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card-front .sentence {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            line-height: 1.8;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-front .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card-front input {
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            transition: border-color 0.2s;
+        }
+
+        .card-front input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(190, 24, 93, 0.1);
+        }
+
+        .card-front input.correct {
+            border-color: var(--success);
+            background-color: #f0fdf4;
+        }
+
+        .card-front input.incorrect {
+            border-color: var(--error);
+            background-color: #fef2f2;
+        }
+
+        .card-back {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .card-back .answer {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .card-back .translation {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-style: italic;
+        }
+
+        .card-back .hint {
+            background: var(--primary-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary);
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .card-back .info {
+            background: #f0f9ff;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #0284c7;
+            font-size: 0.9rem;
+            color: #0c4a6e;
+        }
+
+        /* Category Label */
+        .category-label {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .cat-prateritum { background: #dbeafe; color: #1e40af; }
+        .cat-reflexivverben { background: #fce7f3; color: #9d174d; }
+        .cat-verben-mit-prapositionen { background: #d1fae5; color: #065f46; }
+        .cat-konjunktiv { background: #ede9fe; color: #5b21b6; }
+        .cat-passiv { background: #fef3c7; color: #92400e; }
+        .cat-relativsatze { background: #fee2e2; color: #991b1b; }
+        .cat-indirekte-fragen { background: #e0e7ff; color: #3730a3; }
+        .cat-alltagssatze { background: #fdf2f8; color: #be185d; }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--border);
+        }
+
+        .nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .flip-btn {
+            background: var(--primary-bg);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .flip-btn:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .check-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .check-btn:hover {
+            background: #9d174d;
+        }
+
+        .check-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Completion Screen */
+        .completion-screen {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .completion-screen.show {
+            display: block;
+        }
+
+        .completion-screen h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .completion-screen .final-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .final-stats .stat-box {
+            padding: 1rem;
+            background: var(--primary-bg);
+            border-radius: 8px;
+        }
+
+        .final-stats .stat-value {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .final-stats .stat-label {
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .restart-btn {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .restart-btn:hover {
+            background: #9d174d;
+        }
+
+        /* Keyboard Hints */
+        .keyboard-hints {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .keyboard-hints kbd {
+            background: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            margin: 0 0.2rem;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.4rem;
+            }
+
+            .flashcard {
+                min-height: 300px;
+                padding: 1.5rem;
+            }
+
+            .card-front .sentence {
+                font-size: 1.1rem;
+            }
+
+            .button-group {
+                gap: 0.5rem;
+            }
+
+            button {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .final-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>German B1 — Vocabulary in Sentences</h1>
+        <p>Wörter in Sätzen lernen</p>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">B1 Vocabulary Flashcards — Learn words in context</p>
+    </header>
+
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-label">Correct</div>
+            <div class="stat-value" id="correctCount">0</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Answered</div>
+            <div class="stat-value" id="answeredCount">0</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Accuracy</div>
+            <div class="stat-value" id="accuracy">0%</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">Streak</div>
+            <div class="stat-value" id="streak">0</div>
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">0 / 0 cards</div>
+    </div>
+
+    <div class="filter-container" id="filterContainer"></div>
+
+    <div class="container">
+        <div class="completion-screen" id="completionScreen">
+            <h2>🎉 Congratulations!</h2>
+            <p>You've completed all the cards!</p>
+            <div class="final-stats">
+                <div class="stat-box">
+                    <div class="stat-label">Total Correct</div>
+                    <div class="stat-value" id="finalCorrect">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Final Accuracy</div>
+                    <div class="stat-value" id="finalAccuracy">0%</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Best Streak</div>
+                    <div class="stat-value" id="finalStreak">0</div>
+                </div>
+            </div>
+            <button class="restart-btn" onclick="restart()">Start Over</button>
+        </div>
+
+        <div id="cardContainer">
+            <div class="flashcard-container">
+                <div class="category-label" id="categoryLabel"></div>
+                <div class="flashcard" id="flashcard">
+                    <div class="card-front">
+                        <div class="sentence" id="sentence"></div>
+                        <div class="input-group">
+                            <input type="text" id="answerInput" placeholder="Type your answer here...">
+                            <button class="check-btn" onclick="checkAnswer()">Check Answer</button>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <div class="answer" id="answer"></div>
+                        <div class="translation" id="translation"></div>
+                        <div class="hint" id="hint"></div>
+                        <div class="info" id="info"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="nav-btn" onclick="prevCard()" id="backBtn">← Back</button>
+                <button class="flip-btn" onclick="flipCard()" id="flipBtn">Flip Card</button>
+                <button class="nav-btn" onclick="nextCard()" id="nextBtn">Next →</button>
+            </div>
+        </div>
+
+        <div class="keyboard-hints">
+            <strong>Keyboard shortcuts:</strong> <kbd>Enter</kbd> to check • <kbd>←</kbd><kbd>→</kbd> to navigate • <kbd>Space</kbd> to flip
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const cards = [
+            // Präteritum (~20 cards)
+            { cat: 'Präteritum', de: 'Er ___ gestern ins Kino.', word: 'ging', en: 'He went to the cinema yesterday.', hint: 'gehen (went)', info: 'Präteritum: ging, ging, ist gegangen' },
+            { cat: 'Präteritum', de: 'Sie ___ den ganzen Tag.', word: 'arbeitete', en: 'She worked all day.', hint: 'arbeiten (worked)', info: 'Regular verb in Präteritum' },
+            { cat: 'Präteritum', de: 'Wir ___ letzte Woche in Berlin.', word: 'waren', en: 'We were in Berlin last week.', hint: 'sein (were)', info: 'sein: war, warst, war, waren, wart, waren' },
+            { cat: 'Präteritum', de: 'Ich ___ keine Zeit.', word: 'hatte', en: 'I had no time.', hint: 'haben (had)', info: 'haben: hatte, hattest, hatte, hatten' },
+            { cat: 'Präteritum', de: 'Er ___ mir ein Buch.', word: 'gab', en: 'He gave me a book.', hint: 'geben (gave)', info: 'Irregular verb: gab' },
+            { cat: 'Präteritum', de: 'Sie ___ die Antwort sofort.', word: 'wusste', en: 'She knew the answer immediately.', hint: 'wissen (knew)', info: 'wissen: wusste, wusstest, wusste' },
+            { cat: 'Präteritum', de: 'Ich ___ ihn letzten Monat.', word: 'traf', en: 'I met him last month.', hint: 'treffen (met)', info: 'Irregular: traf' },
+            { cat: 'Präteritum', de: 'Das Auto ___ schnell.', word: 'fuhr', en: 'The car drove fast.', hint: 'fahren (drove)', info: 'fahren: fuhr, fuhrt, fuhren' },
+            { cat: 'Präteritum', de: 'Er ___ einen Brief.', word: 'schrieb', en: 'He wrote a letter.', hint: 'schreiben (wrote)', info: 'schrieb, schriebst, schrieben' },
+            { cat: 'Präteritum', de: 'Sie ___ das Buch.', word: 'nahm', en: 'She took the book.', hint: 'nehmen (took)', info: 'nahm, nahmst, nahmen' },
+            { cat: 'Präteritum', de: 'Wir ___ die Lösung.', word: 'fanden', en: 'We found the solution.', hint: 'finden (found)', info: 'fand, fandst, fanden' },
+            { cat: 'Präteritum', de: 'Er ___ auf und ging.', word: 'stand', en: 'He stood up and left.', hint: 'stehen (stood)', info: 'stand, standest, standen' },
+            { cat: 'Präteritum', de: 'Das Kind ___ auf dem Sofa.', word: 'lag', en: 'The child lay on the sofa.', hint: 'liegen (lay)', info: 'lag, lagst, lagen' },
+            { cat: 'Präteritum', de: 'Er ___ die ganze Nacht.', word: 'schlief', en: 'He slept all night.', hint: 'schlafen (slept)', info: 'schlief, schliefst, schliefen' },
+            { cat: 'Präteritum', de: 'Sie ___ einen schönen Hut.', word: 'trug', en: 'She wore a beautiful hat.', hint: 'tragen (wore)', info: 'trug, trugst, trugen' },
+            { cat: 'Präteritum', de: 'Er ___ mir an.', word: 'rief', en: 'He called me.', hint: 'rufen (called)', info: 'rief, riefst, riefen' },
+            { cat: 'Präteritum', de: 'Das Mädchen ___ schnell.', word: 'lief', en: 'The girl ran fast.', hint: 'laufen (ran)', info: 'lief, liefst, liefen' },
+            { cat: 'Präteritum', de: 'Er ___ die Tür.', word: 'öffnete', en: 'He opened the door.', hint: 'öffnen (opened)', info: 'Regular verb: öffnete' },
+            { cat: 'Präteritum', de: 'Wir ___ ins Konzert.', word: 'gingen', en: 'We went to the concert.', hint: 'gehen (went)', info: 'Plural form of ging' },
+            { cat: 'Präteritum', de: 'Sie ___ zu Hause.', word: 'blieb', en: 'She stayed at home.', hint: 'bleiben (stayed)', info: 'blieb, bliebst, blieben' },
+
+            // Reflexivverben (~15 cards)
+            { cat: 'Reflexivverben', de: 'Ich ___ mich auf den Urlaub.', word: 'freue', en: 'I am looking forward to the vacation.', hint: 'sich freuen (to look forward)', info: 'Reflexive verb: ich freue mich' },
+            { cat: 'Reflexivverben', de: 'Er ___ sich für Musik.', word: 'interessiert', en: 'He is interested in music.', hint: 'sich interessieren (to be interested)', info: 'Accusative reflexive pronoun: sich' },
+            { cat: 'Reflexivverben', de: 'Wir ___ uns die Hände.', word: 'waschen', en: 'We wash our hands.', hint: 'sich waschen (to wash)', info: 'Accusative reflexive: uns' },
+            { cat: 'Reflexivverben', de: 'Kannst du ___ das vorstellen?', word: 'dir', en: 'Can you imagine that?', hint: 'sich vorstellen (Dativ)', info: 'Dative reflexive pronoun for sich vorstellen' },
+            { cat: 'Reflexivverben', de: 'Ich ___ mir ein neues Auto.', word: 'wünsche', en: 'I wish for a new car.', hint: 'sich wünschen (Dativ)', info: 'Dative reflexive: mir' },
+            { cat: 'Reflexivverben', de: 'Sie ___ sich aus.', word: 'ruht', en: 'She is resting.', hint: 'sich ausruhen (to rest)', info: 'Reflexive verb: ruht sich aus' },
+            { cat: 'Reflexivverben', de: 'Du ___ dich beeilen.', word: 'musst', en: 'You must hurry.', hint: 'sich beeilen (to hurry)', info: 'Must hurry: du musst dich beeilen' },
+            { cat: 'Reflexivverben', de: 'Wir ___ uns gut.', word: 'verstehen', en: 'We get along well.', hint: 'sich verstehen (to get along)', info: 'Reflexive verb present' },
+            { cat: 'Reflexivverben', de: 'Er ___ sich schämt.', word: 'schämt', en: 'He is ashamed.', hint: 'sich schämen (to be ashamed)', info: 'er schämt sich' },
+            { cat: 'Reflexivverben', de: 'Sie ___ sich um die Kinder.', word: 'kümmert', en: 'She takes care of the children.', hint: 'sich kümmern um (to take care of)', info: 'Takes care: kümmert sich um' },
+            { cat: 'Reflexivverben', de: 'Ich ___ mich entschuldigen.', word: 'muss', en: 'I must apologize.', hint: 'sich entschuldigen (to apologize)', info: 'Must apologize: muss mich entschuldigen' },
+            { cat: 'Reflexivverben', de: 'Sie ___ sich auf die Reise vor.', word: 'bereitet', en: 'She is preparing for the trip.', hint: 'sich vorbereiten (to prepare)', info: 'Preparing: bereitet sich vor' },
+            { cat: 'Reflexivverben', de: 'Wir ___ uns beschweren.', word: 'wollen', en: 'We want to complain.', hint: 'sich beschweren (to complain)', info: 'Want to complain: wollen uns beschweren' },
+            { cat: 'Reflexivverben', de: 'Ich ___ mir Zeit.', word: 'nehme', en: 'I take my time.', hint: 'sich Zeit nehmen (to take time)', info: 'Take time: nehme mir Zeit' },
+            { cat: 'Reflexivverben', de: 'Er ___ sich an den Namen.', word: 'erinnert', en: 'He remembers the name.', hint: 'sich erinnern an (to remember)', info: 'Remember: erinnert sich an' },
+
+            // Verben mit Präpositionen (~20 cards)
+            { cat: 'Verben mit Präpositionen', de: 'Ich warte ___ den Bus.', word: 'auf', en: 'I am waiting for the bus.', hint: 'warten auf + Akkusativ', info: 'Preposition: auf (for, about)' },
+            { cat: 'Verben mit Präpositionen', de: 'Sie freut sich ___ das Geschenk.', word: 'über', en: 'She is happy about the gift.', hint: 'sich freuen über + Akkusativ', info: 'Preposition: über (about)' },
+            { cat: 'Verben mit Präpositionen', de: 'Er denkt ___ seine Familie.', word: 'an', en: 'He thinks about his family.', hint: 'denken an + Akkusativ', info: 'Preposition: an (of, about)' },
+            { cat: 'Verben mit Präpositionen', de: 'Ich interessiere mich ___ Sport.', word: 'für', en: 'I am interested in sports.', hint: 'sich interessieren für + Akkusativ', info: 'Preposition: für (for)' },
+            { cat: 'Verben mit Präpositionen', de: 'Wir sprechen ___ das Problem.', word: 'über', en: 'We are talking about the problem.', hint: 'sprechen über + Akkusativ', info: 'Preposition: über (about)' },
+            { cat: 'Verben mit Präpositionen', de: 'Er hat Angst ___ Spinnen.', word: 'vor', en: 'He is afraid of spiders.', hint: 'Angst haben vor + Dativ', info: 'Preposition: vor (of) + Dativ' },
+            { cat: 'Verben mit Präpositionen', de: 'Sie träumt ___ einer Reise.', word: 'von', en: 'She is dreaming of a trip.', hint: 'träumen von + Dativ', info: 'Preposition: von (of) + Dativ' },
+            { cat: 'Verben mit Präpositionen', de: 'Ich bitte Sie ___ Hilfe.', word: 'um', en: 'I am asking you for help.', hint: 'bitten um + Akkusativ', info: 'Preposition: um (for)' },
+            { cat: 'Verben mit Präpositionen', de: 'Er wartet ___ mir.', word: 'auf', en: 'He is waiting for me.', hint: 'warten auf + Akkusativ', info: 'Object: mich (accusative)' },
+            { cat: 'Verben mit Präpositionen', de: 'Sie können ___ mir rechnen.', word: 'auf', en: 'You can count on me.', hint: 'rechnen auf + Akkusativ', info: 'To count on: rechnen auf' },
+            { cat: 'Verben mit Präpositionen', de: 'Ich sorge ___ die Kinder.', word: 'für', en: 'I care for the children.', hint: 'sorgen für + Akkusativ', info: 'To care for: sorgen für' },
+            { cat: 'Verben mit Präpositionen', de: 'Er arbeitet ___ dem Projekt.', word: 'an', en: 'He is working on the project.', hint: 'arbeiten an + Dativ', info: 'Preposition: an + Dativ' },
+            { cat: 'Verben mit Präpositionen', de: 'Sie schämt sich ___ dem Fehler.', word: 'für', en: 'She is ashamed of the mistake.', hint: 'sich schämen für + Akkusativ', info: 'To be ashamed of: schämen für' },
+            { cat: 'Verben mit Präpositionen', de: 'Ich beschäftige mich ___ Geschichte.', word: 'mit', en: 'I am interested in history.', hint: 'sich beschäftigen mit + Dativ', info: 'To be interested in: beschäftigen mit' },
+            { cat: 'Verben mit Präpositionen', de: 'Er verliebt sich ___ dem Mädchen.', word: 'in', en: 'He falls in love with the girl.', hint: 'sich verlieben in + Akkusativ', info: 'To fall in love with: verlieben in' },
+            { cat: 'Verben mit Präpositionen', de: 'Wir fragen ___ den Weg.', word: 'nach', en: 'We ask for the way.', hint: 'fragen nach + Dativ', info: 'To ask for: fragen nach' },
+            { cat: 'Verben mit Präpositionen', de: 'Sie beschwert sich ___ dem Lärm.', word: 'über', en: 'She complains about the noise.', hint: 'sich beschweren über + Akkusativ', info: 'To complain about: beschweren über' },
+            { cat: 'Verben mit Präpositionen', de: 'Ich konzentriere mich ___ die Arbeit.', word: 'auf', en: 'I am focusing on the work.', hint: 'sich konzentrieren auf + Akkusativ', info: 'To focus on: konzentrieren auf' },
+            { cat: 'Verben mit Präpositionen', de: 'Er hofft ___ bessere Zeiten.', word: 'auf', en: 'He hopes for better times.', hint: 'hoffen auf + Akkusativ', info: 'To hope for: hoffen auf' },
+            { cat: 'Verben mit Präpositionen', de: 'Sie verzeiht ihm ___ den Fehler.', word: 'für', en: 'She forgives him for the mistake.', hint: 'verzeihen für + Akkusativ', info: 'To forgive: verzeihen für' },
+
+            // Konjunktiv II (~15 cards)
+            { cat: 'Konjunktiv II', de: 'Wenn ich reich ___, würde ich reisen.', word: 'wäre', en: 'If I were rich, I would travel.', hint: 'sein → wäre', info: 'Subjunctive II: wäre, wärst, wären' },
+            { cat: 'Konjunktiv II', de: 'Ich ___ gern nach Japan fliegen.', word: 'würde', en: 'I would like to fly to Japan.', hint: 'würde + Infinitiv', info: 'Subjunctive II conditional' },
+            { cat: 'Konjunktiv II', de: '___ Sie mir bitte helfen?', word: 'Könnten', en: 'Could you help me please?', hint: 'können → könnte', info: 'Polite request: Konjunktiv II' },
+            { cat: 'Konjunktiv II', de: 'Ich ___ gern mehr Zeit.', word: 'hätte', en: 'I wish I had more time.', hint: 'haben → hätte', info: 'Subjunctive II: hätte' },
+            { cat: 'Konjunktiv II', de: 'An deiner Stelle ___ ich zum Arzt gehen.', word: 'würde', en: 'In your place I would go to the doctor.', hint: 'würde + Infinitiv', info: 'Advice: würde gehen' },
+            { cat: 'Konjunktiv II', de: 'Er ___ das eigentlich wissen.', word: 'müsste', en: 'He should actually know that.', hint: 'müssen → müsste', info: 'Subjunctive II: müsste' },
+            { cat: 'Konjunktiv II', de: 'Wir ___ lieber zu Hause bleiben.', word: 'würden', en: 'We would prefer to stay home.', hint: 'würde + Infinitiv (Plural)', info: 'Conditional plural' },
+            { cat: 'Konjunktiv II', de: 'Das ___ mir sehr helfen.', word: 'würde', en: 'That would help me a lot.', hint: 'würde + Infinitiv', info: 'Conditional form' },
+            { cat: 'Konjunktiv II', de: 'Wenn ich Zeit ___, käme ich.', word: 'hätte', en: 'If I had time, I would come.', hint: 'haben → hätte', info: 'Conditional: hätte Zeit' },
+            { cat: 'Konjunktiv II', de: 'Das ___ nicht schlecht sein.', word: 'wäre', en: 'That would not be bad.', hint: 'sein → wäre', info: 'Subjunctive II: wäre' },
+            { cat: 'Konjunktiv II', de: '___ ich das gewusst!', word: 'Hätte', en: 'If only I had known that!', hint: 'Irrealis: hätte gewusst', info: 'Subjunctive II past' },
+            { cat: 'Konjunktiv II', de: 'Ich ___ lieber schlafen.', word: 'würde', en: 'I would prefer to sleep.', hint: 'würde + Infinitiv', info: 'Preference: würde lieber' },
+            { cat: 'Konjunktiv II', de: 'Es ___ möglich sein.', word: 'könnte', en: 'It could be possible.', hint: 'können → könnte', info: 'Possibility: könnte' },
+            { cat: 'Konjunktiv II', de: '___ du mir sagen?', word: 'Könntest', en: 'Could you tell me?', hint: 'können → könntest', info: 'Question form: Konjunktiv II' },
+            { cat: 'Konjunktiv II', de: 'Wenn ich das ___, würde ich es dir sagen.', word: 'wüsste', en: 'If I knew that, I would tell you.', hint: 'wissen → wüsste', info: 'Conditional: wüsste' },
+
+            // Passiv (~15 cards)
+            { cat: 'Passiv', de: 'Das Auto ___ gewaschen.', word: 'wird', en: 'The car is being washed.', hint: 'Passive: wird + Past Participle', info: 'Passiv Präsens: wird gewaschen' },
+            { cat: 'Passiv', de: 'Die Rechnung ___ bezahlt.', word: 'wurde', en: 'The invoice was paid.', hint: 'Passive Past: wurde + Past Participle', info: 'Passiv Präteritum: wurde bezahlt' },
+            { cat: 'Passiv', de: 'Der Brief ___ geschrieben.', word: 'wird', en: 'The letter is being written.', hint: 'Passive Present: wird geschrieben', info: 'wird + Past Participle' },
+            { cat: 'Passiv', de: 'Die Tür ___ geöffnet.', word: 'wurde', en: 'The door was opened.', hint: 'Passive Past: wurde geöffnet', info: 'Past passive form' },
+            { cat: 'Passiv', de: 'Hier ___ Deutsch gesprochen.', word: 'wird', en: 'German is spoken here.', hint: 'Passive: wird gesprochen', info: 'General passive statement' },
+            { cat: 'Passiv', de: 'Das Projekt ___ vollendet.', word: 'wurde', en: 'The project was completed.', hint: 'Passive Past: wurde vollendet', info: 'Project completion in passive' },
+            { cat: 'Passiv', de: 'Die Fragen ___ beantwortet.', word: 'werden', en: 'The questions are being answered.', hint: 'Passive Plural: werden beantwortet', info: 'Plural form of werden' },
+            { cat: 'Passiv', de: 'Der Kuchen ___ gegessen.', word: 'wird', en: 'The cake is being eaten.', hint: 'Passive: wird gegessen', info: 'Food action in passive' },
+            { cat: 'Passiv', de: 'Das Lied ___ gesungen.', word: 'wird', en: 'The song is being sung.', hint: 'Passive: wird gesungen', info: 'Singing in passive' },
+            { cat: 'Passiv', de: 'Die Fenster ___ gereinigt.', word: 'wurden', en: 'The windows were cleaned.', hint: 'Passive Past Plural', info: 'Cleaning action: wurden gereinigt' },
+            { cat: 'Passiv', de: 'Das Essen ___ zubereitet.', word: 'wird', en: 'The food is being prepared.', hint: 'Passive: wird zubereitet', info: 'Food preparation passive' },
+            { cat: 'Passiv', de: 'Der Film ___ gedreht.', word: 'wurde', en: 'The film was made.', hint: 'Passive Past: wurde gedreht', info: 'Film creation: wurde gedreht' },
+            { cat: 'Passiv', de: 'Das Haus ___ gebaut.', word: 'wird', en: 'The house is being built.', hint: 'Passive: wird gebaut', info: 'Construction passive' },
+            { cat: 'Passiv', de: 'Die Blumen ___ gepflanzt.', word: 'wurden', en: 'The flowers were planted.', hint: 'Passive Past Plural', info: 'Planting action: wurden gepflanzt' },
+            { cat: 'Passiv', de: 'Das Problem ___ gelöst.', word: 'wird', en: 'The problem is being solved.', hint: 'Passive: wird gelöst', info: 'Solution in passive' },
+
+            // Relativsätze (~15 cards)
+            { cat: 'Relativsätze', de: 'Der Mann, ___ dort steht, ist mein Vater.', word: 'der', en: 'The man who stands there is my father.', hint: 'Relative pronoun nominative masculine', info: 'der (nom. masc. sing.)' },
+            { cat: 'Relativsätze', de: 'Die Frau, ___ ich kenne, ist Ärztin.', word: 'die', en: 'The woman whom I know is a doctor.', hint: 'Relative pronoun accusative feminine', info: 'die (acc. fem. sing.)' },
+            { cat: 'Relativsätze', de: 'Das Buch, ___ auf dem Tisch liegt, ist spannend.', word: 'das', en: 'The book that lies on the table is exciting.', hint: 'Relative pronoun nominative neuter', info: 'das (nom. neut. sing.)' },
+            { cat: 'Relativsätze', de: 'Die Kinder, ___ im Garten spielen, sind laut.', word: 'die', en: 'The children who play in the garden are loud.', hint: 'Relative pronoun nominative plural', info: 'die (nom. pl.)' },
+            { cat: 'Relativsätze', de: 'Der Film, ___ wir gesehen haben, war toll.', word: 'den', en: 'The film that we watched was great.', hint: 'Relative pronoun accusative masculine', info: 'den (acc. masc. sing.)' },
+            { cat: 'Relativsätze', de: 'Die Stadt, in ___ ich wohne, ist schön.', word: 'der', en: 'The city in which I live is beautiful.', hint: 'Relative pronoun dative feminine', info: 'der (dat. fem. sing.) after preposition' },
+            { cat: 'Relativsätze', de: 'Der Lehrer, ___ das unterrichtet, ist streng.', word: 'das', en: 'The teacher who teaches that is strict.', hint: 'Relative pronoun nominative neuter', info: 'das (nom. neut.) - subject' },
+            { cat: 'Relativsätze', de: 'Die Menschen, ___ ich treffe, sind freundlich.', word: 'die', en: 'The people whom I meet are friendly.', hint: 'Relative pronoun accusative plural', info: 'die (acc. pl.)' },
+            { cat: 'Relativsätze', de: 'Der Computer, mit ___ ich arbeite, ist schnell.', word: 'dem', en: 'The computer with which I work is fast.', hint: 'Relative pronoun dative masculine', info: 'dem (dat. masc.) after "mit"' },
+            { cat: 'Relativsätze', de: 'Das Auto, ___ ich fahre, ist alt.', word: 'das', en: 'The car that I drive is old.', hint: 'Relative pronoun nominative neuter', info: 'das (nom. neut. sing.)' },
+            { cat: 'Relativsätze', de: 'Die Melodie, ___ mir gefällt, ist schön.', word: 'die', en: 'The melody that I like is beautiful.', hint: 'Relative pronoun nominative feminine', info: 'die (nom. fem. sing.)' },
+            { cat: 'Relativsätze', de: 'Der Grund, ___ er gibt, ist nicht klar.', word: 'den', en: 'The reason that he gives is not clear.', hint: 'Relative pronoun accusative masculine', info: 'den (acc. masc.)' },
+            { cat: 'Relativsätze', de: 'Die Lösung, ___ wir finden, ist gut.', word: 'die', en: 'The solution that we find is good.', hint: 'Relative pronoun nominative feminine', info: 'die (nom. fem.) - subject' },
+            { cat: 'Relativsätze', de: 'Das Kind, zu ___ er spricht, ist sein Sohn.', word: 'dem', en: 'The child to whom he speaks is his son.', hint: 'Relative pronoun dative neuter', info: 'dem (dat. neut.) after "zu"' },
+            { cat: 'Relativsätze', de: 'Der Preis, für ___ ich kaufe, ist fair.', word: 'den', en: 'The price for which I buy is fair.', hint: 'Relative pronoun accusative masculine', info: 'den (acc. masc.) after "für"' },
+
+            // Indirekte Fragen (~15 cards)
+            { cat: 'Indirekte Fragen', de: 'Ich weiß nicht, ___ er kommt.', word: 'ob', en: 'I do not know if he is coming.', hint: 'Indirect question: ob (whether)', info: 'Yes/no questions use ob' },
+            { cat: 'Indirekte Fragen', de: 'Können Sie mir sagen, ___ der Bahnhof ist?', word: 'wo', en: 'Can you tell me where the train station is?', hint: 'Indirect question: wo (where)', info: 'Information questions use question word' },
+            { cat: 'Indirekte Fragen', de: 'Ich möchte wissen, ___ das kostet.', word: 'was', en: 'I would like to know what it costs.', hint: 'Indirect question: was (what)', info: 'Object question word' },
+            { cat: 'Indirekte Fragen', de: 'Weißt du, ___ sie morgen arbeitet?', word: 'ob', en: 'Do you know whether she works tomorrow?', hint: 'Indirect question: ob', info: 'Yes/no form' },
+            { cat: 'Indirekte Fragen', de: 'Er fragt, ___ ich mitkomme.', word: 'ob', en: 'He asks if I am coming along.', hint: 'Indirect question: ob (if/whether)', info: 'Yes/no question' },
+            { cat: 'Indirekte Fragen', de: 'Ich frage mich, ___ die Lösung ist.', word: 'was', en: 'I wonder what the solution is.', hint: 'Indirect question: was', info: 'What question' },
+            { cat: 'Indirekte Fragen', de: 'Sie möchte wissen, ___ er wohnt.', word: 'wo', en: 'She wants to know where he lives.', hint: 'Indirect question: wo (where)', info: 'Location question' },
+            { cat: 'Indirekte Fragen', de: 'Kannst du mir erklären, ___ das funktioniert?', word: 'wie', en: 'Can you explain to me how it works?', hint: 'Indirect question: wie (how)', info: 'How question' },
+            { cat: 'Indirekte Fragen', de: 'Ich weiß nicht, ___ er kommt.', word: 'wann', en: 'I do not know when he is coming.', hint: 'Indirect question: wann (when)', info: 'Time question' },
+            { cat: 'Indirekte Fragen', de: 'Hast du gehört, ___ das passiert ist?', word: 'warum', en: 'Did you hear why that happened?', hint: 'Indirect question: warum (why)', info: 'Reason question' },
+            { cat: 'Indirekte Fragen', de: 'Sie fragten, ___ ich das mache.', word: 'ob', en: 'They asked if I was doing that.', hint: 'Indirect question: ob (indirect form)', info: 'Yes/no question' },
+            { cat: 'Indirekte Fragen', de: 'Ich möchte verstehen, ___ du das sagst.', word: 'warum', en: 'I want to understand why you say that.', hint: 'Indirect question: warum', info: 'Why question' },
+            { cat: 'Indirekte Fragen', de: 'Er weiß, ___ das Auto ist.', word: 'wo', en: 'He knows where the car is.', hint: 'Indirect question: wo', info: 'Location: where' },
+            { cat: 'Indirekte Fragen', de: 'Können Sie mir sagen, ___ ich hier anmelden?', word: 'wo', en: 'Can you tell me where I register here?', hint: 'Indirect question: wo', info: 'Where question' },
+            { cat: 'Indirekte Fragen', de: 'Ich bin nicht sicher, ___ das richtig ist.', word: 'ob', en: 'I am not sure if that is correct.', hint: 'Indirect question: ob', info: 'Yes/no uncertainty' },
+
+            // Alltagssätze B1 (~25 cards)
+            { cat: 'Alltagssätze B1', de: 'Ich habe mich ___ entschieden.', word: 'dafür', en: 'I decided in favor of it.', hint: 'Präpositionaladverb: dafür', info: 'dafür = für das' },
+            { cat: 'Alltagssätze B1', de: '___ du dir das leisten?', word: 'Kannst', en: 'Can you afford that?', hint: 'können + sich leisten', info: 'Can afford: leisten' },
+            { cat: 'Alltagssätze B1', de: 'Er ___ sich bei mir entschuldigt.', word: 'hat', en: 'He has apologized to me.', hint: 'Present perfect: hat + entschuldigt', info: 'Has apologized: hat entschuldigt' },
+            { cat: 'Alltagssätze B1', de: 'Das ___ mir besser gefällt.', word: 'gefällt', en: 'That pleases me better.', hint: 'gefallen (Dativ)', info: 'Pleases: gefällt mir' },
+            { cat: 'Alltagssätze B1', de: 'Ich bin ___ begeistert.', word: 'davon', en: 'I am enthusiastic about it.', hint: 'Präpositionaladverb: davon', info: 'davon = von das' },
+            { cat: 'Alltagssätze B1', de: 'Wir haben ___ diskutiert.', word: 'darüber', en: 'We discussed about it.', hint: 'Präpositionaladverb: darüber', info: 'darüber = über das' },
+            { cat: 'Alltagssätze B1', de: 'Ich kümmere ___ darum.', word: 'mich', en: 'I will take care of it.', hint: 'sich kümmern um', info: 'Take care: kümmern um' },
+            { cat: 'Alltagssätze B1', de: 'Es ist wichtig, ___ die Zeit richtig zu nutzen.', word: 'dass', en: 'It is important that you use time properly.', hint: 'dass-Satz (subordinate)', info: 'Subordinate clause with dass' },
+            { cat: 'Alltagssätze B1', de: 'Er ___ ein neues Auto kaufen.', word: 'will', en: 'He wants to buy a new car.', hint: 'wollen + Infinitiv', info: 'Want to: will + Infinitiv' },
+            { cat: 'Alltagssätze B1', de: 'Ich muss ___ zur Arbeit gehen.', word: 'jetzt', en: 'I must go to work now.', hint: 'Zeit Adverb', info: 'Now: jetzt' },
+            { cat: 'Alltagssätze B1', de: 'Wir sind ___ den Freunden eingeladen.', word: 'von', en: 'We are invited by the friends.', hint: 'Passive with von', info: 'Invited by: von + Dativ' },
+            { cat: 'Alltagssätze B1', de: 'Das Restaurant ist bekannt ___ seine Pizza.', word: 'für', en: 'The restaurant is known for its pizza.', hint: 'bekannt für + Akkusativ', info: 'Known for: bekannt für' },
+            { cat: 'Alltagssätze B1', de: 'Ich bin schon ___ den Film.', word: 'dafür', en: 'I am already looking forward to the film.', hint: 'sich freuen auf (Präpositionaladverb)', info: 'dafür = für das' },
+            { cat: 'Alltagssätze B1', de: 'Sie hat Lust, ___ schwimmen zu gehen.', word: 'heute', en: 'She wants to go swimming today.', hint: 'Lust haben + zu + Infinitiv', info: 'Want to: Lust haben' },
+            { cat: 'Alltagssätze B1', de: 'Mir ___ die Beine weh.', word: 'tun', en: 'My legs hurt.', hint: 'Körperteile + wehtun', info: 'Hurt: wehtun' },
+            { cat: 'Alltagssätze B1', de: 'Ich bin überzeugt, ___ du recht hast.', word: 'dass', en: 'I am convinced that you are right.', hint: 'dass-Satz (subordinate)', info: 'Convinced: überzeugt, dass' },
+            { cat: 'Alltagssätze B1', de: 'Das ist ein Angebot, das ich nicht ___ kann.', word: 'ablehnen', en: 'That is an offer I cannot refuse.', hint: 'ablehnen (to reject)', info: 'Can refuse: kann ablehnen' },
+            { cat: 'Alltagssätze B1', de: 'Wir sollten ___ besprechen.', word: 'davon', en: 'We should talk about it.', hint: 'sprechen von/über', info: 'About: davon' },
+            { cat: 'Alltagssätze B1', de: 'Ich bin mir nicht sicher, ___ zu tun.', word: 'was', en: 'I am not sure what to do.', hint: 'Infinitiv Satz mit was', info: 'What to do: was zu tun' },
+            { cat: 'Alltagssätze B1', de: 'Das ist eine tolle Gelegenheit, die ich nutze.', word: 'muss', en: 'That is a great opportunity that I must use.', hint: 'Gelegenheit nutzen', info: 'Opportunity: Gelegenheit' },
+            { cat: 'Alltagssätze B1', de: 'Ich freue mich schon ___ nächste Woche.', word: 'auf', en: 'I am looking forward to next week.', hint: 'sich freuen auf + Akkusativ', info: 'Look forward: auf' },
+            { cat: 'Alltagssätze B1', de: 'Es tut mir leid, dass ich ___ konnte.', word: 'nicht', en: 'I am sorry that I could not come.', hint: 'Es tut mir leid', info: 'Sorry: Es tut mir leid' },
+            { cat: 'Alltagssätze B1', de: 'Du hast recht, ich bin ___ schuld.', word: 'selbst', en: 'You are right, I am at fault myself.', hint: 'Schuld haben (to be at fault)', info: 'Myself at fault: selbst schuld' },
+            { cat: 'Alltagssätze B1', de: 'Das ist mir egal, ___ du tust.', word: 'was', en: 'It does not matter to me what you do.', hint: 'egal + was', info: 'No matter what: egal was' },
+            { cat: 'Alltagssätze B1', de: 'Wir müssen ___ nachdenken, bevor wir entscheiden.', word: 'gründlich', en: 'We must think thoroughly before we decide.', hint: 'gründlich nachdenken', info: 'Think thoroughly: gründlich' }
+        ];
+
+        // State
+        let currentIndex = 0;
+        let filteredCards = [...cards];
+        let activeFilter = 'all';
+        let stats = {
+            correct: 0,
+            answered: 0,
+            streak: 0,
+            bestStreak: 0
+        };
+
+        // Initialize
+        function init() {
+            loadStats();
+            renderFilters();
+            renderCard();
+            updateProgress();
+            updateStats();
+            setupKeyboardListeners();
+        }
+
+        // Utilities
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function getCatClass(category) {
+            return 'cat-' + category
+                .toLowerCase()
+                .replace(/ä/g, 'a')
+                .replace(/ö/g, 'o')
+                .replace(/ü/g, 'u')
+                .replace(/\s+/g, '-');
+        }
+
+        function normalizeAnswer(text) {
+            return text.toLowerCase().trim();
+        }
+
+        // Filters
+        function renderFilters() {
+            const categories = [...new Set(cards.map(c => c.cat))];
+            const container = document.getElementById('filterContainer');
+            container.innerHTML = '';
+
+            const allBtn = document.createElement('button');
+            allBtn.className = 'filter-chip active';
+            allBtn.textContent = 'All';
+            allBtn.onclick = () => setFilter('all');
+            container.appendChild(allBtn);
+
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-chip';
+                btn.textContent = cat;
+                btn.onclick = () => setFilter(cat);
+                container.appendChild(btn);
+            });
+        }
+
+        function setFilter(category) {
+            activeFilter = category;
+            filteredCards = category === 'all' ? [...cards] : cards.filter(c => c.cat === category);
+            filteredCards = shuffleArray(filteredCards);
+            currentIndex = 0;
+            document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCard();
+            updateProgress();
+        }
+
+        // Rendering
+        function renderCard() {
+            if (filteredCards.length === 0) {
+                document.getElementById('cardContainer').innerHTML = '<p>No cards available</p>';
+                return;
+            }
+
+            const card = filteredCards[currentIndex];
+            document.getElementById('categoryLabel').className = 'category-label ' + getCatClass(card.cat);
+            document.getElementById('categoryLabel').textContent = card.cat;
+            document.getElementById('sentence').textContent = card.de;
+            document.getElementById('answer').textContent = card.word;
+            document.getElementById('translation').textContent = '📝 ' + card.en;
+            document.getElementById('hint').textContent = '💡 ' + card.hint;
+            document.getElementById('info').textContent = '📖 ' + card.info;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').className = '';
+            document.getElementById('answerInput').focus();
+            document.getElementById('flashcard').classList.remove('flipped');
+            updateButtonStates();
+        }
+
+        function updateButtonStates() {
+            document.getElementById('backBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex === filteredCards.length - 1;
+        }
+
+        function updateProgress() {
+            const total = filteredCards.length;
+            const progress = ((currentIndex + 1) / total) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = (currentIndex + 1) + ' / ' + total + ' cards';
+        }
+
+        function updateStats() {
+            document.getElementById('correctCount').textContent = stats.correct;
+            document.getElementById('answeredCount').textContent = stats.answered;
+            const accuracy = stats.answered === 0 ? 0 : Math.round((stats.correct / stats.answered) * 100);
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            document.getElementById('streak').textContent = stats.streak;
+        }
+
+        // Answer Checking
+        function checkAnswer() {
+            const input = document.getElementById('answerInput');
+            const card = filteredCards[currentIndex];
+            const isCorrect = normalizeAnswer(input.value) === normalizeAnswer(card.word);
+
+            stats.answered++;
+            if (isCorrect) {
+                stats.correct++;
+                stats.streak++;
+                if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
+                input.className = 'correct';
+            } else {
+                stats.streak = 0;
+                input.className = 'incorrect';
+            }
+
+            updateStats();
+            saveStats();
+            input.disabled = true;
+            document.querySelector('.check-btn').disabled = true;
+        }
+
+        // Navigation
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            if (currentIndex < filteredCards.length - 1) {
+                currentIndex++;
+                renderCard();
+                updateProgress();
+                checkCompletion();
+            }
+        }
+
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderCard();
+                updateProgress();
+            }
+        }
+
+        function checkCompletion() {
+            if (currentIndex === filteredCards.length - 1 && stats.answered === filteredCards.length) {
+                setTimeout(showCompletion, 500);
+            }
+        }
+
+        function showCompletion() {
+            document.getElementById('cardContainer').style.display = 'none';
+            document.getElementById('completionScreen').classList.add('show');
+            document.getElementById('finalCorrect').textContent = stats.correct;
+            const accuracy = Math.round((stats.correct / stats.answered) * 100);
+            document.getElementById('finalAccuracy').textContent = accuracy + '%';
+            document.getElementById('finalStreak').textContent = stats.bestStreak;
+        }
+
+        function restart() {
+            stats = { correct: 0, answered: 0, streak: 0, bestStreak: 0 };
+            saveStats();
+            currentIndex = 0;
+            filteredCards = shuffleArray([...filteredCards]);
+            document.getElementById('cardContainer').style.display = 'block';
+            document.getElementById('completionScreen').classList.remove('show');
+            renderCard();
+            updateProgress();
+            updateStats();
+        }
+
+        // LocalStorage
+        function saveStats() {
+            localStorage.setItem('vocabStatsB1', JSON.stringify(stats));
+        }
+
+        function loadStats() {
+            const saved = localStorage.getItem('vocabStatsB1');
+            if (saved) stats = JSON.parse(saved);
+        }
+
+        // Keyboard Shortcuts
+        function setupKeyboardListeners() {
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    if (!document.querySelector('.check-btn').disabled) checkAnswer();
+                    else nextCard();
+                }
+                if (e.key === 'ArrowLeft') prevCard();
+                if (e.key === 'ArrowRight') nextCard();
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    flipCard();
+                }
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>

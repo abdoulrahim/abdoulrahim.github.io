@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>German A1 — Vocabulary in Sentences</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  :root {
+    --primary: #6d28d9;
+    --primary-light: #a78bfa;
+    --primary-bg: #f5f3ff;
+    --accent: #f59e0b;
+    --accent-bg: #fef3c7;
+    --success: #10b981;
+    --success-bg: #d1fae5;
+    --error: #ef4444;
+    --error-bg: #fee2e2;
+    --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--g50);color:var(--g800);min-height:100vh;}
+
+  /* HEADER */
+  .app-header{background:linear-gradient(135deg,var(--primary),#4f46e5);color:white;padding:20px 24px;text-align:center;position:sticky;top:0;z-index:50;}
+  .app-header h1{font-size:20px;font-weight:700;}
+  .app-header p{font-size:13px;opacity:0.85;margin-top:2px;}
+
+  /* STATS BAR */
+  .stats-bar{display:flex;justify-content:center;gap:24px;padding:16px;background:white;border-bottom:1px solid var(--g200);flex-wrap:wrap;}
+  .stat{text-align:center;}
+  .stat .num{font-size:24px;font-weight:800;color:var(--primary);}
+  .stat .label{font-size:11px;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px;}
+
+  /* PROGRESS */
+  .progress-row{padding:12px 24px;background:white;border-bottom:1px solid var(--g200);}
+  .progress-outer{height:8px;background:var(--g100);border-radius:4px;overflow:hidden;}
+  .progress-inner{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:4px;transition:width 0.5s;}
+  .progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--g500);margin-bottom:4px;}
+
+  /* FILTERS */
+  .filter-bar{display:flex;gap:8px;padding:16px 24px;overflow-x:auto;background:white;border-bottom:1px solid var(--g200);}
+  .filter-chip{
+    padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;
+    border:2px solid var(--g200);background:white;color:var(--g600);white-space:nowrap;transition:all 0.2s;
+  }
+  .filter-chip:hover{border-color:var(--primary-light);}
+  .filter-chip.active{background:var(--primary);color:white;border-color:var(--primary);}
+
+  /* MAIN AREA */
+  .main{max-width:640px;margin:0 auto;padding:24px;}
+
+  /* FLASHCARD */
+  .flashcard-container{perspective:1000px;margin-bottom:24px;}
+  .flashcard{
+    position:relative;width:100%;min-height:320px;border-radius:16px;
+    transition:transform 0.6s;transform-style:preserve-3d;cursor:default;
+  }
+  .flashcard.flipped{transform:rotateY(180deg);}
+  .card-face{
+    position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;padding:32px;
+    box-shadow:0 4px 24px rgba(0,0,0,0.08);
+  }
+  .card-front{background:white;border:2px solid var(--g200);}
+  .card-back{background:linear-gradient(135deg,#fefce8,#fef3c7);border:2px solid var(--accent);transform:rotateY(180deg);}
+
+  .card-category{
+    position:absolute;top:16px;left:16px;font-size:11px;font-weight:600;
+    padding:4px 10px;border-radius:12px;text-transform:uppercase;letter-spacing:0.5px;
+  }
+  .cat-verben{background:#dbeafe;color:#1e40af;}
+  .cat-nomen{background:#fce7f3;color:#9d174d;}
+  .cat-sätze{background:#d1fae5;color:#065f46;}
+  .cat-artikel{background:#fef3c7;color:#92400e;}
+  .cat-präpositionen{background:#e0e7ff;color:#3730a3;}
+  .cat-modalverben{background:#ede9fe;color:#5b21b6;}
+  .cat-adjektive{background:#fce7f3;color:#be185d;}
+
+  .card-number{
+    position:absolute;top:16px;right:16px;font-size:12px;color:var(--g400);font-weight:500;
+  }
+
+  .card-sentence{font-size:20px;line-height:1.7;text-align:center;margin-bottom:20px;color:var(--g800);}
+  .card-sentence .blank{
+    display:inline-block;min-width:120px;border-bottom:3px solid var(--primary);
+    color:var(--primary);font-weight:700;text-align:center;padding:0 4px;
+  }
+  .card-hint{font-size:14px;color:var(--g400);font-style:italic;margin-bottom:16px;}
+
+  .input-area{display:flex;gap:10px;width:100%;max-width:360px;align-items:center;}
+  .input-area input{
+    flex:1;padding:12px 16px;border:2px solid var(--g300);border-radius:10px;
+    font-size:16px;font-family:inherit;outline:none;transition:border-color 0.2s;text-align:center;
+  }
+  .input-area input:focus{border-color:var(--primary);}
+  .input-area input.correct{border-color:var(--success);background:var(--success-bg);color:#065f46;}
+  .input-area input.incorrect{border-color:var(--error);background:var(--error-bg);color:#991b1b;}
+
+  .check-btn{
+    padding:12px 20px;background:var(--primary);color:white;border:none;border-radius:10px;
+    font-size:15px;font-weight:600;cursor:pointer;transition:background 0.2s;
+  }
+  .check-btn:hover{background:#5b21b6;}
+
+  /* BACK side */
+  .back-sentence{font-size:22px;line-height:1.7;text-align:center;margin-bottom:12px;color:var(--g900);font-weight:600;}
+  .back-sentence .word-highlight{color:var(--primary);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:4px;}
+  .back-translation{font-size:16px;color:var(--g500);text-align:center;font-style:italic;margin-bottom:8px;}
+  .back-word-info{font-size:14px;color:var(--g600);text-align:center;background:white;padding:10px 16px;border-radius:8px;margin-top:8px;}
+  .back-result{font-size:16px;font-weight:700;margin-bottom:12px;}
+  .back-result.correct{color:var(--success);}
+  .back-result.incorrect{color:var(--error);}
+
+  /* NAVIGATION */
+  .nav-row{display:flex;gap:12px;justify-content:center;margin-bottom:16px;}
+  .nav-btn{
+    padding:12px 28px;border-radius:10px;font-size:14px;font-weight:600;
+    cursor:pointer;transition:all 0.2s;border:none;
+  }
+  .nav-btn.prev{background:var(--g100);color:var(--g700);}
+  .nav-btn.prev:hover{background:var(--g200);}
+  .nav-btn.next{background:var(--primary);color:white;}
+  .nav-btn.next:hover{background:#5b21b6;}
+  .nav-btn.flip{background:var(--accent);color:var(--g900);}
+  .nav-btn.flip:hover{background:#d97706;}
+  .nav-btn:disabled{opacity:0.4;cursor:default;}
+
+  /* KEYBOARD HINT */
+  .keyboard-hint{text-align:center;font-size:12px;color:var(--g400);margin-top:12px;}
+  .keyboard-hint kbd{
+    background:var(--g100);border:1px solid var(--g300);padding:2px 6px;border-radius:4px;font-family:inherit;font-size:11px;
+  }
+
+  /* COMPLETION */
+  .completion-card{
+    background:linear-gradient(135deg,var(--success),#059669);color:white;
+    border-radius:16px;padding:48px 32px;text-align:center;margin:24px 0;
+  }
+  .completion-card h2{font-size:28px;margin-bottom:8px;}
+  .completion-card p{opacity:0.9;font-size:16px;margin-bottom:16px;}
+  .restart-btn{
+    background:white;color:var(--success);border:none;padding:12px 32px;
+    border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;
+  }
+
+  /* STREAK */
+  .streak-badge{
+    display:inline-flex;align-items:center;gap:6px;padding:6px 14px;
+    background:var(--accent-bg);border-radius:20px;font-size:13px;font-weight:600;color:#92400e;
+  }
+
+  @media(max-width:600px){
+    .card-sentence{font-size:17px;}
+    .main{padding:16px;}
+    .card-face{padding:24px 20px;}
+    .stats-bar{gap:16px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>Wörter in Sätzen lernen</h1>
+  <p>A1 Vocabulary Flashcards — Learn words in context</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="num" id="statCorrect">0</div><div class="label">Correct</div></div>
+  <div class="stat"><div class="num" id="statTotal">0</div><div class="label">Answered</div></div>
+  <div class="stat"><div class="num" id="statPct">0%</div><div class="label">Accuracy</div></div>
+  <div class="stat"><div class="num" id="statStreak">0 🔥</div><div class="label">Streak</div></div>
+</div>
+
+<div class="progress-row">
+  <div class="progress-label"><span id="progLabel">Card 1 of —</span><span id="progPct">0%</span></div>
+  <div class="progress-outer"><div class="progress-inner" id="progBar" style="width:0%"></div></div>
+</div>
+
+<div class="filter-bar" id="filterBar"></div>
+
+<div class="main">
+  <div id="cardArea"></div>
+  <div class="keyboard-hint">
+    <kbd>Enter</kbd> Check answer &nbsp; <kbd>→</kbd> Next card &nbsp; <kbd>←</kbd> Previous card
+  </div>
+</div>
+
+<script>
+// ============ FLASHCARD DATA ============
+const allCards = [
+  // === VERBEN: Konjugation Präsens ===
+  {cat:'Verben',de:'Ich ___ aus Brasilien.',word:'komme',en:'I come from Brazil.',hint:'kommen — ich',info:'kommen: ich komme, du kommst, er kommt'},
+  {cat:'Verben',de:'Woher ___ du?',word:'kommst',en:'Where do you come from?',hint:'kommen — du',info:'kommen: du kommst'},
+  {cat:'Verben',de:'Wo ___ ihr?',word:'wohnt',en:'Where do you (pl.) live?',hint:'wohnen — ihr',info:'wohnen: ihr wohnt'},
+  {cat:'Verben',de:'Ich ___ bei der Post.',word:'arbeite',en:'I work at the post office.',hint:'arbeiten — ich',info:'arbeiten: ich arbeite (extra -e before -te)'},
+  {cat:'Verben',de:'Wie ___ Sie?',word:'heißen',en:'What is your name? (formal)',hint:'heißen — Sie',info:'heißen: Sie heißen'},
+  {cat:'Verben',de:'Er ___ Schmidt.',word:'heißt',en:'His name is Schmidt.',hint:'heißen — er',info:'heißen: er heißt (no extra -s)'},
+  {cat:'Verben',de:'Maria ___ gerne Dialoge.',word:'hört',en:'Maria likes to listen to dialogues.',hint:'hören — sie (Sg.)',info:'hören: sie hört'},
+  {cat:'Verben',de:'Pedro ___ gerne.',word:'schreibt',en:'Pedro likes to write.',hint:'schreiben — er',info:'schreiben: er schreibt'},
+  {cat:'Verben',de:'Wir ___ zusammen Deutsch.',word:'lernen',en:'We learn German together.',hint:'lernen — wir',info:'lernen: wir lernen'},
+  {cat:'Verben',de:'___ du gerne?',word:'Tanzt',en:'Do you like to dance?',hint:'tanzen — du (Frage)',info:'tanzen: du tanzt'},
+
+  // === VERBEN: sein, haben, möchten ===
+  {cat:'Verben',de:'Ich ___ Studentin.',word:'bin',en:'I am a student.',hint:'sein — ich',info:'sein: ich bin, du bist, er ist'},
+  {cat:'Verben',de:'___ du Geld?',word:'Hast',en:'Do you have money?',hint:'haben — du (Frage)',info:'haben: du hast'},
+  {cat:'Verben',de:'Sie ___ verheiratet.',word:'ist',en:'She is married.',hint:'sein — sie (Sg.)',info:'sein: er/sie/es ist'},
+  {cat:'Verben',de:'Wir ___ in München.',word:'sind',en:'We are in Munich.',hint:'sein — wir',info:'sein: wir sind'},
+  {cat:'Verben',de:'Sie ___ fünf Kinder.',word:'hat',en:'She has five children.',hint:'haben — sie (Sg.)',info:'haben: er/sie/es hat'},
+  {cat:'Verben',de:'___ ihr schon eine Wohnung?',word:'Habt',en:'Do you already have an apartment?',hint:'haben — ihr (Frage)',info:'haben: ihr habt'},
+  {cat:'Verben',de:'Ich ___ einen Kaffee, bitte.',word:'möchte',en:'I would like a coffee, please.',hint:'möchten — ich',info:'möchten: ich möchte (polite wish)'},
+  {cat:'Verben',de:'Was ___ Sie trinken?',word:'möchten',en:'What would you like to drink?',hint:'möchten — Sie (Frage)',info:'möchten: Sie möchten'},
+  {cat:'Verben',de:'Sie ___ Italien.',word:'mag',en:'She likes Italy.',hint:'mögen — sie (Sg.)',info:'mögen: er/sie mag (no ending!)'},
+  {cat:'Verben',de:'Ich ___, wo der Bahnhof ist.',word:'weiß',en:'I know where the train station is.',hint:'wissen — ich',info:'wissen: ich weiß, du weißt, er weiß'},
+
+  // === VERBEN: Vokalwechsel ===
+  {cat:'Verben',de:'Er ___ und isst und isst.',word:'isst',en:'He eats and eats and eats.',hint:'essen — er (e→i)',info:'essen: du isst, er isst'},
+  {cat:'Verben',de:'___ du gerne Romane?',word:'Liest',en:'Do you like to read novels?',hint:'lesen — du (e→i)',info:'lesen: du liest, er liest'},
+  {cat:'Verben',de:'Er ___ gut Deutsch.',word:'spricht',en:'He speaks German well.',hint:'sprechen — er (e→i)',info:'sprechen: er spricht'},
+  {cat:'Verben',de:'Sie ___ immer acht Stunden.',word:'schläft',en:'She always sleeps eight hours.',hint:'schlafen — sie (a→ä)',info:'schlafen: du schläfst, er schläft'},
+  {cat:'Verben',de:'Er ___ mit dem Auto in die Stadt.',word:'fährt',en:'He drives to the city by car.',hint:'fahren — er (a→ä)',info:'fahren: du fährst, er fährt'},
+  {cat:'Verben',de:'Sie ___ gerne fern.',word:'sieht',en:'She likes to watch TV.',hint:'fernsehen — sie (e→i)',info:'sehen: er/sie sieht'},
+  {cat:'Verben',de:'___ du den Bus?',word:'Nimmst',en:'Are you taking the bus?',hint:'nehmen — du (e→i)',info:'nehmen: du nimmst, er nimmt'},
+  {cat:'Verben',de:'Er ___ seiner Mutter.',word:'hilft',en:'He helps his mother.',hint:'helfen — er (e→i)',info:'helfen: du hilfst, er hilft'},
+  {cat:'Verben',de:'Sie ___ einen schweren Koffer.',word:'trägt',en:'She carries a heavy suitcase.',hint:'tragen — sie (a→ä)',info:'tragen: du trägst, er trägt'},
+  {cat:'Verben',de:'Er ___ mir ein Buch.',word:'gibt',en:'He gives me a book.',hint:'geben — er (e→i)',info:'geben: du gibst, er gibt'},
+
+  // === MODALVERBEN ===
+  {cat:'Modalverben',de:'Ich ___ gut Englisch sprechen.',word:'kann',en:'I can speak English well.',hint:'können — ich',info:'können: ability / possibility'},
+  {cat:'Modalverben',de:'Du ___ deine Hausaufgaben machen.',word:'musst',en:'You have to do your homework.',hint:'müssen — du',info:'müssen: obligation, no alternative'},
+  {cat:'Modalverben',de:'Hier ___ man nicht rauchen.',word:'darf',en:'You are not allowed to smoke here.',hint:'dürfen — man',info:'nicht dürfen: forbidden'},
+  {cat:'Modalverben',de:'Ich ___ Spaghetti, und Juliane ___ Pizza.',word:'möchte',en:'I would like spaghetti, and Juliane would like pizza.',hint:'möchten — ich',info:'möchten: polite wish'},
+  {cat:'Modalverben',de:'Die Kinder ___ im Urlaub zu Oma fahren.',word:'wollen',en:'The kids want to go to grandma\'s on vacation.',hint:'wollen — sie (Pl.)',info:'wollen: strong wish, direct'},
+  {cat:'Modalverben',de:'Der Arzt sagt, ich ___ nicht arbeiten.',word:'soll',en:'The doctor says I should not work.',hint:'sollen — ich',info:'sollen: advice from someone else'},
+  {cat:'Modalverben',de:'___ ich in der Wohnung einen Hund haben?',word:'Darf',en:'Am I allowed to have a dog in the apartment?',hint:'dürfen — ich (Frage)',info:'dürfen: asking for permission'},
+  {cat:'Modalverben',de:'Mama, ich ___ jetzt spielen gehen!',word:'will',en:'Mom, I want to go play now!',hint:'wollen — ich',info:'wollen: strong desire (direct)'},
+  {cat:'Modalverben',de:'___ wir morgen ins Kino gehen?',word:'Sollen',en:'Shall we go to the movies tomorrow?',hint:'sollen — wir (Vorschlag)',info:'sollen: suggestion / proposal'},
+  {cat:'Modalverben',de:'Ich ___ leider nicht kommen.',word:'kann',en:'Unfortunately I cannot come.',hint:'können — ich',info:'nicht können: not possible'},
+
+  // === TRENNBARE VERBEN ===
+  {cat:'Verben',de:'Ich ___ im Supermarkt ___.',word:'kaufe ... ein',en:'I shop at the supermarket.',hint:'einkaufen (trennbar)',info:'einkaufen: Ich kaufe ein.'},
+  {cat:'Verben',de:'Ich ___ um 7 Uhr ___.',word:'stehe ... auf',en:'I get up at 7 o\'clock.',hint:'aufstehen (trennbar)',info:'aufstehen: Ich stehe auf.'},
+  {cat:'Verben',de:'Wir ___ am Abend ___.',word:'sehen ... fern',en:'We watch TV in the evening.',hint:'fernsehen (trennbar)',info:'fernsehen: Wir sehen fern.'},
+  {cat:'Verben',de:'Ich ___ dich zu meinem Geburtstag ___.',word:'lade ... ein',en:'I invite you to my birthday.',hint:'einladen (trennbar)',info:'einladen: Ich lade ein. (a→ä: du lädst ein)'},
+  {cat:'Verben',de:'Mein Kollege ___ und sagt: Guten Morgen!',word:'kommt ... rein',en:'My colleague comes in and says: Good morning!',hint:'reinkommen (trennbar)',info:'reinkommen: Er kommt rein.'},
+  {cat:'Verben',de:'Dann ___ ich mit der Arbeit ___.',word:'fange ... an',en:'Then I start working.',hint:'anfangen (trennbar)',info:'anfangen: Ich fange an.'},
+
+  // === IMPERATIV ===
+  {cat:'Sätze',de:'___ Sie bitte Platz!',word:'Nehmen',en:'Please have a seat! (formal)',hint:'nehmen — Imperativ formell',info:'Imperativ (Sie): Verb + Sie'},
+  {cat:'Sätze',de:'___ doch noch ein Stück Kuchen!',word:'Nimm',en:'Have another piece of cake! (informal)',hint:'nehmen — Imperativ du (e→i)',info:'nehmen → Nimm! (vowel change kept)'},
+  {cat:'Sätze',de:'___ bitte schnell!',word:'Kommt',en:'Come quickly please! (informal plural)',hint:'kommen — Imperativ ihr',info:'kommen → Kommt! (like ihr-form)'},
+  {cat:'Sätze',de:'___ Sie mir bitte!',word:'Helfen',en:'Please help me! (formal)',hint:'helfen — Imperativ formell',info:'Helfen Sie! (formal imperative)'},
+
+  // === W-FRAGEN ===
+  {cat:'Sätze',de:'___ heißen Sie?',word:'Wie',en:'What is your name?',hint:'Fragewort: How?',info:'Wie = How / What (for names)'},
+  {cat:'Sätze',de:'___ kommen Sie?',word:'Woher',en:'Where do you come from?',hint:'Fragewort: Where from?',info:'Woher = Where from'},
+  {cat:'Sätze',de:'___ wohnen Sie?',word:'Wo',en:'Where do you live?',hint:'Fragewort: Where?',info:'Wo = Where (location)'},
+  {cat:'Sätze',de:'___ ist das?',word:'Was',en:'What is that?',hint:'Fragewort: What?',info:'Was = What'},
+  {cat:'Sätze',de:'___ gehst du?',word:'Wohin',en:'Where are you going?',hint:'Fragewort: Where to?',info:'Wohin = Where to (direction)'},
+  {cat:'Sätze',de:'___ kommst du heute?',word:'Wann',en:'When are you coming today?',hint:'Fragewort: When?',info:'Wann = When'},
+  {cat:'Sätze',de:'___ lernst du Deutsch?',word:'Warum',en:'Why are you learning German?',hint:'Fragewort: Why?',info:'Warum = Why'},
+  {cat:'Sätze',de:'___ Kinder haben Sie?',word:'Wie viele',en:'How many children do you have?',hint:'Fragewort: How many?',info:'Wie viele = How many'},
+
+  // === JA/NEIN/DOCH ===
+  {cat:'Sätze',de:'Sprechen Sie nicht Deutsch? — ___, ich spreche Deutsch!',word:'Doch',en:'Don\'t you speak German? — Yes I do!',hint:'Positive answer to a negative question',info:'Doch = contradicts a negative question'},
+  {cat:'Sätze',de:'Lernen Sie Deutsch? — ___, ich lerne Deutsch.',word:'Ja',en:'Are you learning German? — Yes, I am.',hint:'Positive answer to a positive question',info:'Ja = Yes (to positive questions)'},
+  {cat:'Sätze',de:'Haben Sie Kinder? — ___, ich habe keine Kinder.',word:'Nein',en:'Do you have children? — No, I don\'t.',hint:'Negative answer',info:'Nein = No'},
+
+  // === NEGATION ===
+  {cat:'Artikel',de:'Ich koche ___ gerne.',word:'nicht',en:'I don\'t like to cook.',hint:'Negation für Verben/Adjektive',info:'nicht: negates verbs, adjectives, adverbs'},
+  {cat:'Artikel',de:'Ich habe ___ Kinder.',word:'keine',en:'I have no children.',hint:'Negation für Nomen (Pl.)',info:'kein-: negates nouns (like ein)'},
+  {cat:'Artikel',de:'Ich habe ___ Geld.',word:'kein',en:'I have no money.',hint:'Negation für Nomen (das Geld)',info:'kein: neuter nominative/accusative'},
+  {cat:'Artikel',de:'Ich möchte ___ Kaffee.',word:'keinen',en:'I don\'t want any coffee.',hint:'Negation Akkusativ maskulin',info:'keinen: masculine accusative'},
+  {cat:'Artikel',de:'Ich habe ___ Spülmaschine.',word:'keine',en:'I don\'t have a dishwasher.',hint:'Negation für Nomen (die)',info:'keine: feminine'},
+  {cat:'Artikel',de:'Ich bin ___ hungrig.',word:'nicht',en:'I am not hungry.',hint:'Negation für Adjektive',info:'nicht: before adjectives'},
+  {cat:'Artikel',de:'Ich bin ___ verheiratet.',word:'nicht',en:'I am not married.',hint:'Negation für Adjektive',info:'nicht: negates the adjective'},
+
+  // === AKKUSATIV ===
+  {cat:'Artikel',de:'Ich brauche ___ Pass.',word:'den',en:'I need the passport. (der Pass)',hint:'Akkusativ — definit maskulin',info:'der → den (Akkusativ maskulin)'},
+  {cat:'Artikel',de:'Ich brauche ___ Tasche.',word:'die',en:'I need the bag. (die Tasche)',hint:'Akkusativ — definit feminin',info:'die → die (no change in Akk.)'},
+  {cat:'Artikel',de:'Ich brauche ___ Handy.',word:'das',en:'I need the phone. (das Handy)',hint:'Akkusativ — definit neutral',info:'das → das (no change in Akk.)'},
+  {cat:'Artikel',de:'Walter kauft ___ Flasche Wein.',word:'eine',en:'Walter buys a bottle of wine. (die Flasche)',hint:'Akkusativ — indefinit feminin',info:'eine → eine (no change in Akk.)'},
+  {cat:'Artikel',de:'Walter kauft ___ Joghurt.',word:'einen',en:'Walter buys a yogurt. (der Joghurt)',hint:'Akkusativ — indefinit maskulin',info:'ein → einen (Akk. maskulin)'},
+  {cat:'Artikel',de:'Thomas hat ___ Auto, aber ___ Fahrrad.',word:'ein ... kein',en:'Thomas has a car but no bicycle.',hint:'Akkusativ neutral + Negation',info:'ein/kein: neuter stays same in Akk.'},
+  {cat:'Artikel',de:'Der Mann isst ___ Fisch.',word:'den',en:'The man eats the fish. (der Fisch)',hint:'Akkusativ — definit maskulin',info:'der → den (direct object)'},
+
+  // === DATIV ===
+  {cat:'Artikel',de:'Ich fahre mit ___ Auto.',word:'dem',en:'I drive by car. (das Auto)',hint:'Dativ — definit neutral',info:'das → dem (Dativ)'},
+  {cat:'Artikel',de:'Ich fahre mit ___ Zug.',word:'dem',en:'I go by train. (der Zug)',hint:'Dativ — definit maskulin',info:'der → dem (Dativ)'},
+  {cat:'Artikel',de:'Ich fahre mit ___ U-Bahn.',word:'der',en:'I take the subway. (die U-Bahn)',hint:'Dativ — definit feminin',info:'die → der (Dativ feminin)'},
+  {cat:'Artikel',de:'Ich gehe mit ___ Freundin ins Kino.',word:'einer',en:'I go to the cinema with a friend. (die Freundin)',hint:'Dativ — indefinit feminin',info:'eine → einer (Dativ)'},
+  {cat:'Artikel',de:'Ich gehe mit ___ Freund spazieren.',word:'einem',en:'I go for a walk with a friend. (der Freund)',hint:'Dativ — indefinit maskulin',info:'ein → einem (Dativ)'},
+  {cat:'Artikel',de:'Er gibt ___ Kindern ein Eis.',word:'den',en:'He gives the children an ice cream.',hint:'Dativ Plural',info:'die → den + Nomen + n (Dativ Pl.)'},
+
+  // === POSSESSIVARTIKEL ===
+  {cat:'Artikel',de:'Das ist ___ Mutter. (er)',word:'seine',en:'That is his mother.',hint:'Possessivartikel — er + feminin',info:'er → sein; feminine: seine'},
+  {cat:'Artikel',de:'Das ist ___ Vater. (sie)',word:'ihr',en:'That is her father.',hint:'Possessivartikel — sie + maskulin',info:'sie → ihr; masculine: ihr'},
+  {cat:'Artikel',de:'Das sind ___ Kinder. (wir)',word:'unsere',en:'Those are our children.',hint:'Possessivartikel — wir + Plural',info:'wir → unser; plural: unsere'},
+  {cat:'Artikel',de:'Ist das ___ Koffer? (Sie)',word:'Ihr',en:'Is that your suitcase? (formal)',hint:'Possessivartikel — Sie + maskulin',info:'Sie → Ihr (always capitalized)'},
+  {cat:'Artikel',de:'Wo ist ___ Handy? (du)',word:'dein',en:'Where is your phone?',hint:'Possessivartikel — du + neutral',info:'du → dein; neuter: dein'},
+  {cat:'Artikel',de:'Ich liebe ___ Mann. (ich)',word:'meinen',en:'I love my husband.',hint:'Possessivartikel — ich + Akk. mask.',info:'ich → mein; Akkusativ mask.: meinen'},
+
+  // === PERSONALPRONOMEN Akk/Dat ===
+  {cat:'Nomen',de:'Liebst du ___? (ich)',word:'mich',en:'Do you love me?',hint:'Personalpronomen Akkusativ — ich',info:'ich → mich (Akk.)'},
+  {cat:'Nomen',de:'Ich mag ___. (du)',word:'dich',en:'I like you.',hint:'Personalpronomen Akkusativ — du',info:'du → dich (Akk.)'},
+  {cat:'Nomen',de:'Ich sehe ___ nicht. (er)',word:'ihn',en:'I don\'t see him.',hint:'Personalpronomen Akkusativ — er',info:'er → ihn (Akk.)'},
+  {cat:'Nomen',de:'Wie geht es ___? (du)',word:'dir',en:'How are you?',hint:'Personalpronomen Dativ — du',info:'du → dir (Dat.)'},
+  {cat:'Nomen',de:'Ich helfe ___. (Sie)',word:'Ihnen',en:'I\'m helping you. (formal)',hint:'Personalpronomen Dativ — Sie',info:'Sie → Ihnen (Dat.)'},
+  {cat:'Nomen',de:'Er kauft ___ ein Eis. (die Kinder)',word:'ihnen',en:'He buys them an ice cream.',hint:'Personalpronomen Dativ — sie (Pl.)',info:'sie (Pl.) → ihnen (Dat.)'},
+  {cat:'Nomen',de:'Es geht ___ gut. (ich)',word:'mir',en:'I\'m doing well.',hint:'Personalpronomen Dativ — ich',info:'ich → mir (Dat.)'},
+
+  // === NOMEN & PLURALS ===
+  {cat:'Nomen',de:'Die ___ spielen im Garten.',word:'Kinder',en:'The children play in the garden.',hint:'das Kind → Plural',info:'das Kind → die Kinder (Plural)'},
+  {cat:'Nomen',de:'Ich habe zwei ___.',word:'Katzen',en:'I have two cats.',hint:'die Katze → Plural',info:'die Katze → die Katzen'},
+  {cat:'Nomen',de:'Die ___ sind sehr bequem.',word:'Stühle',en:'The chairs are very comfortable.',hint:'der Stuhl → Plural',info:'der Stuhl → die Stühle (Umlaut + e)'},
+  {cat:'Nomen',de:'Ich lese gerne ___.',word:'Bücher',en:'I like to read books.',hint:'das Buch → Plural',info:'das Buch → die Bücher (Umlaut + er)'},
+
+  // === SATZSTELLUNG ===
+  {cat:'Sätze',de:'Am Abend ___ wir Pizza.',word:'essen',en:'In the evening we eat pizza.',hint:'Verb = Position 2',info:'Verb always in Position 2 in statements'},
+  {cat:'Sätze',de:'Ich ___ morgen einkaufen.',word:'muss',en:'I have to go shopping tomorrow.',hint:'Modalverb = Position 2',info:'Modal verb in Pos. 2, infinitive at end'},
+  {cat:'Sätze',de:'Am Sonntag ___ wir lange schlafen.',word:'können',en:'On Sunday we can sleep in.',hint:'Modalverb = Position 2',info:'können in Pos. 2, schlafen at end'},
+
+  // === MIXED EVERYDAY ===
+  {cat:'Verben',de:'Ich ___ Deutsch.',word:'lerne',en:'I am learning German.',hint:'lernen — ich',info:'lernen: ich lerne'},
+  {cat:'Verben',de:'Er ___ viel Arbeit.',word:'hat',en:'He has a lot of work.',hint:'haben — er',info:'haben: er hat'},
+  {cat:'Verben',de:'Wir ___ gerne Kaffee.',word:'trinken',en:'We like to drink coffee.',hint:'trinken — wir',info:'trinken: wir trinken'},
+  {cat:'Verben',de:'___ du auch gerne spazieren?',word:'Gehst',en:'Do you also like to go for walks?',hint:'gehen — du (Frage)',info:'gehen: du gehst'},
+  {cat:'Verben',de:'Ich ___ dich zu meiner Party ___!',word:'lade ... ein',en:'I\'m inviting you to my party!',hint:'einladen — ich (trennbar)',info:'einladen: Ich lade ein.'},
+  {cat:'Sätze',de:'Ich ___ nicht in Frankfurt.',word:'wohne',en:'I don\'t live in Frankfurt.',hint:'wohnen — ich',info:'wohnen: ich wohne'},
+  {cat:'Modalverben',de:'Du ___ nicht Computer spielen!',word:'darfst',en:'You are not allowed to play computer!',hint:'dürfen — du',info:'nicht dürfen: forbidden'},
+  {cat:'Modalverben',de:'Die Kinder ___ schneller laufen.',word:'können',en:'The children can run faster.',hint:'können — sie (Pl.)',info:'können: ability'},
+  {cat:'Artikel',de:'Ich kaufe ___ Schokoladenkuchen.',word:'einen',en:'I\'m buying a chocolate cake. (der Kuchen)',hint:'Akkusativ — indefinit maskulin',info:'ein → einen (Akk. mask.)'},
+  {cat:'Artikel',de:'Sie schenkt ___ Kind Schokolade.',word:'dem',en:'She gives the child chocolate.',hint:'Dativ — definit neutral',info:'das → dem (Dativ)'},
+
+  // === A1 LESSON 1: BEGRÜSSUNG & VORSTELLUNG ===
+  {cat:'A1_Begrüßung',de:'___, wie geht es dir?',word:'Hallo',en:'Hello, how are you?',hint:'Greeting',info:'Hallo: informal greeting'},
+  {cat:'A1_Begrüßung',de:'___ Tag, wie kann ich dir helfen?',word:'Guten',en:'Good day, how can I help you?',hint:'guten Tag',info:'Guten Tag: formal daytime greeting'},
+  {cat:'A1_Begrüßung',de:'___ Morgen, ich bin Anna.',word:'Guten',en:'Good morning, I am Anna.',hint:'guten Morgen',info:'Guten Morgen: morning greeting'},
+  {cat:'A1_Begrüßung',de:'___ Abend! Bis morgen!',word:'Guten',en:'Good evening! See you tomorrow!',hint:'guten Abend',info:'Guten Abend: evening greeting'},
+  {cat:'A1_Begrüßung',de:'___, auf Wiedersehen!',word:'Tschüss',en:'Bye, goodbye!',hint:'informal goodbye',info:'Tschüss: casual goodbye'},
+  {cat:'A1_Begrüßung',de:'Auf ___!',word:'Wiedersehen',en:'Goodbye!',hint:'auf Wiedersehen',info:'Auf Wiedersehen: formal goodbye'},
+  {cat:'A1_Begrüßung',de:'Ich ___ Anna Müller.',word:'heiße',en:'I am called Anna Müller.',hint:'heißen — ich',info:'heißen: My name is'},
+  {cat:'A1_Begrüßung',de:'Ich ___ aus Deutschland.',word:'komme',en:'I come from Germany.',hint:'kommen — ich',info:'kommen: to come from'},
+  {cat:'A1_Begrüßung',de:'Ich ___ in Berlin.',word:'wohne',en:'I live in Berlin.',hint:'wohnen — ich',info:'wohnen: to live'},
+  {cat:'A1_Begrüßung',de:'Ich ___ fließend Englisch.',word:'spreche',en:'I speak English fluently.',hint:'sprechen — ich',info:'sprechen: to speak'},
+  {cat:'A1_Begrüßung',de:'Mein ___ ist Peter.',word:'Name',en:'My name is Peter.',hint:'der Name',info:'der Name → die Namen (plural)'},
+  {cat:'A1_Begrüßung',de:'Das ist mein ___.',word:'Vorname',en:'This is my first name.',hint:'der Vorname',info:'der Vorname: first name'},
+  {cat:'A1_Begrüßung',de:'Das ist mein ___.',word:'Nachname',en:'This is my last name.',hint:'der Nachname',info:'der Nachname: last name'},
+
+  // === A1 LESSON 2: FAMILIE & MENSCHEN ===
+  {cat:'A1_Familie',de:'Das ist mein ___.',word:'Vater',en:'That is my father.',hint:'der Vater',info:'der Vater → die Väter (plural)'},
+  {cat:'A1_Familie',de:'Meine ___ heißt Maria.',word:'Mutter',en:'My mother is called Maria.',hint:'die Mutter',info:'die Mutter → die Mütter (plural)'},
+  {cat:'A1_Familie',de:'Mein ___ heißt Thomas.',word:'Bruder',en:'My brother is called Thomas.',hint:'der Bruder',info:'der Bruder → die Brüder (plural)'},
+  {cat:'A1_Familie',de:'Meine ___ heißt Sofia.',word:'Schwester',en:'My sister is called Sofia.',hint:'die Schwester',info:'die Schwester → die Schwestern (plural)'},
+  {cat:'A1_Familie',de:'Meine ___ sind alt.',word:'Eltern',en:'My parents are old.',hint:'die Eltern',info:'die Eltern (always plural)'},
+  {cat:'A1_Familie',de:'Mein ___ ist 75 Jahre alt.',word:'Großvater',en:'My grandfather is 75 years old.',hint:'der Großvater',info:'der Großvater → die Großväter (plural)'},
+  {cat:'A1_Familie',de:'Meine ___ ist sehr nett.',word:'Großmutter',en:'My grandmother is very nice.',hint:'die Großmutter',info:'die Großmutter → die Großmütter (plural)'},
+  {cat:'A1_Familie',de:'Ich habe zwei ___.',word:'Geschwister',en:'I have two siblings.',hint:'die Geschwister',info:'die Geschwister (always plural, brothers and sisters)'},
+  {cat:'A1_Familie',de:'Das ist mein beste ___.',word:'Freundin',en:'This is my best female friend.',hint:'die Freundin',info:'die Freundin (female friend) → der Freund (male friend)'},
+  {cat:'A1_Familie',de:'Das ist mein ___.',word:'Freund',en:'This is my male friend.',hint:'der Freund',info:'der Freund → die Freunde (plural)'},
+  {cat:'A1_Familie',de:'Das ist mein ___.',word:'Mann',en:'This is my husband.',hint:'der Mann',info:'der Mann → die Männer (plural)'},
+  {cat:'A1_Familie',de:'Das ist meine ___.',word:'Frau',en:'This is my wife.',hint:'die Frau',info:'die Frau → die Frauen (plural)'},
+  {cat:'A1_Familie',de:'Das ist ein ___.',word:'Junge',en:'This is a boy.',hint:'der Junge',info:'der Junge → die Jungen (plural)'},
+  {cat:'A1_Familie',de:'Das ist ein ___.',word:'Mädchen',en:'This is a girl.',hint:'das Mädchen',info:'das Mädchen → die Mädchen (plural, same form)'},
+  {cat:'A1_Familie',de:'Das ist mein Büro ___ und wir arbeiten zusammen.',word:'Kollege',en:'This is my office colleague and we work together.',hint:'der Kollege',info:'der Kollege → die Kollegen (plural, male) / die Kollegin (female)'},
+  {cat:'A1_Familie',de:'Das ist mein __, der Direktor der Firma.',word:'Chef',en:'This is my boss, the director of the company.',hint:'der Chef',info:'der Chef → die Chefs (plural)'},
+
+  // === A1 LESSON 3: ESSEN & TRINKEN ===
+  {cat:'A1_Essen',de:'Das ___ schmeckt lecker.',word:'Brot',en:'The bread tastes delicious.',hint:'das Brot',info:'das Brot → die Brote (plural)'},
+  {cat:'A1_Essen',de:'Ich streiche ___ aufs Brot.',word:'Butter',en:'I spread butter on the bread.',hint:'die Butter',info:'die Butter (uncountable)'},
+  {cat:'A1_Essen',de:'Ich koche ___ zum Mittagessen.',word:'Reis',en:'I cook rice for lunch.',hint:'der Reis',info:'der Reis (uncountable)'},
+  {cat:'A1_Essen',de:'Die ___ sind gesund und lecker.',word:'Kartoffeln',en:'The potatoes are healthy and delicious.',hint:'die Kartoffel (Pl.)',info:'die Kartoffel → die Kartoffeln (plural)'},
+  {cat:'A1_Essen',de:'Die ___ ist rot und frisch.',word:'Tomate',en:'The tomato is red and fresh.',hint:'die Tomate',info:'die Tomate → die Tomaten (plural)'},
+  {cat:'A1_Essen',de:'Der ___ ist grün und süß.',word:'Apfel',en:'The apple is green and sweet.',hint:'der Apfel',info:'der Apfel → die Äpfel (plural, with umlaut)'},
+  {cat:'A1_Essen',de:'Die ___ ist gelb und süß.',word:'Banane',en:'The banana is yellow and sweet.',hint:'die Banane',info:'die Banane → die Bananen (plural)'},
+  {cat:'A1_Essen',de:'Die ___ ist orange und süß.',word:'Orange',en:'The orange is orange-colored and sweet.',hint:'die Orange',info:'die Orange → die Orangen (plural)'},
+  {cat:'A1_Essen',de:'Ich trinke gerne ___ zum Frühstück.',word:'Milch',en:'I like to drink milk for breakfast.',hint:'die Milch',info:'die Milch (uncountable)'},
+  {cat:'A1_Essen',de:'Eine Tasse ___ bitte!',word:'Kaffee',en:'A cup of coffee please!',hint:'der Kaffee',info:'der Kaffee → die Kaffees (plural)'},
+  {cat:'A1_Essen',de:'Möchtest du ___ oder Kaffee?',word:'Tee',en:'Would you like tea or coffee?',hint:'der Tee',info:'der Tee → die Tees (plural)'},
+  {cat:'A1_Essen',de:'Ich trinke viel ___ jeden Tag.',word:'Wasser',en:'I drink a lot of water every day.',hint:'das Wasser',info:'das Wasser (usually uncountable)'},
+  {cat:'A1_Essen',de:'Ein ___ bitte! Ich bin durstig.',word:'Bier',en:'A beer please! I\'m thirsty.',hint:'das Bier',info:'das Bier → die Biere (plural)'},
+  {cat:'A1_Essen',de:'Rotwein oder ___?',word:'Wein',en:'Red wine or white wine?',hint:'der Wein',info:'der Wein → die Weine (plural)'},
+  {cat:'A1_Essen',de:'Orangen___ schmeckt gut!',word:'saft',en:'Orange juice tastes good!',hint:'der Saft',info:'der Saft → die Säfte (plural)'},
+  {cat:'A1_Essen',de:'Ich esse ___ gerne mit Salat.',word:'Käse',en:'I like to eat cheese with salad.',hint:'der Käse',info:'der Käse (uncountable in singular sense)'},
+  {cat:'A1_Essen',de:'Ein ___ morgens ist wichtig.',word:'Ei',en:'An egg in the morning is important.',hint:'das Ei',info:'das Ei → die Eier (plural)'},
+  {cat:'A1_Essen',de:'___ ist sehr gesund.',word:'Fisch',en:'Fish is very healthy.',hint:'der Fisch',info:'der Fisch → die Fische (plural)'},
+  {cat:'A1_Essen',de:'Der ___ ist frisch und lecker.',word:'Salat',en:'The salad is fresh and delicious.',hint:'der Salat',info:'der Salat → die Salate (plural)'},
+  {cat:'A1_Essen',de:'Der ___ ist cremig und lecker.',word:'Joghurt',en:'The yogurt is creamy and delicious.',hint:'der Joghurt',info:'der Joghurt → die Joghurts (plural)'},
+
+  // === A1 LESSON 4: BERUF & ALLTAG ===
+  {cat:'A1_Beruf',de:'Der ___ kocht leckeres Essen.',word:'Koch',en:'The chef cooks delicious food.',hint:'der Koch',info:'der Koch → die Köche (plural)'},
+  {cat:'A1_Beruf',de:'Der ___ kontrolliert den Verkehr.',word:'Polizist',en:'The police officer controls traffic.',hint:'der Polizist',info:'der Polizist → die Polizisten (plural)'},
+  {cat:'A1_Beruf',de:'Der ___ schneidet Haare.',word:'Friseur',en:'The hairdresser cuts hair.',hint:'der Friseur',info:'der Friseur → die Friseure (plural)'},
+  {cat:'A1_Beruf',de:'Der ___ baut Häuser und Brücken.',word:'Ingenieur',en:'The engineer builds houses and bridges.',hint:'der Ingenieur',info:'der Ingenieur → die Ingenieure (plural)'},
+  {cat:'A1_Beruf',de:'Der ___ fährt Taxi in der Stadt.',word:'Taxifahrer',en:'The taxi driver drives a taxi in the city.',hint:'der Taxifahrer',info:'der Taxifahrer → die Taxifahrer (plural)'},
+  {cat:'A1_Beruf',de:'Der ___ studiert an der Universität.',word:'Student',en:'The student studies at the university.',hint:'der Student',info:'der Student → die Studenten (plural)'},
+  {cat:'A1_Beruf',de:'Der ___ entwirft schöne Häuser.',word:'Architekt',en:'The architect designs beautiful houses.',hint:'der Architekt',info:'der Architekt → die Architekten (plural)'},
+  {cat:'A1_Beruf',de:'Der ___ leitet die Firma.',word:'Manager',en:'The manager runs the company.',hint:'der Manager',info:'der Manager → die Manager (plural, same form)'},
+  {cat:'A1_Beruf',de:'Ich arbeite in einer ___.',word:'Firma',en:'I work at a company.',hint:'die Firma',info:'die Firma → die Firmen (plural)'},
+  {cat:'A1_Beruf',de:'Ich ___ mittags eine halbe Stunde.',word:'mache Pause',en:'I take a half-hour break at noon.',hint:'machen Pause',info:'Pause machen: to take a break'},
+  {cat:'A1_Beruf',de:'Die ___ ist anstrengend.',word:'Arbeit',en:'The work is exhausting.',hint:'die Arbeit',info:'die Arbeit → die Arbeiten (plural)'},
+  {cat:'A1_Beruf',de:'Ich ___ von neun bis fünf Uhr.',word:'arbeite',en:'I work from nine to five o\'clock.',hint:'arbeiten — ich',info:'arbeiten: to work'},
+  {cat:'A1_Beruf',de:'Wir ___ Deutsch in der Schule.',word:'lernen',en:'We learn German at school.',hint:'lernen — wir',info:'lernen: to learn'},
+  {cat:'A1_Beruf',de:'Die Kinder ___ acht Stunden pro Nacht.',word:'schlafen',en:'The children sleep eight hours per night.',hint:'schlafen — sie (Pl.)',info:'schlafen: to sleep'},
+
+  // === A1 LESSON 5: FREIZEIT & HOBBYS ===
+  {cat:'A1_Freizeit',de:'Ich ___ gerne Tennis.',word:'mache Sport',en:'I like to play sports / do tennis.',hint:'Sport machen',info:'Sport machen: to do sports'},
+  {cat:'A1_Freizeit',de:'Ich ___ gerne Musik.',word:'höre',en:'I like to listen to music.',hint:'Musik hören',info:'Musik hören: to listen to music'},
+  {cat:'A1_Freizeit',de:'Ich ___ gerne Romane.',word:'lese',en:'I like to read novels.',hint:'lesen — ich',info:'lesen: to read'},
+  {cat:'A1_Freizeit',de:'Ich ___ gerne mit meinem Fahrrad.',word:'fahre',en:'I like to ride my bicycle.',hint:'Rad fahren',info:'Rad fahren: to ride a bicycle'},
+  {cat:'A1_Freizeit',de:'Ich ___ gerne im Pool.',word:'schwimme',en:'I like to swim in the pool.',hint:'schwimmen — ich',info:'schwimmen: to swim'},
+  {cat:'A1_Freizeit',de:'Ich ___ jeden Morgen im Park.',word:'jogge',en:'I jog in the park every morning.',hint:'joggen — ich',info:'joggen: to jog'},
+  {cat:'A1_Freizeit',de:'Ich ___ gerne für meine Familie.',word:'koche',en:'I like to cook for my family.',hint:'kochen — ich',info:'kochen: to cook'},
+  {cat:'A1_Freizeit',de:'Ich gehe gerne ___ und sehe Filme.',word:'ins Kino',en:'I like to go to the cinema and watch films.',hint:'ins Kino gehen',info:'ins Kino gehen: to go to the movies'},
+  {cat:'A1_Freizeit',de:'Am Wochenende ___ ich meine Freunde.',word:'treffe',en:'On the weekend I meet my friends.',hint:'Freunde treffen',info:'Freunde treffen: to meet friends'},
+  {cat:'A1_Freizeit',de:'Ich ___ samstags gerne ___.',word:'gehe ... einkaufen',en:'I like to go shopping on Saturdays.',hint:'einkaufen gehen',info:'einkaufen gehen: to go shopping'},
+  {cat:'A1_Freizeit',de:'Ich ___ abends ___.',word:'sehe ... fern',en:'I watch TV in the evening.',hint:'fernsehen — ich',info:'fernsehen: to watch television'},
+  {cat:'A1_Freizeit',de:'Die Kinder ___ gerne Spiele.',word:'spielen',en:'The children like to play games.',hint:'spielen — sie (Pl.)',info:'spielen: to play'},
+
+  // === A1 LESSON 6: STADT & WOHNUNG ===
+  {cat:'A1_Wohnung',de:'Ich wohne in einer schönen ___.',word:'Wohnung',en:'I live in a beautiful apartment.',hint:'die Wohnung',info:'die Wohnung → die Wohnungen (plural)'},
+  {cat:'A1_Wohnung',de:'Das ___ ist sehr groß.',word:'Zimmer',en:'The room is very large.',hint:'das Zimmer',info:'das Zimmer → die Zimmer (plural)'},
+  {cat:'A1_Wohnung',de:'In der ___ koche ich.',word:'Küche',en:'In the kitchen I cook.',hint:'die Küche',info:'die Küche → die Küchen (plural)'},
+  {cat:'A1_Wohnung',de:'Das ___ hat eine Badewanne.',word:'Bad',en:'The bathroom has a bathtub.',hint:'das Bad',info:'das Bad → die Bäder (plural)'},
+  {cat:'A1_Wohnung',de:'Im ___ schlafe ich.',word:'Schlafzimmer',en:'In the bedroom I sleep.',hint:'das Schlafzimmer',info:'das Schlafzimmer → die Schlafzimmer (plural)'},
+  {cat:'A1_Wohnung',de:'Im ___ sehe ich fern und lese.',word:'Wohnzimmer',en:'In the living room I watch TV and read.',hint:'das Wohnzimmer',info:'das Wohnzimmer → die Wohnzimmer (plural)'},
+  {cat:'A1_Wohnung',de:'Im ___ wachsen Blumen.',word:'Garten',en:'In the garden flowers grow.',hint:'der Garten',info:'der Garten → die Gärten (plural)'},
+  {cat:'A1_Wohnung',de:'Auf dem ___ sitze ich abends.',word:'Balkon',en:'On the balcony I sit in the evenings.',hint:'der Balkon',info:'der Balkon → die Balkone (plural)'},
+  {cat:'A1_Wohnung',de:'Ich wohne in der Berliner ___.',word:'Straße',en:'I live on Berlin Street.',hint:'die Straße',info:'die Straße → die Straßen (plural)'},
+  {cat:'A1_Wohnung',de:'Der ___ ist zentral gelegen.',word:'Platz',en:'The square is centrally located.',hint:'der Platz',info:'der Platz → die Plätze (plural)'},
+  {cat:'A1_Wohnung',de:'Wir gehen ins ___ und sehen einen Film.',word:'Kino',en:'We go to the cinema and watch a film.',hint:'das Kino',info:'das Kino → die Kinos (plural)'},
+  {cat:'A1_Wohnung',de:'Im ___ sehen wir Theaterstücke.',word:'Theater',en:'In the theater we watch plays.',hint:'das Theater',info:'das Theater → die Theater (plural, same form)'},
+  {cat:'A1_Wohnung',de:'Im ___ sehen wir Kunstwerke.',word:'Museum',en:'In the museum we look at artworks.',hint:'das Museum',info:'das Museum → die Museen (plural)'},
+  {cat:'A1_Wohnung',de:'Ich kaufe Lebensmittel im ___.',word:'Supermarkt',en:'I buy groceries at the supermarket.',hint:'der Supermarkt',info:'der Supermarkt → die Supermärkte (plural)'},
+  {cat:'A1_Wohnung',de:'Ich spaziere gerne im ___.',word:'Park',en:'I like to walk in the park.',hint:'der Park',info:'der Park → die Parks (plural)'},
+
+  // === A1 LESSON 7: WETTER & DATUM ===
+  {cat:'A1_Wetter',de:'Die ___ scheint und ist warm.',word:'Sonne',en:'The sun shines and it is warm.',hint:'die Sonne',info:'die Sonne (the sun)'},
+  {cat:'A1_Wetter',de:'Der ___ fällt und es ist nass.',word:'Regen',en:'The rain falls and it is wet.',hint:'der Regen',info:'der Regen (the rain, uncountable)'},
+  {cat:'A1_Wetter',de:'Der ___ weht stark.',word:'Wind',en:'The wind blows strongly.',hint:'der Wind',info:'der Wind → die Winde (plural)'},
+  {cat:'A1_Wetter',de:'Der ___ fällt im Winter.',word:'Schnee',en:'The snow falls in winter.',hint:'der Schnee',info:'der Schnee (the snow, uncountable)'},
+  {cat:'A1_Wetter',de:'Es ist ___ und sonnig heute.',word:'warm',en:'It is warm and sunny today.',hint:'warm (adjective)',info:'warm: warm, opposite: kalt (cold)'},
+  {cat:'A1_Wetter',de:'Es ist ___ und wir frieren.',word:'kalt',en:'It is cold and we are freezing.',hint:'kalt (adjective)',info:'kalt: cold'},
+  {cat:'A1_Wetter',de:'Es ist ___ und wir schwitzen.',word:'heiß',en:'It is hot and we are sweating.',hint:'heiß (adjective)',info:'heiß: hot, very warm'},
+  {cat:'A1_Wetter',de:'Der ___ ist die grünste Jahreszeit.',word:'Frühling',en:'Spring is the greenest season.',hint:'der Frühling',info:'der Frühling: spring'},
+  {cat:'A1_Wetter',de:'Der ___ ist warm und sonnig.',word:'Sommer',en:'Summer is warm and sunny.',hint:'der Sommer',info:'der Sommer: summer'},
+  {cat:'A1_Wetter',de:'Der ___ ist kühl und bunt.',word:'Herbst',en:'Autumn is cool and colorful.',hint:'der Herbst',info:'der Herbst: autumn/fall'},
+  {cat:'A1_Wetter',de:'Der ___ ist kalt und weiß.',word:'Winter',en:'Winter is cold and white.',hint:'der Winter',info:'der Winter: winter'},
+  {cat:'A1_Wetter',de:'___ ist der erste Monat des Jahres.',word:'Januar',en:'January is the first month of the year.',hint:'Januar (month)',info:'Januar: January (Jänner in Austria)'},
+  {cat:'A1_Wetter',de:'___ hat 28 oder 29 Tage.',word:'Februar',en:'February has 28 or 29 days.',hint:'Februar (month)',info:'Februar: February'},
+  {cat:'A1_Wetter',de:'___ ist der Frühlingsmonat.',word:'März',en:'March is the spring month.',hint:'März (month)',info:'März: March'},
+  {cat:'A1_Wetter',de:'___ ist ein Frühjahrsmonat.',word:'April',en:'April is a spring month.',hint:'April (month)',info:'April: April'},
+  {cat:'A1_Wetter',de:'___ ist der fünfte Monat.',word:'Mai',en:'May is the fifth month.',hint:'Mai (month)',info:'Mai: May'},
+  {cat:'A1_Wetter',de:'___ ist sommerlich und warm.',word:'Juni',en:'June is summery and warm.',hint:'Juni (month)',info:'Juni: June'},
+  {cat:'A1_Wetter',de:'___ ist der Höhepunkt des Sommers.',word:'Juli',en:'July is the peak of summer.',hint:'Juli (month)',info:'Juli: July'},
+  {cat:'A1_Wetter',de:'___ ist noch warm und sonnig.',word:'August',en:'August is still warm and sunny.',hint:'August (month)',info:'August: August'},
+  {cat:'A1_Wetter',de:'___ ist der Herbstbeginn.',word:'September',en:'September is the beginning of autumn.',hint:'September (month)',info:'September: September'},
+  {cat:'A1_Wetter',de:'___ ist kühl und regnerisch.',word:'Oktober',en:'October is cool and rainy.',hint:'Oktober (month)',info:'Oktober: October'},
+  {cat:'A1_Wetter',de:'___ ist grau und windig.',word:'November',en:'November is grey and windy.',hint:'November (month)',info:'November: November'},
+  {cat:'A1_Wetter',de:'___ ist der Weihnachtsmonat.',word:'Dezember',en:'December is the Christmas month.',hint:'Dezember (month)',info:'Dezember: December'},
+  {cat:'A1_Wetter',de:'___ ist der erste Wochentag.',word:'Montag',en:'Monday is the first weekday.',hint:'Montag (weekday)',info:'Montag: Monday'},
+  {cat:'A1_Wetter',de:'___ ist der zweite Wochentag.',word:'Dienstag',en:'Tuesday is the second weekday.',hint:'Dienstag (weekday)',info:'Dienstag: Tuesday'},
+  {cat:'A1_Wetter',de:'___ ist die Wochenmitte.',word:'Mittwoch',en:'Wednesday is the middle of the week.',hint:'Mittwoch (weekday)',info:'Mittwoch: Wednesday'},
+  {cat:'A1_Wetter',de:'___ ist vor dem Wochenende.',word:'Donnerstag',en:'Thursday is before the weekend.',hint:'Donnerstag (weekday)',info:'Donnerstag: Thursday'},
+  {cat:'A1_Wetter',de:'___ ist der Beginn des Wochenendes.',word:'Freitag',en:'Friday is the beginning of the weekend.',hint:'Freitag (weekday)',info:'Freitag: Friday'},
+  {cat:'A1_Wetter',de:'___ ist ein Wochenendtag.',word:'Samstag',en:'Saturday is a weekend day.',hint:'Samstag (weekday)',info:'Samstag: Saturday (Sonnabend in some regions)'},
+  {cat:'A1_Wetter',de:'Am ___ ruhe ich aus.',word:'Sonntag',en:'On Sunday I rest.',hint:'Sonntag (weekday)',info:'Sonntag: Sunday'},
+
+  // === A1 LESSON 8: VERKEHR & REISEN ===
+  {cat:'A1_Verkehr',de:'Ich fahre mit dem ___ zur Arbeit.',word:'Auto',en:'I drive to work by car.',hint:'das Auto',info:'das Auto → die Autos (plural)'},
+  {cat:'A1_Verkehr',de:'Der ___ ist voll und langsam.',word:'Bus',en:'The bus is full and slow.',hint:'der Bus',info:'der Bus → die Busse (plural)'},
+  {cat:'A1_Verkehr',de:'Der ___ fährt schnell.',word:'Zug',en:'The train travels quickly.',hint:'der Zug',info:'der Zug → die Züge (plural)'},
+  {cat:'A1_Verkehr',de:'Ich fahre mit meinem ___ zur Schule.',word:'Fahrrad',en:'I ride my bicycle to school.',hint:'das Fahrrad',info:'das Fahrrad → die Fahrräder (plural)'},
+  {cat:'A1_Verkehr',de:'Das ___ fliegt über dem Meer.',word:'Flugzeug',en:'The airplane flies over the sea.',hint:'das Flugzeug',info:'das Flugzeug → die Flugzeuge (plural)'},
+  {cat:'A1_Verkehr',de:'Die ___ ist schnell und modern.',word:'U-Bahn',en:'The subway is fast and modern.',hint:'die U-Bahn',info:'die U-Bahn → die U-Bahnen (plural)'},
+  {cat:'A1_Verkehr',de:'Die ___ fährt durch die Stadt.',word:'Straßenbahn',en:'The tram drives through the city.',hint:'die Straßenbahn',info:'die Straßenbahn → die Straßenbahnen (plural)'},
+  {cat:'A1_Verkehr',de:'Das ___ wartet am Bahnhof.',word:'Taxi',en:'The taxi waits at the train station.',hint:'das Taxi',info:'das Taxi → die Taxis (plural)'},
+  {cat:'A1_Verkehr',de:'Ich brauche ein ___ für die Fahrt.',word:'Ticket',en:'I need a ticket for the journey.',hint:'das Ticket',info:'das Ticket → die Tickets (plural)'},
+  {cat:'A1_Verkehr',de:'Der ___ ist zentral gelegen.',word:'Bahnhof',en:'The train station is centrally located.',hint:'der Bahnhof',info:'der Bahnhof → die Bahnhöfe (plural)'},
+  {cat:'A1_Verkehr',de:'Der ___ ist modern und groß.',word:'Flughafen',en:'The airport is modern and large.',hint:'der Flughafen',info:'der Flughafen → die Flughäfen (plural)'},
+  {cat:'A1_Verkehr',de:'Die ___ ist eine Bushaltestelle.',word:'Haltestelle',en:'The stop is a bus stop.',hint:'die Haltestelle',info:'die Haltestelle → die Haltestellen (plural)'},
+  {cat:'A1_Verkehr',de:'Ich ___ mit dem Zug nach Berlin.',word:'fahre',en:'I travel to Berlin by train.',hint:'fahren — ich',info:'fahren: to travel, to drive'},
+  {cat:'A1_Verkehr',de:'Das Flugzeug ___ nach London.',word:'fliegt',en:'The plane flies to London.',hint:'fliegen — es',info:'fliegen: to fly'},
+
+  // === A1 LESSON 9: RESTAURANT & FREUNDE ===
+  {cat:'A1_Restaurant',de:'Die ___ zeigt alle Gerichte.',word:'Speisekarte',en:'The menu shows all dishes.',hint:'die Speisekarte',info:'die Speisekarte → die Speisekarten (plural)'},
+  {cat:'A1_Restaurant',de:'Ich ___ ein Schnitzel bitte.',word:'bestelle',en:'I order a schnitzel please.',hint:'bestellen — ich',info:'bestellen: to order'},
+  {cat:'A1_Restaurant',de:'Ich ___ mit Kreditkarte, bitte.',word:'bezahle',en:'I pay with a credit card, please.',hint:'bezahlen — ich',info:'bezahlen: to pay'},
+  {cat:'A1_Restaurant',de:'Der ___ bringt das Essen.',word:'Kellner',en:'The waiter brings the food.',hint:'der Kellner',info:'der Kellner → die Kellner (plural)'},
+  {cat:'A1_Restaurant',de:'Die ___ kostet 45 Euro.',word:'Rechnung',en:'The bill costs 45 euros.',hint:'die Rechnung',info:'die Rechnung → die Rechnungen (plural)'},
+  {cat:'A1_Restaurant',de:'Die ___ ist die erste Gang.',word:'Vorspeise',en:'The appetizer is the first course.',hint:'die Vorspeise',info:'die Vorspeise → die Vorspeisen (plural)'},
+  {cat:'A1_Restaurant',de:'Das ___ ist die zweite Gang.',word:'Hauptgericht',en:'The main course is the second course.',hint:'das Hauptgericht',info:'das Hauptgericht → die Hauptgerichte (plural)'},
+  {cat:'A1_Restaurant',de:'Die ____ ist die letzte Gang.',word:'Nachspeise',en:'The dessert is the last course.',hint:'die Nachspeise',info:'die Nachspeise → die Nachspeisen (plural)'},
+  {cat:'A1_Restaurant',de:'Das ___ ist eine Tasse Kaffee oder Tee.',word:'Getränk',en:'The beverage is a cup of coffee or tea.',hint:'das Getränk',info:'das Getränk → die Getränke (plural)'},
+  {cat:'A1_Restaurant',de:'Wir machen eine ___ am Samstag.',word:'Party',en:'We are having a party on Saturday.',hint:'die Party',info:'die Party → die Partys (plural)'},
+  {cat:'A1_Restaurant',de:'Ich ___ dich zu meiner Hochzeit ___.',word:'lade ... ein',en:'I invite you to my wedding.',hint:'einladen — ich',info:'einladen: to invite'},
+  {cat:'A1_Restaurant',de:'Wir ___ meinen Geburtstag.',word:'feiern',en:'We celebrate my birthday.',hint:'feiern — wir',info:'feiern: to celebrate'},
+
+  // === A1 LESSON 10: URLAUB & REISEZIELE ===
+  {cat:'A1_Urlaub',de:'Ich nehme nächste Woche ___.',word:'Urlaub',en:'I take vacation next week.',hint:'der Urlaub',info:'der Urlaub → die Urlaube (plural)'},
+  {cat:'A1_Urlaub',de:'Die ___ ist wunderschön.',word:'Reise',en:'The trip is beautiful.',hint:'die Reise',info:'die Reise → die Reisen (plural)'},
+  {cat:'A1_Urlaub',de:'Der ___ ist warm und sonnig.',word:'Strand',en:'The beach is warm and sunny.',hint:'der Strand',info:'der Strand → die Strände (plural)'},
+  {cat:'A1_Urlaub',de:'Das ___ ist blau und erfrischend.',word:'Meer',en:'The sea is blue and refreshing.',hint:'das Meer',info:'das Meer → die Meere (plural)'},
+  {cat:'A1_Urlaub',de:'Der ___ ist hoch und beeindruckend.',word:'Berg',en:'The mountain is high and impressive.',hint:'der Berg',info:'der Berg → die Berge (plural)'},
+  {cat:'A1_Urlaub',de:'Der ___ ist klar und ruhig.',word:'See',en:'The lake is clear and calm.',hint:'der See',info:'der See → die Seen (plural), not die See (the sea)'},
+  {cat:'A1_Urlaub',de:'Das ___ ist teuer aber schön.',word:'Hotel',en:'The hotel is expensive but beautiful.',hint:'das Hotel',info:'das Hotel → die Hotels (plural)'},
+  {cat:'A1_Urlaub',de:'Die ___ ist günstiger als das Hotel.',word:'Pension',en:'The guesthouse is cheaper than the hotel.',hint:'die Pension',info:'die Pension → die Pensionen (plural)'},
+  {cat:'A1_Urlaub',de:'Das ___ ist mit Balkon und Dusche.',word:'Zimmer',en:'The room has a balcony and shower.',hint:'das Zimmer',info:'das Zimmer: room (same as lesson 6)'},
+  {cat:'A1_Urlaub',de:'Ich ___ ein Zimmer für zwei Personen.',word:'buche',en:'I book a room for two people.',hint:'buchen — ich',info:'buchen: to book'},
+  {cat:'A1_Urlaub',de:'Ich packe meinen ___ für die Reise.',word:'Koffer',en:'I pack my suitcase for the trip.',hint:'der Koffer',info:'der Koffer → die Koffer (plural)'},
+  {cat:'A1_Urlaub',de:'Ich ___ meinen Koffer schnell.',word:'packe',en:'I pack my suitcase quickly.',hint:'packen — ich',info:'packen: to pack'},
+  {cat:'A1_Urlaub',de:'Ich brauche ___ für den Strand.',word:'Sonnencreme',en:'I need sunscreen for the beach.',hint:'die Sonnencreme',info:'die Sonnencreme → die Sonnencremes (plural)'},
+
+  // === A1 LESSON 11: KÖRPER & GESUNDHEIT ===
+  {cat:'A1_Körper',de:'Der ___ tut mir weh.',word:'Kopf',en:'My head hurts.',hint:'der Kopf',info:'der Kopf → die Köpfe (plural)'},
+  {cat:'A1_Körper',de:'Das ___ sieht gut.',word:'Auge',en:'The eye sees well.',hint:'das Auge',info:'das Auge → die Augen (plural)'},
+  {cat:'A1_Körper',de:'Die ___ riecht gut.',word:'Nase',en:'The nose smells well.',hint:'die Nase',info:'die Nase → die Nasen (plural)'},
+  {cat:'A1_Körper',de:'Der ___ spricht und isst.',word:'Mund',en:'The mouth speaks and eats.',hint:'der Mund',info:'der Mund → die Münder (plural)'},
+  {cat:'A1_Körper',de:'Das ___ hört Musik.',word:'Ohr',en:'The ear hears music.',hint:'das Ohr',info:'das Ohr → die Ohren (plural)'},
+  {cat:'A1_Körper',de:'Die ___ schreibt und arbeitet.',word:'Hand',en:'The hand writes and works.',hint:'die Hand',info:'die Hand → die Hände (plural)'},
+  {cat:'A1_Körper',de:'Der ___ ist lang und stark.',word:'Arm',en:'The arm is long and strong.',hint:'der Arm',info:'der Arm → die Arme (plural)'},
+  {cat:'A1_Körper',de:'Das ___ läuft schnell.',word:'Bein',en:'The leg runs quickly.',hint:'das Bein',info:'das Bein → die Beine (plural)'},
+  {cat:'A1_Körper',de:'Der ___ läuft und tanzt.',word:'Fuß',en:'The foot runs and dances.',hint:'der Fuß',info:'der Fuß → die Füße (plural)'},
+  {cat:'A1_Körper',de:'Der ___ ist gerade und trägt Gewicht.',word:'Rücken',en:'The back is straight and bears weight.',hint:'der Rücken',info:'der Rücken → die Rücken (plural)'},
+  {cat:'A1_Körper',de:'Der ___ verdaut Essen.',word:'Bauch',en:'The belly digests food.',hint:'der Bauch',info:'der Bauch → die Bäuche (plural)'},
+  {cat:'A1_Körper',de:'Ich habe eine ___ und niese.',word:'Erkältung',en:'I have a cold and sneeze.',hint:'die Erkältung',info:'die Erkältung → die Erkältungen (plural)'},
+  {cat:'A1_Körper',de:'Der ___ ist unangenehm.',word:'Husten',en:'The cough is unpleasant.',hint:'der Husten',info:'der Husten (uncountable)'},
+  {cat:'A1_Körper',de:'Der ___ macht mir Probleme.',word:'Schnupfen',en:'The runny nose gives me problems.',hint:'der Schnupfen',info:'der Schnupfen (uncountable, runny nose)'},
+  {cat:'A1_Körper',de:'Das ____ ist 39 Grad.',word:'Fieber',en:'The fever is 39 degrees.',hint:'das Fieber',info:'das Fieber (uncountable, fever)'},
+  {cat:'A1_Körper',de:'Der ___ untersucht mich.',word:'Arzt',en:'The doctor examines me.',hint:'der Arzt',info:'der Arzt → die Ärzte (plural)'},
+  {cat:'A1_Körper',de:'Die ___ verkauft Medikamente.',word:'Apotheke',en:'The pharmacy sells medicines.',hint:'die Apotheke',info:'die Apotheke → die Apotheken (plural)'},
+
+  // === A1 LESSON 12: BERUFSLEBEN ===
+  {cat:'A1_Berufsleben',de:'Ich arbeite im ___ an meinem Schreibtisch.',word:'Büro',en:'I work in the office at my desk.',hint:'das Büro',info:'das Büro → die Büros (plural)'},
+  {cat:'A1_Berufsleben',de:'Das ___ beginnt um zehn Uhr.',word:'Meeting',en:'The meeting starts at ten o\'clock.',hint:'das Meeting',info:'das Meeting → die Meetings (plural)'},
+  {cat:'A1_Berufsleben',de:'Ich sende eine ___ an meinen Chef.',word:'E-Mail',en:'I send an email to my boss.',hint:'die E-Mail',info:'die E-Mail → die E-Mails (plural)'},
+  {cat:'A1_Berufsleben',de:'Das ___ klingelt ständig.',word:'Telefon',en:'The phone rings constantly.',hint:'das Telefon',info:'das Telefon → die Telefone (plural)'},
+  {cat:'A1_Berufsleben',de:'Ich habe einen ___ mit dem Kunden.',word:'Termin',en:'I have an appointment with the customer.',hint:'der Termin',info:'der Termin → die Termine (plural)'},
+  {cat:'A1_Berufsleben',de:'Das ___ ist großartig und wichtig.',word:'Projekt',en:'The project is wonderful and important.',hint:'das Projekt',info:'das Projekt → die Projekte (plural)'},
+  {cat:'A1_Berufsleben',de:'Das ___ arbeitet zusammen sehr gut.',word:'Team',en:'The team works together very well.',hint:'das Team',info:'das Team → die Teams (plural)'},
+  {cat:'A1_Berufsleben',de:'Das ___ ist nicht sehr hoch.',word:'Gehalt',en:'The salary is not very high.',hint:'das Gehalt',info:'das Gehalt → die Gehälter (plural)'},
+  {cat:'A1_Berufsleben',de:'Ich habe vier Wochen ___ pro Jahr.',word:'Urlaub',en:'I have four weeks vacation per year.',hint:'der Urlaub',info:'der Urlaub (same as lesson 10)'},
+  {cat:'A1_Berufsleben',de:'Der ___ ist um 17 Uhr.',word:'Feierabend',en:'The end of the workday is at 5 p.m.',hint:'der Feierabend',info:'der Feierabend: end of workday'},
+  {cat:'A1_Berufsleben',de:'Ich mache viele ___ am Wochenende.',word:'Überstunden',en:'I work many overtime hours on the weekend.',hint:'die Überstunden',info:'die Überstunden (always plural)'},
+  {cat:'A1_Berufsleben',de:'Die ___ ist für den neuen Job.',word:'Bewerbung',en:'The application is for the new job.',hint:'die Bewerbung',info:'die Bewerbung → die Bewerbungen (plural)'},
+];
+
+// ========== STATE ==========
+let cards = [...allCards];
+let currentIndex = 0;
+let isFlipped = false;
+let answered = false;
+let lastResult = null;
+let stats = JSON.parse(localStorage.getItem('vocabStats') || '{"correct":0,"total":0,"streak":0,"best":0}');
+let activeFilter = 'Alle';
+
+// ========== FILTERS ==========
+function renderFilters() {
+  const cats = ['Alle', ...new Set(allCards.map(c => c.cat))];
+  document.getElementById('filterBar').innerHTML = cats.map(c =>
+    `<div class="filter-chip ${activeFilter===c?'active':''}" onclick="setFilter('${c}')">${c} ${c!=='Alle'?`(${allCards.filter(x=>x.cat===c).length})`:'('+allCards.length+')'}</div>`
+  ).join('');
+}
+
+function setFilter(cat) {
+  activeFilter = cat;
+  cards = cat === 'Alle' ? [...allCards] : allCards.filter(c => c.cat === cat);
+  shuffleArray(cards);
+  currentIndex = 0;
+  isFlipped = false;
+  answered = false;
+  renderFilters();
+  renderCard();
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+// ========== RENDER ==========
+function renderCard() {
+  if (cards.length === 0) {
+    document.getElementById('cardArea').innerHTML = '<p style="text-align:center;color:var(--g400);">No cards in this category.</p>';
+    return;
+  }
+  if (currentIndex >= cards.length) {
+    showCompletion();
+    return;
+  }
+
+  const c = cards[currentIndex];
+  const catClass = 'cat-' + c.cat.toLowerCase().replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u');
+  const sentenceHTML = c.de.replace('___', '<span class="blank">?</span>');
+  const fullSentenceHTML = c.de.replace('___', `<span class="word-highlight">${c.word}</span>`);
+
+  // Handle separable verb answers for display
+  const displayWord = c.word;
+
+  document.getElementById('cardArea').innerHTML = `
+    <div class="flashcard-container">
+      <div class="flashcard${isFlipped?' flipped':''}" id="flashcard">
+        <div class="card-face card-front">
+          <span class="card-category ${catClass}">${c.cat}</span>
+          <span class="card-number">${currentIndex+1} / ${cards.length}</span>
+          <div class="card-sentence">${sentenceHTML}</div>
+          <div class="card-hint">💡 ${c.hint}</div>
+          <div class="input-area">
+            <input type="text" id="answerInput" placeholder="Type the word..." autocomplete="off"
+              ${answered?'disabled':''} class="${answered?(lastResult?'correct':'incorrect'):''}"
+              value="${answered? document.getElementById('answerInput')?.value || '' : ''}">
+            ${!answered ? `<button class="check-btn" onclick="checkAnswer()">✓</button>` : ''}
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <span class="card-category ${catClass}">${c.cat}</span>
+          <span class="card-number">${currentIndex+1} / ${cards.length}</span>
+          ${answered ? `<div class="back-result ${lastResult?'correct':'incorrect'}">${lastResult?'✓ Correct!':'✗ Not quite'}</div>` : ''}
+          <div class="back-sentence">${fullSentenceHTML}</div>
+          <div class="back-translation">${c.en}</div>
+          <div class="back-word-info">📘 ${c.info}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav-btn prev" onclick="prevCard()" ${currentIndex===0?'disabled':''}>← Back</button>
+      ${!isFlipped && answered ? `<button class="nav-btn flip" onclick="flipCard()">Flip 🔄</button>` : ''}
+      ${isFlipped ? `<button class="nav-btn next" onclick="nextCard()">Next →</button>` : ''}
+      ${!answered ? '' : (!isFlipped ? '' : '')}
+    </div>
+  `;
+
+  if (!answered) {
+    const input = document.getElementById('answerInput');
+    if (input) { input.focus(); }
+  }
+
+  updateStats();
+  updateProgress();
+}
+
+function checkAnswer() {
+  const input = document.getElementById('answerInput');
+  if (!input) return;
+  const val = input.value.trim();
+  if (!val) return;
+
+  const c = cards[currentIndex];
+  // Accept multiple formats: "kaufe ... ein" or "kaufe ein" or "kaufe...ein"
+  const normalizedVal = val.toLowerCase().replace(/\s*\.\.\.\s*/g, ' ... ').replace(/\s+/g,' ').trim();
+  const normalizedAns = c.word.toLowerCase().replace(/\s*\.\.\.\s*/g, ' ... ').replace(/\s+/g,' ').trim();
+
+  // Also accept without the dots for separable verbs
+  const altAns = normalizedAns.replace(' ... ', ' ');
+  const altVal = normalizedVal.replace(' ... ', ' ');
+
+  lastResult = normalizedVal === normalizedAns || altVal === altAns || val.toLowerCase() === c.word.toLowerCase();
+  answered = true;
+
+  stats.total++;
+  if (lastResult) {
+    stats.correct++;
+    stats.streak++;
+    if (stats.streak > stats.best) stats.best = stats.streak;
+  } else {
+    stats.streak = 0;
+  }
+  localStorage.setItem('vocabStats', JSON.stringify(stats));
+
+  // Re-render to show result, then auto-flip
+  renderCard();
+  setTimeout(() => { if (answered && !isFlipped) flipCard(); }, 800);
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  renderCard();
+}
+
+function nextCard() {
+  currentIndex++;
+  isFlipped = false;
+  answered = false;
+  lastResult = null;
+  renderCard();
+}
+
+function prevCard() {
+  if (currentIndex > 0) {
+    currentIndex--;
+    isFlipped = false;
+    answered = false;
+    lastResult = null;
+    renderCard();
+  }
+}
+
+function showCompletion() {
+  const pct = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+  document.getElementById('cardArea').innerHTML = `
+    <div class="completion-card">
+      <h2>🎉 Runde geschafft!</h2>
+      <p>You completed all ${cards.length} cards in this set!</p>
+      <p style="font-size:20px;margin:12px 0;">${stats.correct}/${stats.total} correct overall (${pct}%)</p>
+      <p>Best streak: ${stats.best} 🔥</p>
+      <button class="restart-btn" onclick="restart()">Shuffle & Restart 🔄</button>
+    </div>
+  `;
+}
+
+function restart() {
+  shuffleArray(cards);
+  currentIndex = 0;
+  isFlipped = false;
+  answered = false;
+  lastResult = null;
+  renderCard();
+}
+
+// ========== STATS & PROGRESS ==========
+function updateStats() {
+  document.getElementById('statCorrect').textContent = stats.correct;
+  document.getElementById('statTotal').textContent = stats.total;
+  const pct = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+  document.getElementById('statPct').textContent = pct + '%';
+  document.getElementById('statStreak').textContent = stats.streak + ' 🔥';
+}
+
+function updateProgress() {
+  const p = cards.length > 0 ? Math.round(((currentIndex) / cards.length) * 100) : 0;
+  document.getElementById('progLabel').textContent = `Card ${Math.min(currentIndex+1, cards.length)} of ${cards.length}`;
+  document.getElementById('progPct').textContent = p + '%';
+  document.getElementById('progBar').style.width = p + '%';
+}
+
+// ========== KEYBOARD ==========
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !answered) {
+    checkAnswer();
+  } else if (e.key === 'ArrowRight' && isFlipped) {
+    nextCard();
+  } else if (e.key === 'ArrowLeft') {
+    prevCard();
+  } else if (e.key === ' ' && answered && !isFlipped) {
+    e.preventDefault();
+    flipCard();
+  }
+});
+
+// ========== INIT ==========
+shuffleArray(cards);
+renderFilters();
+renderCard();
+</script>
+</body>
+</html>

@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammatik aktiv B1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #be185d;
+            --primary-light: #f472b6;
+            --primary-bg: #fdf2f8;
+            --secondary: #1e293b;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --gray-300: #d1d5db;
+            --bg-light: #f8fafc;
+            --success: #16a34a;
+            --error: #dc2626;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f1f5f9;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 2px solid var(--primary-bg);
+            background: var(--primary-bg);
+        }
+
+        .sidebar-header h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .nav-section {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-section:last-child {
+            border-bottom: none;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            padding: 0 20px 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-light);
+        }
+
+        .nav-item.active {
+            background: rgba(190, 24, 93, 0.3);
+            color: var(--primary);
+            font-weight: 600;
+            border-left: 3px solid var(--primary);
+            padding-left: 17px;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .badge.b1 {
+            background: #be185d;
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            background: #f1f5f9;
+        }
+
+        .content-header {
+            background: white;
+            padding: 32px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-header h1 {
+            font-size: 32px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .content-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .progress-display {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 32px;
+            gap: 2px;
+        }
+
+        .tab {
+            padding: 14px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab:hover {
+            color: var(--primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .content-area {
+            padding: 32px;
+            max-width: 900px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .grammar-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .grammar-table th {
+            background: var(--primary-bg);
+            color: var(--primary);
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .grammar-table th:last-child {
+            border-right: none;
+        }
+
+        .grammar-table td {
+            padding: 12px;
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .grammar-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .grammar-table td:last-child {
+            border-right: none;
+        }
+
+        .grammar-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .grammar-section h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .grammar-section p {
+            color: var(--text-secondary);
+            margin: 8px 0;
+            line-height: 1.7;
+        }
+
+        .grammar-section ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .grammar-section ul li {
+            margin: 6px 0;
+        }
+
+        .example {
+            background: var(--primary-bg);
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: 'Monaco', monospace;
+            font-size: 13px;
+            color: var(--primary);
+        }
+
+        .en-note {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 14px;
+            margin: 16px 0;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #92400e;
+        }
+
+        .exercise {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .exercise h4 {
+            color: var(--primary);
+            margin-bottom: 14px;
+            font-size: 14px;
+        }
+
+        .exercise-item {
+            margin: 14px 0;
+        }
+
+        .exercise-item label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .exercise-item input[type="text"],
+        .exercise-item select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+        }
+
+        .exercise-item input[type="text"]:focus,
+        .exercise-item select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(190, 24, 93, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #9d174d;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(190, 24, 93, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            border-color: var(--primary);
+        }
+
+        .result-message {
+            padding: 14px;
+            border-radius: 6px;
+            margin-top: 16px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .result-message.success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid var(--success);
+        }
+
+        .result-message.error {
+            background: #fee2e2;
+            color: #7f1d1d;
+            border-left: 4px solid var(--error);
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #9d174d 100%);
+            color: white;
+            padding: 32px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .welcome-section h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-section p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 18px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card h3 {
+            color: var(--text-secondary);
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* DIFFICULTY BADGES AND FILTERS */
+        .difficulty-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .difficulty-easy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .difficulty-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .difficulty-hard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .difficulty-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-filter button {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--gray-300);
+            background: white;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .difficulty-filter button.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .explanation-box {
+            margin-top: 8px;
+            padding: 10px 14px;
+            background: #ecfdf5;
+            border-left: 3px solid #10b981;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #065f46;
+            display: none;
+        }
+
+        .explanation-box.visible {
+            display: block;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Grammatik aktiv</h1>
+                <p>B1 Grammatik</p>
+            </div>
+            <div id="navSections"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="content-header">
+                <div>
+                    <h1 id="lessonTitle">Willkommen</h1>
+                    <p id="lessonDescription"></p>
+                </div>
+                <div class="progress-display">
+                    <strong id="progressText">0/12 abgeschlossen</strong>
+                </div>
+            </div>
+
+            <div class="tabs" id="tabsContainer"></div>
+
+            <div class="content-area">
+                <div id="welcomeTab" class="tab-content active">
+                    <div class="welcome-section">
+                        <h2>Willkommen, Abdoulrahim!</h2>
+                        <p>Verbessere dein Deutsch auf B1-Niveau. Lerne die wichtigsten Grammatikthemen mit interaktiven Übungen und detaillierten Erklärungen.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Lektionen abgeschlossen</h3>
+                            <div class="value" id="completedCount">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Gesamtpunkte</h3>
+                            <div class="value" id="totalScore">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="grammarTab" class="tab-content"></div>
+                <div id="exercisesTab" class="tab-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DATA-DRIVEN LESSONS WITH EXERCISES
+        const lessons = [
+            // LESSON 1: Präteritum
+            {
+                id: 1,
+                title: 'Präteritum',
+                description: 'Simple Past Tense',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Präteritum - Simple Past Tense</h3>
+                        <p>Das Präteritum (Imperfekt) ist die einfache Vergangenheitsform, hauptsächlich in schriftlichen Texten verwendet. Mit sein/haben/Modalverben ist es auch in der gesprochenen Sprache üblich.</p>
+                        <p><strong>Bildung regelmäßiger Verben:</strong> Stamm + -te + Endungen</p>
+                        <table class="grammar-table">
+                            <tr><th>Person</th><th>machen</th><th>arbeiten</th></tr>
+                            <tr><td>ich/er/sie/es</td><td>machte</td><td>arbeitete</td></tr>
+                            <tr><td>du</td><td>machtest</td><td>arbeitetest</td></tr>
+                            <tr><td>wir/sie/Sie</td><td>machten</td><td>arbeiteten</td></tr>
+                        </table>
+                    </div>
+                    <div class="grammar-section">
+                        <h3>Unregelmäßige Verben</h3>
+                        <table class="grammar-table">
+                            <tr><th>Infinitiv</th><th>Präteritum (ich)</th></tr>
+                            <tr><td>sein</td><td>war</td></tr>
+                            <tr><td>haben</td><td>hatte</td></tr>
+                            <tr><td>gehen</td><td>ging</td></tr>
+                            <tr><td>kommen</td><td>kam</td></tr>
+                            <tr><td>schreiben</td><td>schrieb</td></tr>
+                            <tr><td>sehen</td><td>sah</td></tr>
+                        </table>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Gestern ___ ich von 9 bis 17 Uhr. (arbeiten)', answer: 'arbeitete', difficulty: 'easy', explanation: 'Regular verb: arbeiten + -te ending for ich form.' },
+                    { type: 'fill', q: 'Die Kinder ___ im Park. (spielen)', answer: 'spielten', difficulty: 'easy', explanation: 'spielen: stem (spiel-) + -te + -n (plural). Regular verb.' },
+                    { type: 'fill', q: 'Wir ___ ein neues Auto. (kaufen)', answer: 'kauften', difficulty: 'easy', explanation: 'kaufen → kaufte + -n = kauften for wir form.' },
+                    { type: 'fill', q: 'Ich ___ gestern zu Hause. (sein)', answer: 'war', difficulty: 'easy', explanation: 'sein is irregular. Präteritum form is "war" for ich/er/sie/es.' },
+                    { type: 'fill', q: 'Du ___ nach Hause. (gehen)', answer: 'gingst', difficulty: 'medium', explanation: 'gehen → ging (irregular stem) + -st (du ending) = gingst.' },
+                    { type: 'fill', q: 'Er ___ einen Brief. (schreiben)', answer: 'schrieb', difficulty: 'medium', explanation: 'schreiben: irregular, stem changes to "schrieb", add -∅ for er form.' },
+                    { type: 'mc', q: 'Welche Form passt? "Wir ___ ins Kino."', options: ['ging', 'gingen', 'gingst', 'ging'], answer: 'gingen', difficulty: 'medium', explanation: 'wir form requires -en ending: gingen.' },
+                    { type: 'mc', q: 'Welche Form ist richtig? "Sie ___ einen Kaffee." (trinken)', options: ['trank', 'tranken', 'trankst', 'trinkten'], answer: 'tranken', difficulty: 'medium', explanation: 'trinken → trank (irregular), add -en for sie/Sie plural form.' },
+                    { type: 'fill', q: 'Ich ___ das nicht. (wissen)', answer: 'wusste', difficulty: 'medium', explanation: 'wissen is mixed verb: wusste (like regular) for ich form.' },
+                    { type: 'fill', q: 'Sie ___ ein schönes Haus. (haben)', answer: 'hatten', difficulty: 'medium', explanation: 'haben is irregular: hatte + -n = hatten for sie form.' },
+                    { type: 'mc', q: 'Was ist die richtige Form? "Das Kind ___ schnell." (laufen)', options: ['lief', 'liefen', 'liefst', 'laufte'], answer: 'lief', difficulty: 'hard', explanation: 'laufen → lief (irregular) for singular forms (ich/du/er/sie/es).' },
+                    { type: 'fill', q: 'Bevor er kam, ___ ich schon lange gewartet. (haben)', answer: 'hatte', difficulty: 'hard', explanation: 'Plus-past context: haben → hatte for ich/er form (singular).' }
+                ]
+            },
+
+            // LESSON 2: Plusquamperfekt
+            {
+                id: 2,
+                title: 'Plusquamperfekt',
+                description: 'Past Perfect Tense',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Plusquamperfekt - Past Perfect</h3>
+                        <p>Drückt aus, dass ein Ereignis VOR einem anderen Ereignis in der Vergangenheit stattfand.</p>
+                        <p><strong>Bildung:</strong> Präteritum von haben/sein + Partizip II</p>
+                        <table class="grammar-table">
+                            <tr><th>Person</th><th>haben</th><th>sein</th></tr>
+                            <tr><td>ich</td><td>hatte gegessen</td><td>war gegangen</td></tr>
+                            <tr><td>du</td><td>hattest gegessen</td><td>warst gegangen</td></tr>
+                            <tr><td>wir/sie/Sie</td><td>hatten gegessen</td><td>waren gegangen</td></tr>
+                        </table>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Nachdem ich gegessen ___, ging ich spazieren.', answer: 'hatte', difficulty: 'easy', explanation: 'Plusquamperfekt: "hatte" (past tense of haben) + Partizip II (gegessen). This shows the eating happened first.' },
+                    { type: 'fill', q: 'Er ___ schon gegessen, als ich kam.', answer: 'hatte', difficulty: 'easy', explanation: 'Plusquamperfekt: hatte + gegessen. The eating happened before my arrival.' },
+                    { type: 'fill', q: 'Sie ___ bereits angekommen, bevor es dunkel wurde.', answer: 'waren', difficulty: 'easy', explanation: 'Movement verb uses sein: waren (plural) + angekommen (past participle).' },
+                    { type: 'fill', q: 'Bevor wir ankamen, ___ es geregnet.', answer: 'hatte', difficulty: 'medium', explanation: 'hatte + geregnet (Plusquamperfekt). The rain happened before we arrived.' },
+                    { type: 'fill', q: 'Nachdem sie den Film gesehen ___, ging sie nach Hause.', answer: 'hatte', difficulty: 'medium', explanation: 'Plusquamperfekt with haben: hatte + gesehen. Film-watching came first.' },
+                    { type: 'fill', q: 'Die Polizei kam, nachdem der Dieb verschwunden ___. (sein)', answer: 'war', difficulty: 'medium', explanation: 'Disappear = movement, uses sein: war + verschwunden (Plusquamperfekt).' },
+                    { type: 'mc', q: 'Welche Form ist richtig? "Nachdem er ___ gegangen, rief ich an."', options: ['ist', 'war', 'hatte', 'sein'], answer: 'war', difficulty: 'medium', explanation: 'gehen uses sein in past: war + gegangen = Plusquamperfekt.' },
+                    { type: 'mc', q: 'Was passt? "Sie ___ schon Deutsch gelernt, als sie zu uns kam."', options: ['hat', 'hatte', 'ist', 'war'], answer: 'hatte', difficulty: 'medium', explanation: 'lernen uses haben; Plusquamperfekt = hatte + gelernt.' },
+                    { type: 'fill', q: 'Bevor das Spiel begann, ___ ich schon drei Stunden gewartet. (haben)', answer: 'hatte', difficulty: 'hard', explanation: 'Plusquamperfekt with haben: hatte (past of haben) + gewartet (past participle). Waiting came before game start.' },
+                    { type: 'fill', q: 'Als er anrief, ___ ich gerade gegessen. (haben)', answer: 'hatte', difficulty: 'hard', explanation: 'Plusquamperfekt: hatte (gerade gegessen). The eating was in progress in the past when he called.' },
+                    { type: 'mc', q: 'Richtig oder falsch? "Nachdem wir ___ angekommen, besuchten wir die Stadt."', options: ['haben', 'waren', 'sind', 'hatten'], answer: 'waren', difficulty: 'hard', explanation: 'ankommen uses sein; Plusquamperfekt = waren + angekommen for the earlier past event.' },
+                    { type: 'fill', q: 'Sie ___ das Buch fertig gelesen, bevor sie in den Urlaub fuhr. (haben)', answer: 'hatte', difficulty: 'hard', explanation: 'Plusquamperfekt: hatte (Präteritum of haben) + gelesen (Partizip II). Reading completed before vacation.' }
+                ]
+            },
+
+            // LESSON 3: Reflexivpronomen
+            {
+                id: 3,
+                title: 'Reflexivpronomen',
+                description: 'Reflexive Pronouns',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Reflexive Pronouns (mich/dich/sich/uns/euch/sich)</h3>
+                        <p>Reflexive pronouns indicate that the action is performed on oneself.</p>
+                        <table class="grammar-table">
+                            <tr><th>Person</th><th>Akkusativ</th><th>Dativ</th></tr>
+                            <tr><td>ich</td><td>mich</td><td>mir</td></tr>
+                            <tr><td>du</td><td>dich</td><td>dir</td></tr>
+                            <tr><td>er/sie/es</td><td>sich</td><td>sich</td></tr>
+                            <tr><td>wir</td><td>uns</td><td>uns</td></tr>
+                            <tr><td>ihr</td><td>euch</td><td>euch</td></tr>
+                            <tr><td>sie/Sie</td><td>sich</td><td>sich</td></tr>
+                        </table>
+                    </div>
+                    <div class="grammar-section">
+                        <h3>Common Reflexive Verbs</h3>
+                        <p>sich freuen (to be happy), sich ärgern (to be annoyed), sich interessieren (to be interested), sich setzen (to sit down), sich waschen (to wash oneself)</p>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Ich freue ___ auf den Urlaub.', answer: 'mich', difficulty: 'easy', explanation: 'sich freuen (Akk.): 1st person singular = mich.' },
+                    { type: 'fill', q: 'Du wäschst ___ die Hände.', answer: 'dir', difficulty: 'easy', explanation: 'sich waschen uses Dativ for body parts: dir (2nd singular).' },
+                    { type: 'fill', q: 'Er ärgert ___ über die Situation.', answer: 'sich', difficulty: 'easy', explanation: 'sich ärgern (Akk.): 3rd person singular = sich.' },
+                    { type: 'fill', q: 'Wir interessieren ___ für Musik.', answer: 'uns', difficulty: 'easy', explanation: 'sich interessieren (Akk.): 1st person plural = uns.' },
+                    { type: 'fill', q: 'Ihr setzt ___ hier hin.', answer: 'euch', difficulty: 'easy', explanation: 'sich setzen (Akk.): 2nd person plural = euch.' },
+                    { type: 'fill', q: 'Sie freuen ___ auf das Fest.', answer: 'sich', difficulty: 'medium', explanation: '3rd person plural or formal Sie: sich (both Akk. and Dat.).' },
+                    { type: 'mc', q: 'Richtig? "Ich hätte ___ ein Fenster angetan."', options: ['mir', 'mich', 'meinen', 'meine'], answer: 'mir', difficulty: 'medium', explanation: 'sich etw. tun = Dativ for body parts/things: mir (1st singular).' },
+                    { type: 'mc', q: 'Was passt? "Sie wundern ___ über das Ergebnis."', options: ['sich', 'sich', 'sich', 'sich'], answer: 'sich', difficulty: 'medium', explanation: 'sich wundern (Akk.): 3rd person = sich. (All options are identical, showing sich is always the answer for 3rd person in reflexive constructions)' },
+                    { type: 'fill', q: 'Im Perfekt: Ich habe ___ gewaschen.', answer: 'mich', difficulty: 'hard', explanation: 'Reflexive verbs in Perfekt: haben + Partizip (gewaschen). Reflexive pronoun stays: mich.' },
+                    { type: 'fill', q: 'Im Perfekt: Wir haben ___ gefreut.', answer: 'uns', difficulty: 'hard', explanation: 'Perfekt with reflexive: haben + gefreut. Reflexive pronoun = uns (1st plural Akk.).' },
+                    { type: 'fill', q: 'Sie hatte ___ in den Arm genommen. (sich nehmen)', answer: 'sich', difficulty: 'hard', explanation: 'Plusquamperfekt reflexive: hatte + genommen. Reflexive pronoun for 3rd person = sich.' },
+                    { type: 'mc', q: 'Richtig? "Ihr sollt ___ besser benehmen."', options: ['euch', 'euer', 'eure', 'euer'], answer: 'euch', difficulty: 'hard', explanation: 'sich benehmen (Akk.): 2nd plural = euch (reflexive pronoun, not possessive).' }
+                ]
+            },
+
+            // LESSON 4: Trennbare & Untrennbare Verben
+            {
+                id: 4,
+                title: 'Trennbare & Untrennbare Verben',
+                description: 'Separable & Inseparable Verbs',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Separable Verbs (Trennbare Verben)</h3>
+                        <p><strong>Prefixes:</strong> an-, auf-, ein-, aus-, weg-, zu-, zurück-, mit-, etc.</p>
+                        <p>In present tense: Prefix moves to end of sentence. Example: "Ich rufe dich an." (I call you.)</p>
+                        <p>In Partizip II: ge- inserted between prefix and verb. Example: angerufen</p>
+                    </div>
+                    <div class="grammar-section">
+                        <h3>Inseparable Verbs (Untrennbare Verben)</h3>
+                        <p><strong>Prefixes:</strong> be-, er-, ver-, ent-, emp-, ge-, zer-, miss-</p>
+                        <p>Prefix never separates. Example: "Ich besuche dich." (I visit you.) → "Ich habe dich besucht."</p>
+                        <p>In Partizip II: NO ge- prefix. Example: besucht (not: gebesucht)</p>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Ich rufe dich morgen ___. (anrufen)', answer: 'an', difficulty: 'easy', explanation: 'anrufen is separable. In present tense, "an" moves to the end: rufe ... an.' },
+                    { type: 'fill', q: 'Du machst die Tür ___. (aufmachen)', answer: 'auf', difficulty: 'easy', explanation: 'aufmachen (separable): auf moves to end in present. "Du machst die Tür auf."' },
+                    { type: 'fill', q: 'Partizip II von "anrufen": ge___ + ___.', answer: 'angerufen', difficulty: 'easy', explanation: 'Separable Partizip II: ge- is inserted between prefix and stem: ge + an + rufen → angerufen.' },
+                    { type: 'fill', q: 'Partizip II von "besuchen": ___.', answer: 'besucht', difficulty: 'easy', explanation: 'besuchen is inseparable (prefix be-). NO ge- is added: besucht (not gebesucht).' },
+                    { type: 'fill', q: 'Sie verstehen das Problem. → Sie haben das Problem ___. (verstehen)', answer: 'verstanden', difficulty: 'medium', explanation: 'verstehen (inseparable): Partizip II = verstanden (no ge- prefix).' },
+                    { type: 'fill', q: 'Ich rufe den Freund ___. (anrufen - Präsens)', answer: 'an', difficulty: 'medium', explanation: 'Present tense separable: rufe ... an. The prefix separates.' },
+                    { type: 'mc', q: 'Welches ist richtig? "Partizip II von verkaufen"', options: ['gevorkauft', 'verkauft', 'ververkauft', 'verkaauften'], answer: 'verkauft', difficulty: 'medium', explanation: 'verkaufen is inseparable (ver-): Partizip II = verkauft (no ge-).' },
+                    { type: 'mc', q: 'Richtig? "Ich ___ ein Haus ___ (einziehen - Präsens)"', options: ['ziehe ein', 'einziehe', 'bin eingezogen', 'zu einziehen'], answer: 'ziehe ein', difficulty: 'medium', explanation: 'einziehen is separable: present tense splits = ziehe ... ein.' },
+                    { type: 'fill', q: 'Im Perfekt: "Ich habe meine Freunde ___." (besuchen)', answer: 'besucht', difficulty: 'hard', explanation: 'besuchen (inseparable): Perfekt = haben + besucht (no ge- prefix).' },
+                    { type: 'fill', q: 'Im Perfekt: "Sie hat ihn ___." (anrufen)', answer: 'angerufen', difficulty: 'hard', explanation: 'anrufen (separable): Perfekt = haben + angerufen (with ge- inside: an-ge-rufen).' },
+                    { type: 'mc', q: 'Partizip II von "entdecken": ___', options: ['entdeckt', 'entdecken', 'geentdeckt', 'gendekt'], answer: 'entdeckt', difficulty: 'hard', explanation: 'entdecken (inseparable prefix ent-): Partizip II = entdeckt (no ge-).' },
+                    { type: 'fill', q: 'Im Präsens (3rd singular): "Er zieht in ein neues Haus ___." (einziehen)', answer: 'ein', difficulty: 'hard', explanation: 'einziehen (separable): Present = zieht ... ein. The "ein" separates and moves to the end.' }
+                ]
+            },
+
+            // LESSON 5: Verben mit Präpositionen
+            {
+                id: 5,
+                title: 'Verben mit Präpositionen',
+                description: 'Verbs with Fixed Prepositions',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Verbs with Prepositions</h3>
+                        <p>Many German verbs require specific prepositions. The case (accusative/dative) depends on the preposition.</p>
+                        <table class="grammar-table">
+                            <tr><th>Verb + Präposition</th><th>Case</th><th>Example</th></tr>
+                            <tr><td>warten auf (to wait for)</td><td>Accusative</td><td>Ich warte auf den Bus. (I wait for the bus.)</td></tr>
+                            <tr><td>sich freuen über (to be happy about)</td><td>Accusative</td><td>Ich freue mich über das Geschenk.</td></tr>
+                            <tr><td>denken an (to think of)</td><td>Accusative</td><td>Ich denke an dich. (I think of you.)</td></tr>
+                            <tr><td>sich interessieren für (to be interested in)</td><td>Accusative</td><td>Ich interessiere mich für Musik.</td></tr>
+                            <tr><td>bestehen aus (to consist of)</td><td>Dative</td><td>Das besteht aus Holz. (It consists of wood.)</td></tr>
+                            <tr><td>sprechen von (to speak of)</td><td>Dative</td><td>Wir sprechen von dir. (We speak of you.)</td></tr>
+                        </table>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Ich warte ___ den Bus.', answer: 'auf', difficulty: 'easy', explanation: 'warten auf + Akkusativ. Fixed preposition with warten is "auf".' },
+                    { type: 'fill', q: 'Ich freue mich ___ das Geschenk.', answer: 'über', difficulty: 'easy', explanation: 'sich freuen über + Akkusativ. The joy is directed "over/about" something.' },
+                    { type: 'fill', q: 'Ich denke ___ dich.', answer: 'an', difficulty: 'easy', explanation: 'denken an + Akkusativ. To think "of" = think "an" in German.' },
+                    { type: 'fill', q: 'Interessierst du dich ___ Sport?', answer: 'für', difficulty: 'easy', explanation: 'sich interessieren für + Akkusativ. Interest is "for" something.' },
+                    { type: 'fill', q: 'Das besteht ___ Holz.', answer: 'aus', difficulty: 'medium', explanation: 'bestehen aus + Dativ. Something consists "of" (made from).' },
+                    { type: 'fill', q: 'Wir sprechen ___ dem Problem.', answer: 'von', difficulty: 'medium', explanation: 'sprechen von + Dativ. To speak "of" = sprechen von.' },
+                    { type: 'mc', q: 'Richtig? "Er ärgert ___ über die Verzögerung."', options: ['sich auf', 'sich über', 'sich an', 'über sich'], answer: 'sich über', difficulty: 'medium', explanation: 'sich ärgern über + Akkusativ. To be annoyed "at/about" something.' },
+                    { type: 'mc', q: 'Was passt? "Sie ändert ihre Meinung ___ die Idee."', options: ['zu', 'über', 'an', 'in'], answer: 'über', difficulty: 'medium', explanation: 'sich ändern über or opinion "about" something.' },
+                    { type: 'fill', q: 'Ich erinnere ___ meine Kindheit. (Case: Akkusativ)', answer: 'mich an', difficulty: 'hard', explanation: 'sich erinnern an + Akkusativ. To remember = sich ... an erinnern.' },
+                    { type: 'fill', q: 'Er kümmert ___ die Kinder.', answer: 'sich um', difficulty: 'hard', explanation: 'sich kümmern um + Akkusativ. To care for/about = kümmern um.' },
+                    { type: 'fill', q: 'Sie besteht ___ ihrer Meinung.', answer: 'auf', difficulty: 'hard', explanation: 'bestehen auf + Dativ. To insist "on" = bestehen auf.' },
+                    { type: 'mc', q: 'Welche Präposition? "Ich bitte ___ Hilfe."', options: ['um', 'für', 'an', 'zu'], answer: 'um', difficulty: 'hard', explanation: 'bitten um + Akkusativ. To ask for/beg for = bitten um.' }
+                ]
+            },
+
+            // LESSON 6: Präpositionaladverbien
+            {
+                id: 6,
+                title: 'Präpositionaladverbien',
+                description: 'Prepositional Adverbs (da(r)+ & wo(r)+)',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Prepositional Adverbs</h3>
+                        <p><strong>da(r)+ Präposition:</strong> Refers to things. "Darauf" (on it), "Darin" (in it)</p>
+                        <p><strong>wo(r)+ Präposition:</strong> Forms questions. "Worauf?" (What on?), "Woran?" (What about?)</p>
+                        <table class="grammar-table">
+                            <tr><th>Präposition</th><th>da(r)+ form</th><th>wo(r)+ form</th></tr>
+                            <tr><td>auf</td><td>darauf</td><td>worauf</td></tr>
+                            <tr><td>in</td><td>darin</td><td>worin</td></tr>
+                            <tr><td>an</td><td>daran</td><td>woran</td></tr>
+                            <tr><td>über</td><td>darüber</td><td>worüber</td></tr>
+                            <tr><td>mit</td><td>damit</td><td>womit</td></tr>
+                            <tr><td>für</td><td>dafür</td><td>wofür</td></tr>
+                        </table>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Das ist ein Stuhl. Ich sitze ___. (darauf)', answer: 'darauf', difficulty: 'easy', explanation: 'da(r)+ auf = darauf. Reference to "the chair" → on it → darauf.' },
+                    { type: 'fill', q: 'Das ist eine Dose. Süßigkeiten sind ___.', answer: 'darin', difficulty: 'easy', explanation: 'da(r)+ in = darin. "In the box" → in it → darin.' },
+                    { type: 'fill', q: 'Worauf wartest du? Ich warte ___. (darauf)', answer: 'darauf', difficulty: 'easy', explanation: 'Question: worauf? (on what?) Answer: darauf (on it).' },
+                    { type: 'fill', q: 'Woran denkst du? Ich denke ___. (daran)', answer: 'daran', difficulty: 'easy', explanation: 'Question: woran? (of what/about what?) Answer: daran (about it).' },
+                    { type: 'fill', q: 'Das ist ein Problem. Wir sprechen ___. (darüber)', answer: 'darüber', difficulty: 'medium', explanation: 'da(r)+ über = darüber. Speaking "about" the problem → darüber.' },
+                    { type: 'fill', q: 'Womit schreibst du? Ich schreibe ___. (damit)', answer: 'damit', difficulty: 'medium', explanation: 'Question: womit? (with what?) Answer: damit (with it).' },
+                    { type: 'mc', q: 'Richtig? "Wofür brauchst du das? Ich brauche es ___."', options: ['dafür', 'daran', 'darauf', 'damit'], answer: 'dafür', difficulty: 'medium', explanation: 'wofür (for what?) → dafür (for it).' },
+                    { type: 'mc', q: 'Was passt? "Der Schlüssel liegt hier. Der Tisch ist ___."', options: ['darin', 'darauf', 'daran', 'dafür'], answer: 'darauf', difficulty: 'medium', explanation: 'The key is lying "on" the table → darauf (on it).' },
+                    { type: 'fill', q: 'Woran erinnert dich das? ___ erinnert mich an meine Kindheit.', answer: 'Daran', difficulty: 'hard', explanation: 'Question: woran (about what?) Answer: daran (about it). Capitalize at sentence start.' },
+                    { type: 'fill', q: 'Worin besteht das Problem? ___ besteht darin, dass...', answer: 'Darin', difficulty: 'hard', explanation: 'worin (in what?) → darin (in it). The answer replaces the da(r)+ form.' },
+                    { type: 'mc', q: 'Richtig? "Worüber lachst du? Ich lache ___."', options: ['darum', 'darüber', 'daran', 'damit'], answer: 'darüber', difficulty: 'hard', explanation: 'worüber (about what?) → darüber (about it).' },
+                    { type: 'fill', q: 'Wodurch wird das erreicht? ___ wird das Ziel erreicht. (Durch die Anstrengung)', answer: 'Dadurch', difficulty: 'hard', explanation: 'wodurch (how/by what?) → dadurch (by it). da(r)+ durch = dadurch.' }
+                ]
+            },
+
+            // LESSON 7: Konjunktiv II
+            {
+                id: 7,
+                title: 'Konjunktiv II',
+                description: 'Subjunctive Mood (Hypotheticals)',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Konjunktiv II - Expressing Wishes, Hypotheticals</h3>
+                        <p>Used for polite requests, wishes, and contrary-to-fact situations.</p>
+                        <p><strong>Formation:</strong> würde + Infinitiv (most common for non-modal verbs)</p>
+                        <table class="grammar-table">
+                            <tr><th>Person</th><th>würde + Infinitiv</th></tr>
+                            <tr><td>ich</td><td>würde machen</td></tr>
+                            <tr><td>du</td><td>würdest machen</td></tr>
+                            <tr><td>er/sie/es</td><td>würde machen</td></tr>
+                            <tr><td>wir/sie/Sie</td><td>würden machen</td></tr>
+                        </table>
+                    </div>
+                    <div class="grammar-section">
+                        <h3>Special Forms</h3>
+                        <p><strong>hätte</strong> (have): "Ich hätte Lust auf Kaffee." (I would like coffee.)</p>
+                        <p><strong>wäre</strong> (be): "Ich wäre glücklich." (I would be happy.)</p>
+                        <p><strong>könnte</strong> (can): "Ich könnte dir helfen." (I could help you.)</p>
+                        <p><strong>möchte</strong> (want): "Ich möchte einen Kaffee." (I would like a coffee.)</p>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Ich ___ gerne einen Kaffee. (hätte)', answer: 'hätte', difficulty: 'easy', explanation: 'Konjunktiv II of haben: hätte. Expresses wish: "I would have/like coffee."' },
+                    { type: 'fill', q: 'Ich ___ glücklicher, wenn ich Geld hätte. (wäre)', answer: 'wäre', difficulty: 'easy', explanation: 'Konjunktiv II of sein: wäre. Expresses hypothetical: "I would be happier if..."' },
+                    { type: 'fill', q: 'Ich ___ dir sehr gerne helfen. (würde)', answer: 'würde', difficulty: 'easy', explanation: 'würde + Infinitiv: würde helfen. Most common Konjunktiv II form.' },
+                    { type: 'fill', q: 'Du ___ das besser verstehen. (müsse → würde müssen)', answer: 'würdest', difficulty: 'easy', explanation: 'würde + müssen → würdest müssen. Polite conditional.' },
+                    { type: 'fill', q: 'Wenn ich Zeit hätte, ___ ich ins Kino ___.', answer: 'würde / gehen', difficulty: 'medium', explanation: 'Conditional sentence: würde + gehen. "If I had time, I would go to the cinema."' },
+                    { type: 'fill', q: 'Ich ___ dir danken, wenn du mir ___.', answer: 'würde / helfen würdest', difficulty: 'medium', explanation: 'Conditional: würde danken / helfen würdest. Both verbs in Konjunktiv II.' },
+                    { type: 'mc', q: 'Richtig? "An deiner Stelle ___ ich das nicht tun."', options: ['würde', 'werde', 'wäre', 'bin'], answer: 'würde', difficulty: 'medium', explanation: 'würde + tun = Konjunktiv II. "In your place, I would not do that."' },
+                    { type: 'mc', q: 'Was passt? "Das ___ eine gute Idee."', options: ['ist', 'wäre', 'würde', 'habe'], answer: 'wäre', difficulty: 'medium', explanation: 'wäre (Konjunktiv II of sein) expresses a hypothetical or polite idea.' },
+                    { type: 'fill', q: 'Polite request: "___ du mir bitte helfen?"', answer: 'Würdest', difficulty: 'hard', explanation: 'würdest + du (inversion for question). Polite form: "Would you help me?"' },
+                    { type: 'fill', q: 'Wenn es nicht regnete, ___ wir spazieren ___.', answer: 'würden / gehen', difficulty: 'hard', explanation: 'Conditional with Konjunktiv I subjunctive condition: würden gehen.' },
+                    { type: 'mc', q: 'Richtig? "Ich ___ lieber Tee als Kaffee."', options: ['hätte', 'will', 'bin', 'trinke'], answer: 'hätte', difficulty: 'hard', explanation: 'hätte lieber = "I would prefer" / "I would rather have." Expresses a wish.' },
+                    { type: 'fill', q: 'Wish: "Wenn ich nur Zeit ___!"', answer: 'hätte', difficulty: 'hard', explanation: 'Conditional wish with hätte. "If only I had time!" Expresses unrealistic desire.' }
+                ]
+            },
+
+            // LESSON 8: Passiv
+            {
+                id: 8,
+                title: 'Passiv',
+                description: 'Passive Voice',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Passive Voice (Passiv)</h3>
+                        <p><strong>Formation:</strong> werden (conjugated) + Partizip II</p>
+                        <p><strong>Präsens:</strong> Das Buch wird gelesen. (The book is being read.)</p>
+                        <p><strong>Präteritum:</strong> Das Buch wurde gelesen. (The book was read.)</p>
+                        <p><strong>Perfekt:</strong> Das Buch ist gelesen worden. (The book has been read.)</p>
+                        <table class="grammar-table">
+                            <tr><th>Tense</th><th>werden Form</th><th>Example</th></tr>
+                            <tr><td>Präsens</td><td>wird</td><td>Der Brief wird geschrieben.</td></tr>
+                            <tr><td>Präteritum</td><td>wurde</td><td>Der Brief wurde geschrieben.</td></tr>
+                            <tr><td>Perfekt</td><td>ist ... worden</td><td>Der Brief ist geschrieben worden.</td></tr>
+                        </table>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Das Buch ___ gelesen. (werden - Präsens, es)', answer: 'wird', difficulty: 'easy', explanation: 'Passive Präsens: wird (3rd singular) + gelesen. "The book is read."' },
+                    { type: 'fill', q: 'Der Brief ___ geschrieben. (werden - Präsens, er)', answer: 'wird', difficulty: 'easy', explanation: 'wird + geschrieben (Partizip II). "The letter is written."' },
+                    { type: 'fill', q: 'Die Tür ___ geschlossen. (werden - Präsens, sie)', answer: 'wird', difficulty: 'easy', explanation: 'Passive: wird geschlossen. "The door is closed."' },
+                    { type: 'fill', q: 'Das Haus ___ gebaut. (werden - Präteritum)', answer: 'wurde', difficulty: 'easy', explanation: 'Passive Präteritum: wurde + Partizip II. "The house was built."' },
+                    { type: 'fill', q: 'Die Autos ___ repariert. (werden - Präteritum, plural)', answer: 'wurden', difficulty: 'medium', explanation: 'Passive Präteritum (plural): wurden + repariert. "The cars were repaired."' },
+                    { type: 'fill', q: 'Der Kuchen ___ im Ofen ___. (backen - Passiv Präsens)', answer: 'wird / gebacken', difficulty: 'medium', explanation: 'wird + gebacken (Partizip II). "The cake is baked in the oven."' },
+                    { type: 'mc', q: 'Active: "Die Schüler lösen die Aufgaben." Passive: "Die Aufgaben ___ gelöst."', options: ['werden', 'werden', 'wird', 'wurde'], answer: 'werden', difficulty: 'medium', explanation: 'Aufgaben (plural) → werden (plural form) + gelöst.' },
+                    { type: 'mc', q: 'Perfekt Passiv: "Der Brief ist geschrieben ___."', options: ['haben', 'sein', 'worden', 'worden'], answer: 'worden', difficulty: 'medium', explanation: 'Perfekt Passiv: ist + Partizip II + worden. "worden" is the past participle of werden.' },
+                    { type: 'fill', q: 'Perfekt Passiv: Das Fenster ___ ___. (öffnen)', answer: 'ist / geöffnet worden', difficulty: 'hard', explanation: 'Perfekt Passiv: ist + geöffnet + worden. "The window has been opened."' },
+                    { type: 'fill', q: 'Transform to Passiv (Präsens): Active: "Er schreibt einen Brief." Passive: "___ ein Brief geschrieben."', answer: 'Wird', difficulty: 'hard', explanation: 'Active (er schreibt) → Passive (wird geschrieben). wird + Partizip II.' },
+                    { type: 'fill', q: 'Transform to Passiv (Präteritum): "Sie bauten ein Haus." → "Ein Haus ___ gebaut."', answer: 'wurde', difficulty: 'hard', explanation: 'Active Präteritum (Sie bauten) → Passive Präteritum (wurde gebaut).' },
+                    { type: 'mc', q: 'Richtig? "Das Projekt wurde abgeschlossen. Wann ___ es ___?"', options: ['wird abgeschlossen', 'ist abgeschlossen worden', 'wurde abgeschlossen', 'war abgeschlossen'], answer: 'ist abgeschlossen worden', difficulty: 'hard', explanation: 'Question in Perfekt Passiv: ist + Partizip II + worden.' }
+                ]
+            },
+
+            // LESSON 9: Futur I
+            {
+                id: 9,
+                title: 'Futur I',
+                description: 'Future Tense I',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Futur I - Expressing the Future</h3>
+                        <p><strong>Formation:</strong> werden (conjugated) + Infinitiv</p>
+                        <p>Used for plans, predictions, or promises about the future.</p>
+                        <table class="grammar-table">
+                            <tr><th>Person</th><th>Futur I</th></tr>
+                            <tr><td>ich/du/er/sie/es</td><td>werde/wirst/wird ... machen</td></tr>
+                            <tr><td>wir/sie/Sie</td><td>werden ... machen</td></tr>
+                        </table>
+                    </div>
+                    <div class="grammar-section">
+                        <h3>Präsens vs. Futur I</h3>
+                        <p>Often, German uses present tense with future meaning when the context is clear: "Ich gehe morgen ins Kino." (I'm going to the cinema tomorrow.)</p>
+                        <p>Futur I is used for predictions or when future is emphasized: "Das wird schwierig sein." (That will be difficult.)</p>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Ich ___ morgen ins Kino gehen. (Futur I)', answer: 'werde', difficulty: 'easy', explanation: 'Futur I: werde + Infinitiv (gehen). "I will go to the cinema tomorrow."' },
+                    { type: 'fill', q: 'Du ___ das verstehen. (Futur I)', answer: 'wirst', difficulty: 'easy', explanation: 'Futur I (du): wirst + verstehen. "You will understand that."' },
+                    { type: 'fill', q: 'Er ___ einen Kaffee trinken. (Futur I)', answer: 'wird', difficulty: 'easy', explanation: 'Futur I (er/sie/es): wird + Infinitiv. "He will drink a coffee."' },
+                    { type: 'fill', q: 'Wir ___ zusammen arbeiten. (Futur I)', answer: 'werden', difficulty: 'easy', explanation: 'Futur I (wir/sie/Sie): werden + arbeiten. "We will work together."' },
+                    { type: 'fill', q: 'Das Projekt ___ erfolgreich sein. (Futur I)', answer: 'wird', difficulty: 'medium', explanation: 'Prediction: wird + sein. "The project will be successful."' },
+                    { type: 'fill', q: 'Sie ___ das Buch bis morgen ___. (lesen - Futur I)', answer: 'wird / gelesen haben', difficulty: 'medium', explanation: 'Futur I with Perfekt: wird + gelesen haben (future perfect). "She will have read the book."' },
+                    { type: 'mc', q: 'Richtig? "Wenn wir fleißig arbeiten, ___ wir das Ziel erreichen."', options: ['erreichen', 'werden erreichen', 'erreicht haben', 'haben erreicht'], answer: 'werden erreichen', difficulty: 'medium', explanation: 'Futur I in conditional: werden + Infinitiv. "We will reach the goal."' },
+                    { type: 'mc', q: 'Present or Future? "Morgen fahre ich nach Berlin."', options: ['Präsens (future meaning)', 'Futur I', 'Perfekt', 'Präteritum'], answer: 'Präsens (future meaning)', difficulty: 'medium', explanation: 'German often uses Präsens for near future when context is clear. "I\'m going to Berlin tomorrow."' },
+                    { type: 'fill', q: 'Promise: "Ich ___ dich nie vergessen." (Futur I)', answer: 'werde', difficulty: 'hard', explanation: 'Futur I for promise: werde + vergessen. "I will never forget you."' },
+                    { type: 'fill', q: 'Prediction (3rd pl.): "Das ___ schwierige Zeiten sein." (Futur I)', answer: 'werden', difficulty: 'hard', explanation: 'Futur I prediction (plural): werden + sein. "Those will be difficult times."' },
+                    { type: 'mc', q: 'Richtig? "Bis zum Sommer ___ ich drei Monate in Berlin gelebt haben."', options: ['werde', 'bin', 'habe', 'wird'], answer: 'werde', difficulty: 'hard', explanation: 'Futur II (future perfect): werde + Partizip + haben. "By summer, I will have lived in Berlin for 3 months."' },
+                    { type: 'fill', q: 'Negative prediction: "Das ___ nicht funktionieren." (Futur I)', answer: 'wird', difficulty: 'hard', explanation: 'Futur I with negation: wird nicht + Infinitiv. "That will not work."' }
+                ]
+            },
+
+            // LESSON 10: Genitiv & n-Deklination
+            {
+                id: 10,
+                title: 'Genitiv & n-Deklination',
+                description: 'Genitive Case & n-Declension Nouns',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Genitive Case (Possessive/Ownership)</h3>
+                        <p><strong>Formation:</strong> The noun takes genitive article (des, der, der, der)</p>
+                        <table class="grammar-table">
+                            <tr><th>Gender</th><th>Nominative</th><th>Genitive</th><th>Example</th></tr>
+                            <tr><td>Masc.</td><td>der Mann</td><td>des Mannes</td><td>Das Auto des Mannes (The man's car)</td></tr>
+                            <tr><td>Fem.</td><td>die Frau</td><td>der Frau</td><td>Das Buch der Frau (The woman's book)</td></tr>
+                            <tr><td>Neut.</td><td>das Kind</td><td>des Kindes</td><td>Die Mutter des Kindes (The child's mother)</td></tr>
+                            <tr><td>Plural</td><td>die Kinder</td><td>der Kinder</td><td>Die Eltern der Kinder (The children's parents)</td></tr>
+                        </table>
+                    </div>
+                    <div class="grammar-section">
+                        <h3>n-Declension Nouns (weak nouns)</h3>
+                        <p>Some masculine nouns add -n or -en in all oblique cases (except nominative).</p>
+                        <p>Examples: der Mensch, der Junge, der Name, der Student, der Patient</p>
+                        <table class="grammar-table">
+                            <tr><th>Case</th><th>der Junge</th><th>der Name</th></tr>
+                            <tr><td>Nominative</td><td>der Junge</td><td>der Name</td></tr>
+                            <tr><td>Accusative</td><td>den Jungen</td><td>den Namen</td></tr>
+                            <tr><td>Dative</td><td>dem Jungen</td><td>dem Namen</td></tr>
+                            <tr><td>Genitive</td><td>des Jungen</td><td>des Namens</td></tr>
+                        </table>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Das ist das Auto ___ Mannes. (der)', answer: 'des', difficulty: 'easy', explanation: 'Genitive masculine: der → des. "The man\'s car"' },
+                    { type: 'fill', q: 'Das ist das Buch ___ Frau. (die)', answer: 'der', difficulty: 'easy', explanation: 'Genitive feminine: die → der. "The woman\'s book"' },
+                    { type: 'fill', q: 'Das ist die Mutter ___ Kindes. (das)', answer: 'des', difficulty: 'easy', explanation: 'Genitive neuter: das → des. "The child\'s mother"' },
+                    { type: 'fill', q: 'Das sind die Eltern ___ Kinder. (die - plural)', answer: 'der', difficulty: 'easy', explanation: 'Genitive plural: die → der. "The children\'s parents"' },
+                    { type: 'fill', q: 'Genitive prepositions: "Wegen ___ Regens sind wir zu Hause." (der Regen)', answer: 'des', difficulty: 'medium', explanation: 'Genitive preposition wegen (because of) + masculine: Regen → des Regens.' },
+                    { type: 'fill', q: 'Trotz ___ Schmerzes arbeitet er weiter. (der Schmerz)', answer: 'des', difficulty: 'medium', explanation: 'Trotz (in spite of) + genitive: Schmerz → des Schmerzes.' },
+                    { type: 'fill', q: 'n-Declension: Das ist der Junge. Ich kenne ___. (Akk.)', answer: 'den Jungen', difficulty: 'medium', explanation: 'n-declension: der Junge → den Jungen (accusative adds -n).' },
+                    { type: 'fill', q: 'n-Declension: Ich spreche mit ___. (der Name)', answer: 'dem Namen', difficulty: 'medium', explanation: 'n-declension: der Name → dem Namen (dative adds -n).' },
+                    { type: 'fill', q: 'n-Declension (Genitive): Das ist das Auto ___ Mannes. (der Mensch)', answer: 'des Menschen', difficulty: 'hard', explanation: 'n-declension: der Mensch → des Menschen (genitive adds -en).' },
+                    { type: 'fill', q: 'Während ___ Ferien fahren wir nach Spanien. (die Ferien - genitive plural)', answer: 'der', difficulty: 'hard', explanation: 'Genitive preposition während (during) + plural: Ferien → der Ferien.' },
+                    { type: 'mc', q: 'Richtig? "Das ist das Haus ___ Familie."', options: ['der', 'des', 'dem', 'den'], answer: 'der', difficulty: 'hard', explanation: 'Genitive feminine: die Familie → der Familie. "The family\'s house"' },
+                    { type: 'fill', q: 'Multiple n-decl: Das ist ___ Name ___ Jungen.', answer: 'der / des', difficulty: 'hard', explanation: 'n-declension: der Name (nom.) but des Namens (gen.), and des Jungen (gen.).' }
+                ]
+            },
+
+            // LESSON 11: Relativsätze
+            {
+                id: 11,
+                title: 'Relativsätze',
+                description: 'Relative Clauses',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Relative Clauses (Relative Pronouns)</h3>
+                        <p>Relative pronouns refer back to a noun and introduce a relative clause. They must match the noun's gender and number, but their case depends on the clause function.</p>
+                        <table class="grammar-table">
+                            <tr><th>Case</th><th>Masc.</th><th>Fem.</th><th>Neut.</th><th>Plural</th></tr>
+                            <tr><td>Nominative</td><td>der</td><td>die</td><td>das</td><td>die</td></tr>
+                            <tr><td>Accusative</td><td>den</td><td>die</td><td>das</td><td>die</td></tr>
+                            <tr><td>Dative</td><td>dem</td><td>der</td><td>dem</td><td>denen</td></tr>
+                            <tr><td>Genitive</td><td>dessen</td><td>deren</td><td>dessen</td><td>deren</td></tr>
+                        </table>
+                    </div>
+                    <div class="grammar-section">
+                        <h3>Key Rule</h3>
+                        <p>The relative pronoun must match the antecedent (noun it refers to) in gender/number, but its case is determined by its role in the relative clause.</p>
+                        <p>Example: "Das ist der Mann, <u>den</u> ich gestern sah." (The man accusative because "saw" takes Akk.)</p>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Das ist der Mann, ___ aus Amerika kommt. (Nominativ)', answer: 'der', difficulty: 'easy', explanation: 'Relative pronoun nominative masc.: der. "The man who comes from America."' },
+                    { type: 'fill', q: 'Das ist die Frau, ___ ich kenne. (Akkusativ)', answer: 'die', difficulty: 'easy', explanation: 'Relative pronoun accusative fem.: die. "The woman whom I know." (kennen + Akk.)' },
+                    { type: 'fill', q: 'Das ist das Buch, ___ auf dem Tisch liegt. (Nominativ)', answer: 'das', difficulty: 'easy', explanation: 'Relative pronoun nominative neut.: das. "The book that is on the table."' },
+                    { type: 'fill', q: 'Das sind die Kinder, ___ ich yesterday sah. (Akkusativ plural)', answer: 'die', difficulty: 'easy', explanation: 'Relative pronoun accusative plural: die. "The children whom I saw yesterday."' },
+                    { type: 'fill', q: 'Das ist der Mann, ___ ich helfen kann. (Dativ)', answer: 'dem', difficulty: 'medium', explanation: 'Relative pronoun dative masc.: dem. helfen + Dativ. "The man whom I can help."' },
+                    { type: 'fill', q: 'Das ist das Mädchen, mit ___ ich jeden Tag spiele. (Dativ)', answer: 'dem', difficulty: 'medium', explanation: 'Relative pronoun dative neut.: dem. Mit + Dativ. "The girl with whom I play every day."' },
+                    { type: 'fill', q: 'Das sind die Menschen, ___ ich vertraue. (Dativ plural)', answer: 'denen', difficulty: 'medium', explanation: 'Relative pronoun dative plural: denen. Vertrauen + Dativ. "The people whom I trust."' },
+                    { type: 'fill', q: 'Das ist die Frau, ___ Sohn Arzt ist. (Genitiv)', answer: 'deren', difficulty: 'medium', explanation: 'Relative pronoun genitive fem.: deren. "The woman whose son is a doctor."' },
+                    { type: 'fill', q: 'Das ist der Mann, ___ Auto sehr alt ist. (Genitiv)', answer: 'dessen', difficulty: 'hard', explanation: 'Relative pronoun genitive masc.: dessen. "The man whose car is very old."' },
+                    { type: 'mc', q: 'Richtig? "Das ist das Haus, in ___ ich geboren bin."', options: ['dem', 'der', 'das', 'den'], answer: 'dem', difficulty: 'hard', explanation: 'Relative pronoun dative neut. (in + Dativ): dem. "The house in which I was born."' },
+                    { type: 'fill', q: 'Combine: "Der Mann arbeitet hier. Ich kenne ihn." → "Der Mann, ___ ich kenne, arbeitet hier."', answer: 'den', difficulty: 'hard', explanation: 'Combine sentences: relative pronoun accusative masc. = den (because kennen + Akk.).' },
+                    { type: 'fill', q: 'Combine: "Die Bücher sind alt. Ich lese sie gerne." → "Die Bücher, ___ ich gerne lese, sind alt."', answer: 'die', difficulty: 'hard', explanation: 'Combine: relative pronoun accusative plural = die (lesen + Akk.).' }
+                ]
+            },
+
+            // LESSON 12: Indirekte Fragen
+            {
+                id: 12,
+                title: 'Indirekte Fragen',
+                description: 'Indirect Questions',
+                grammar: `
+                    <div class="grammar-section">
+                        <h3>Indirect Questions</h3>
+                        <p>Transform direct questions into indirect questions using "ob" (if/whether) for yes/no questions, or question words for W-questions.</p>
+                        <p><strong>Key change:</strong> The verb moves to the END of the clause (not conjugated in position 2).</p>
+                        <table class="grammar-table">
+                            <tr><th>Type</th><th>Direct</th><th>Indirect</th></tr>
+                            <tr><td>Yes/No</td><td>Kommst du?</td><td>Ich frage, ob du kommst.</td></tr>
+                            <tr><td>W-Question</td><td>Wohin gehst du?</td><td>Ich frage, wohin du gehst.</td></tr>
+                            <tr><td>Wer</td><td>Wer ist das?</td><td>Ich frage, wer das ist.</td></tr>
+                        </table>
+                    </div>
+                    <div class="grammar-section">
+                        <h3>Word Order Rule</h3>
+                        <p>In indirect questions, the conjugated verb comes at the END. The subject typically follows the question word/ob.</p>
+                        <p>Example: "Ich weiß, <u>was</u> du <u>sagst</u>." (I know what you say.)</p>
+                    </div>
+                `,
+                exercises: [
+                    { type: 'fill', q: 'Direct: "Kommst du morgen?" Indirect: "Ich frage, ___ du morgen kommst."', answer: 'ob', difficulty: 'easy', explanation: 'Yes/no question → ob. Verb at end: kommst.' },
+                    { type: 'fill', q: 'Direct: "Wohin gehst du?" Indirect: "Ich weiß nicht, ___ du gehst."', answer: 'wohin', difficulty: 'easy', explanation: 'W-question wohin → wohin (unchanged). Verb at end: gehst.' },
+                    { type: 'fill', q: 'Direct: "Wann kommt er?" Indirect: "Ich frage mich, ___ er kommt."', answer: 'wann', difficulty: 'easy', explanation: 'W-question wann → wann. Verb at end: kommt.' },
+                    { type: 'fill', q: 'Direct: "Wie heißt du?" Indirect: "Ich möchte wissen, ___ du ___."', answer: 'wie / heißt', difficulty: 'easy', explanation: 'W-question wie → wie. Verb at end: heißt.' },
+                    { type: 'fill', q: 'Direct: "Warum lachst du?" Indirect: "Ich verstehe nicht, ___ du ___."', answer: 'warum / lachst', difficulty: 'medium', explanation: 'W-question warum → warum. Verb at end: lachst.' },
+                    { type: 'fill', q: 'Direct: "Was machst du?" Indirect: "Er möchte wissen, ___ ich ___."', answer: 'was / mache', difficulty: 'medium', explanation: 'W-question was → was. Verb at end: mache (1st person).' },
+                    { type: 'mc', q: 'Richtig? "Ich frage, ob du ___ morgen besuchst."', options: ['mich', 'mir', 'dir', 'sich'], answer: 'mich', difficulty: 'medium', explanation: 'besuchen + Akk. = mich (you visit me). ob + Akk. pronoun.' },
+                    { type: 'mc', q: 'Richtig? "Wir fragen, ___ sie das Konzert besuchen."', options: ['ob', 'wohin', 'wie', 'wann'], answer: 'ob', difficulty: 'medium', explanation: 'Yes/no question (Do they attend the concert?) → ob.' },
+                    { type: 'fill', q: 'Multiple info: Direct: "Wer ist das und woher kommt er?" Indirect: "Ich frage, ___ das ist und ___ er ___."', answer: 'wer / woher / kommt', difficulty: 'hard', explanation: 'Two W-questions: wer + woher. Verb at end: kommt.' },
+                    { type: 'fill', q: 'Tense: Direct: "Hat er das gesagt?" Indirect: "Ich frage, ___ er das gesagt ___."', answer: 'ob / hat', difficulty: 'hard', explanation: 'Yes/no question (Perfekt) → ob. Verb at end: hat ... gesagt (Perfekt structure).' },
+                    { type: 'fill', q: 'Word order: Direct: "Wie lange arbeitest du dort?" Indirect: "Ich möchte wissen, ___ lange du dort ___."', answer: 'wie / arbeitest', difficulty: 'hard', explanation: 'W-question wie lange → wie lange. Verb at end: arbeitest.' },
+                    { type: 'mc', q: 'Richtig? "Sie fragten mich, ob ich ___ helfen könnte."', options: ['ihn', 'ihnen', 'ihr', 'mich'], answer: 'ihnen', difficulty: 'hard', explanation: 'helfen + Dativ = ihnen (them). ob + Dative context.' }
+                ]
+            },
+            {
+                title: 'Infinitiv mit zu',
+                subtitle: 'Es ist schön, ein Fest zu feiern',
+                level: 'B1',
+                grammar: '<h3>Infinitiv mit zu</h3><p>Many expressions require <b>zu + Infinitiv</b> at the end of the clause. The "zu" goes directly before the infinitive, or between the prefix and verb for separable verbs: <b>ein|zu|kaufen</b>.</p><p><b>Common triggers:</b> Es ist schön/wichtig/möglich...; Ich habe Lust/Zeit/Angst...; Ich versuche/beginne/hoffe...; Ich habe keine Lust...</p><p><b>Separable verbs:</b> zu goes BETWEEN prefix and verb: <i>Ich habe Lust, heute <b>einzukaufen</b>.</i></p><p><b>Without zu:</b> Modal verbs (können, müssen...), lassen, gehen, hören, sehen.</p>',
+                exercises: [
+                    { type: 'fill', q: 'Es ist wichtig, viel Wasser ___ ___. (trinken)', answer: 'zu trinken', difficulty: 'easy', explanation: '"Es ist wichtig" triggers zu + Infinitiv. "Es ist wichtig, viel Wasser zu trinken." = It is important to drink a lot of water.' },
+                    { type: 'fill', q: 'Ich habe keine Lust, heute ___. (einkaufen)', answer: 'einzukaufen', difficulty: 'medium', explanation: 'Separable: zu goes between prefix and verb: ein+zu+kaufen = einzukaufen. I don\'t feel like shopping today.' },
+                    { type: 'fill', q: 'Er versucht, das Problem ___ ___. (lösen)', answer: 'zu lösen', difficulty: 'easy', explanation: '"versuchen" triggers zu + Infinitiv. "Er versucht, das Problem zu lösen." = He tries to solve the problem.' },
+                    { type: 'fill', q: 'Ich habe Angst, morgen früh ___. (aufstehen)', answer: 'aufzustehen', difficulty: 'medium', explanation: 'Separable: auf+zu+stehen = aufzustehen. I\'m afraid of getting up early tomorrow.' },
+                    { type: 'mc', q: 'Which is correct? "Ich hoffe, dich bald ___ sehen."', options: ['zu', 'für', '—(nothing)', 'um'], answer: 'zu', difficulty: 'easy', explanation: '"hoffen" triggers zu + Infinitiv: "Ich hoffe, dich bald zu sehen." = I hope to see you soon.' },
+                    { type: 'mc', q: 'Which is correct? "Ich muss morgen früh ___."', options: ['aufstehen (no zu)', 'aufzustehen', 'zu aufstehen'], answer: 'aufstehen (no zu)', difficulty: 'medium', explanation: 'Modal verbs (müssen) use Infinitiv WITHOUT zu: "Ich muss aufstehen." NOT "aufzustehen".' },
+                    { type: 'fill', q: 'Es ist nicht einfach, eine neue Sprache ___ ___. (lernen)', answer: 'zu lernen', difficulty: 'easy', explanation: '"Es ist nicht einfach" + zu + Infinitiv. It\'s not easy to learn a new language.' },
+                    { type: 'fill', q: 'Sie hat begonnen, sich auf die Prüfung ___. (vorbereiten)', answer: 'vorzubereiten', difficulty: 'hard', explanation: 'Separable: vor+zu+bereiten = vorzubereiten. "sich vorbereiten" = to prepare oneself.' }
+                ]
+            },
+            {
+                title: 'Temporale Nebensätze: wenn & als',
+                subtitle: 'Ich gehe, wenn ... / Ich ging, als ...',
+                level: 'B1',
+                grammar: '<h3>wenn vs. als</h3><table class="grammar-table"><tr><th></th><th>wenn</th><th>als</th></tr><tr><td><b>Present/Future</b></td><td>✓ Wenn es regnet, ...</td><td>✗</td></tr><tr><td><b>Past: repeated</b></td><td>✓ (Immer) wenn ich kam, ...</td><td>✗</td></tr><tr><td><b>Past: one time</b></td><td>✗</td><td>✓ Als ich 10 war, ...</td></tr></table><p><b>wenn</b> = when/whenever (present, future, repeated past)<br><b>als</b> = when (one-time past event only)<br>Both send the verb to the END of their clause.</p>',
+                exercises: [
+                    { type: 'mc', q: '___ ich klein war, spielte ich viel draußen. (one-time past)', options: ['Als', 'Wenn', 'Weil', 'Ob'], answer: 'Als', difficulty: 'easy', explanation: 'One-time past event (childhood) → als. "Als ich klein war" = When I was little.' },
+                    { type: 'mc', q: '___ es regnet, bleibe ich zu Hause. (present/general)', options: ['Wenn', 'Als', 'Weil', 'Dass'], answer: 'Wenn', difficulty: 'easy', explanation: 'Present/general rule → wenn. "Wenn es regnet" = When(ever) it rains.' },
+                    { type: 'mc', q: 'Immer ___ meine Oma kam, brachte sie Kuchen mit. (repeated past)', options: ['wenn', 'als', 'weil', 'dass'], answer: 'wenn', difficulty: 'medium', explanation: 'Repeated past action (immer = always) → wenn. "Whenever grandma came..."' },
+                    { type: 'mc', q: '___ ich 2019 nach Japan geflogen bin, war das Wetter toll.', options: ['Als', 'Wenn', 'Weil', 'Ob'], answer: 'Als', difficulty: 'medium', explanation: 'One specific trip in 2019 → als. One-time past event = als.' },
+                    { type: 'fill', q: '___ du morgen kommst, bringe bitte Milch mit. (future)', answer: 'Wenn', difficulty: 'easy', explanation: 'Future event → wenn. "Wenn du morgen kommst" = When you come tomorrow.' },
+                    { type: 'mc', q: '___ ich das erste Mal Sushi gegessen habe, hat es mir nicht geschmeckt.', options: ['Als', 'Wenn', 'Weil'], answer: 'Als', difficulty: 'hard', explanation: '"das erste Mal" = the first time = one specific past event → als.' }
+                ]
+            },
+            {
+                title: 'Finalsätze: um...zu & damit',
+                subtitle: 'Ich lerne, um eine Prüfung zu bestehen',
+                level: 'B1',
+                grammar: '<h3>um...zu vs. damit</h3><p>Both express PURPOSE (= in order to).</p><p><b>um...zu + Infinitiv</b>: Same subject in both clauses.<br><i>Ich lerne Deutsch, <b>um</b> in Deutschland <b>zu arbeiten</b>.</i> (I learn German in order to work in Germany.)</p><p><b>damit + Nebensatz</b>: Different subjects in each clause.<br><i>Ich erkläre es langsam, <b>damit</b> du es <b>verstehst</b>.</i> (I explain slowly so that you understand.)</p><p>With separable verbs: um...ein<b>zu</b>kaufen (zu goes between prefix and verb).</p>',
+                exercises: [
+                    { type: 'fill', q: 'Ich spare Geld, ___ ein Auto ___ ___. (kaufen, same subject)', answer: 'um|zu kaufen', difficulty: 'easy', explanation: 'Same subject (ich...ich) → um...zu. "Ich spare Geld, um ein Auto zu kaufen." = I save money to buy a car.' },
+                    { type: 'mc', q: 'Ich spreche langsam, _____ du mich verstehst. (different subjects)', options: ['damit', 'um...zu', 'weil', 'dass'], answer: 'damit', difficulty: 'easy', explanation: 'Different subjects (ich ≠ du) → damit. "...damit du mich verstehst" = so that you understand me.' },
+                    { type: 'fill', q: 'Er joggt jeden Tag, ___ fit ___ ___. (bleiben)', answer: 'um|zu bleiben', difficulty: 'medium', explanation: 'Same subject → um...zu. "Er joggt, um fit zu bleiben." = He jogs to stay fit.' },
+                    { type: 'mc', q: 'Which is correct? "Sie macht das Licht an, ___ die Kinder lesen können."', options: ['damit', 'um...zu', 'weil'], answer: 'damit', difficulty: 'medium', explanation: 'Different subjects (sie ≠ Kinder) → damit. She turns on the light so that the children can read.' },
+                    { type: 'fill', q: 'Ich bin nach Deutschland gekommen, ___ Medizin ___ ___. (studieren)', answer: 'um|zu studieren', difficulty: 'easy', explanation: 'Same subject → um...zu. I came to Germany in order to study medicine.' },
+                    { type: 'mc', q: 'Ich lerne viel, ___ die Prüfung ___.', options: ['um...zu bestehen', 'damit...besteht', 'weil...bestehe'], answer: 'um...zu bestehen', difficulty: 'hard', explanation: 'Same subject (ich lerne, ich bestehe) → um die Prüfung zu bestehen. To pass the exam.' }
+                ]
+            },
+            {
+                title: 'Doppelkonnektoren',
+                subtitle: 'Entweder...oder, weder...noch, sowohl...als auch',
+                level: 'B1',
+                grammar: '<h3>Doppelkonnektoren (Double Connectors)</h3><table class="grammar-table"><tr><th>Connector</th><th>Meaning</th><th>Example</th></tr><tr><td><b>entweder...oder</b></td><td>either...or</td><td><b>Entweder</b> kommst du mit, <b>oder</b> du bleibst hier.</td></tr><tr><td><b>weder...noch</b></td><td>neither...nor</td><td>Er trinkt <b>weder</b> Kaffee <b>noch</b> Tee.</td></tr><tr><td><b>sowohl...als auch</b></td><td>both...and</td><td>Sie spricht <b>sowohl</b> Deutsch <b>als auch</b> Englisch.</td></tr><tr><td><b>nicht nur...sondern auch</b></td><td>not only...but also</td><td>Er ist <b>nicht nur</b> klug, <b>sondern auch</b> fleißig.</td></tr><tr><td><b>zwar...aber</b></td><td>indeed...but / it\'s true...but</td><td>Er ist <b>zwar</b> nett, <b>aber</b> unzuverlässig.</td></tr></table>',
+                exercises: [
+                    { type: 'mc', q: '_____ trinke ich Tee, _____ trinke ich Kaffee. (one or the other)', options: ['Entweder...oder', 'Weder...noch', 'Sowohl...als auch'], answer: 'Entweder...oder', difficulty: 'easy', explanation: 'Either...or = entweder...oder. "Either I drink tea or I drink coffee."' },
+                    { type: 'mc', q: 'Er spricht _____ Deutsch _____ Englisch. Er spricht nur Arabisch.', options: ['weder...noch', 'sowohl...als auch', 'entweder...oder'], answer: 'weder...noch', difficulty: 'easy', explanation: 'Neither...nor = weder...noch. He speaks neither German nor English.' },
+                    { type: 'mc', q: 'Sie kann _____ gut kochen _____ gut backen. Sie ist talentiert!', options: ['sowohl...als auch', 'weder...noch', 'entweder...oder'], answer: 'sowohl...als auch', difficulty: 'medium', explanation: 'Both...and = sowohl...als auch. She can both cook and bake well.' },
+                    { type: 'mc', q: 'Er ist _____ intelligent, _____ auch sehr fleißig.', options: ['nicht nur...sondern', 'entweder...oder', 'weder...noch'], answer: 'nicht nur...sondern', difficulty: 'medium', explanation: 'Not only...but also = nicht nur...sondern auch. He is not only smart but also hardworking.' },
+                    { type: 'mc', q: 'Das Restaurant ist _____ teuer, _____ das Essen ist gut.', options: ['zwar...aber', 'weder...noch', 'sowohl...als auch'], answer: 'zwar...aber', difficulty: 'hard', explanation: '"zwar...aber" = it\'s true that...but. The restaurant is indeed expensive, but the food is good.' },
+                    { type: 'fill', q: 'Ich habe _____ Zeit _____ Geld für einen Urlaub. (neither...nor)', answer: 'weder|noch', difficulty: 'medium', explanation: 'weder...noch. I have neither time nor money for a vacation.' }
+                ]
+            },
+            {
+                title: 'Präpositionen mit Genitiv',
+                subtitle: 'Während, wegen, trotz, innerhalb, außerhalb',
+                level: 'B1',
+                grammar: '<h3>Genitiv-Präpositionen</h3><table class="grammar-table"><tr><th>Prep</th><th>Meaning</th><th>Example</th></tr><tr><td><b>während</b></td><td>during</td><td><b>Während</b> des Unterrichts (during the lesson)</td></tr><tr><td><b>wegen</b></td><td>because of</td><td><b>Wegen</b> des Regens (because of the rain)</td></tr><tr><td><b>trotz</b></td><td>despite</td><td><b>Trotz</b> des schlechten Wetters (despite the bad weather)</td></tr><tr><td><b>innerhalb</b></td><td>within</td><td><b>Innerhalb</b> einer Woche (within a week)</td></tr><tr><td><b>außerhalb</b></td><td>outside of</td><td><b>Außerhalb</b> der Stadt (outside the city)</td></tr></table><p>Genitiv forms: <b>des</b> (m/n) + -s/-es on noun, <b>der</b> (f/pl). Adjective ending: always <b>-en</b>.</p>',
+                exercises: [
+                    { type: 'mc', q: '_____ des Regens bleiben wir zu Hause. (because of)', options: ['Wegen', 'Trotz', 'Während', 'Innerhalb'], answer: 'Wegen', difficulty: 'easy', explanation: 'wegen = because of. "Wegen des Regens" = Because of the rain. + Genitiv.' },
+                    { type: 'mc', q: '_____ des schlechten Wetters gehen wir spazieren. (despite)', options: ['Trotz', 'Wegen', 'Während', 'Außerhalb'], answer: 'Trotz', difficulty: 'easy', explanation: 'trotz = despite. "Trotz des schlechten Wetters" = Despite the bad weather.' },
+                    { type: 'mc', q: '_____ der Pause essen die Schüler. (during)', options: ['Während', 'Wegen', 'Trotz', 'Innerhalb'], answer: 'Während', difficulty: 'easy', explanation: 'während = during. "Während der Pause" = During the break. der = feminin Genitiv.' },
+                    { type: 'fill', q: 'Die Lieferung kommt _____ einer Woche. (within)', answer: 'innerhalb', difficulty: 'medium', explanation: 'innerhalb = within. "Innerhalb einer Woche" = Within a week. einer = feminin Genitiv.' },
+                    { type: 'mc', q: 'Wegen _____ Unfalls war die Straße gesperrt.', options: ['des', 'dem', 'den', 'der'], answer: 'des', difficulty: 'medium', explanation: 'wegen + Genitiv. der Unfall (maskulin) → des Unfalls. Maskulin Genitiv = des + -s on noun.' },
+                    { type: 'mc', q: 'Trotz _____ langen Reise war er nicht müde.', options: ['der', 'die', 'dem', 'des'], answer: 'der', difficulty: 'hard', explanation: 'trotz + Genitiv. die Reise (feminin) → der Reise. Feminin Genitiv = der.' }
+                ]
+            },
+            {
+                title: 'Das Verb "lassen"',
+                subtitle: 'Leben und leben lassen',
+                level: 'B1',
+                grammar: '<h3>lassen - Three Meanings</h3><p><b>1. To let/allow:</b> <i>Lass mich in Ruhe!</i> (Leave me alone!)</p><p><b>2. To have something done:</b> <i>Ich lasse mein Auto reparieren.</i> (I\'m having my car repaired.)</p><p><b>3. To leave (behind):</b> <i>Ich lasse den Schlüssel zu Hause.</i> (I leave the key at home.)</p><p>Conjugation: ich lasse, du lässt, er lässt, wir lassen, ihr lasst, sie lassen.<br>Perfekt: hat gelassen / hat...lassen (with another infinitive: <i>Ich habe das Auto reparieren <b>lassen</b>.</i>)</p>',
+                exercises: [
+                    { type: 'mc', q: '_____ mich bitte ausreden! (let me)', options: ['Lass', 'Lasse', 'Lässt', 'Lasst'], answer: 'Lass', difficulty: 'easy', explanation: 'Imperative (du): Lass! "Lass mich ausreden!" = Let me finish speaking!' },
+                    { type: 'mc', q: 'Ich _____ meine Haare schneiden. (have done by someone)', options: ['lasse', 'lässt', 'lass', 'gelassen'], answer: 'lasse', difficulty: 'medium', explanation: 'ich lasse + Infinitiv = I have something done. "Ich lasse meine Haare schneiden." = I\'m having my hair cut.' },
+                    { type: 'mc', q: 'Er _____ seinen Koffer im Hotel. (leave behind)', options: ['lässt', 'lasse', 'lasst', 'lassen'], answer: 'lässt', difficulty: 'medium', explanation: 'er lässt = he leaves. "Er lässt seinen Koffer im Hotel." = He leaves his suitcase at the hotel.' },
+                    { type: 'mc', q: 'Meine Eltern _____ mich nicht alleine reisen. (don\'t let)', options: ['lassen', 'lässt', 'lasse', 'lasst'], answer: 'lassen', difficulty: 'easy', explanation: 'sie (plural) lassen. "Meine Eltern lassen mich nicht..." = My parents don\'t let me...' },
+                    { type: 'fill', q: 'Ich habe das Auto reparieren _____. (Perfekt of lassen with infinitive)', answer: 'lassen', difficulty: 'hard', explanation: 'With another infinitive, Perfekt uses "lassen" (not "gelassen"): "Ich habe das Auto reparieren lassen."' },
+                    { type: 'mc', q: 'Which meaning? "Lass uns ins Kino gehen!"', options: ['Let\'s (suggestion)', 'Have done', 'Leave behind'], answer: 'Let\'s (suggestion)', difficulty: 'medium', explanation: '"Lass uns..." = Let\'s... A common way to make suggestions. "Let\'s go to the cinema!"' }
+                ]
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let currentLesson = null;
+        let currentDifficultyFilter = 'all';
+        let mcShuffledOptions = {};
+
+        // INITIALIZE
+        function init() {
+            renderNavigation();
+            renderWelcome();
+            loadProgress();
+        }
+
+        // RENDER NAVIGATION
+        function renderNavigation() {
+            const navSections = document.getElementById('navSections');
+            navSections.innerHTML = `
+                <div class="nav-section">
+                    <div class="nav-section-title">Lektionen</div>
+                    ${lessons.map(lesson => `
+                        <div class="nav-item" onclick="selectLesson(${lesson.id})">
+                            <span>Lektion ${lesson.id}: ${lesson.title}</span>
+                            <span class="check" id="check-${lesson.id}" style="display:none;">✓</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            updateCompletionChecks();
+        }
+
+        // SELECT LESSON
+        function selectLesson(lessonId) {
+            currentLesson = lessons[lessonId - 1];
+            currentDifficultyFilter = 'all';
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.nav-item').classList.add('active');
+
+            document.getElementById('lessonTitle').textContent = `Lektion ${currentLesson.id}: ${currentLesson.title}`;
+            document.getElementById('lessonDescription').textContent = currentLesson.description;
+
+            renderTabs();
+            selectTab('grammar');
+        }
+
+        // RENDER TABS
+        function renderTabs() {
+            const tabsContainer = document.getElementById('tabsContainer');
+            tabsContainer.innerHTML = `
+                <div class="tab active" onclick="selectTab('grammar')">Grammatik</div>
+                <div class="tab" onclick="selectTab('exercises')">Übungen</div>
+            `;
+        }
+
+        // SELECT TAB
+        function selectTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+
+            if (tabName === 'grammar') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('grammarTab').innerHTML = currentLesson.grammar;
+                document.getElementById('grammarTab').classList.add('active');
+            } else if (tabName === 'exercises') {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                renderExercises();
+                document.getElementById('exercisesTab').classList.add('active');
+            }
+        }
+
+        // RENDER EXERCISES
+        function renderExercises() {
+            const exercisesTab = document.getElementById('exercisesTab');
+            const exercises = currentLesson.exercises;
+            const filtered = currentDifficultyFilter === 'all'
+                ? exercises
+                : exercises.filter(ex => ex.difficulty === currentDifficultyFilter);
+
+            let html = `
+                <div class="difficulty-filter">
+                    <button class="${currentDifficultyFilter === 'all' ? 'active' : ''}" onclick="setDifficultyFilter('all', ${currentLesson.id})">Alle</button>
+                    <button class="${currentDifficultyFilter === 'easy' ? 'active' : ''}" onclick="setDifficultyFilter('easy', ${currentLesson.id})">Leicht</button>
+                    <button class="${currentDifficultyFilter === 'medium' ? 'active' : ''}" onclick="setDifficultyFilter('medium', ${currentLesson.id})">Mittel</button>
+                    <button class="${currentDifficultyFilter === 'hard' ? 'active' : ''}" onclick="setDifficultyFilter('hard', ${currentLesson.id})">Schwer</button>
+                </div>
+            `;
+
+            filtered.forEach((exercise, idx) => {
+                const exId = `ex-${currentLesson.id}-${idx}`;
+                if (exercise.type === 'mc') {
+                    html += renderMCExercise(exercise, idx, currentLesson.id);
+                } else if (exercise.type === 'fill') {
+                    html += renderFillExercise(exercise, idx, currentLesson.id);
+                }
+            });
+
+            exercisesTab.innerHTML = html;
+        }
+
+        // RENDER MC EXERCISE
+        function renderMCExercise(exercise, idx, lessonId) {
+            const exId = `ex-${lessonId}-${idx}`;
+            if (!mcShuffledOptions[exId]) {
+                mcShuffledOptions[exId] = shuffleArray([...exercise.options]);
+            }
+
+            return `
+                <div class="exercise">
+                    <h4>Übung ${idx + 1}
+                        <span class="difficulty-badge difficulty-${exercise.difficulty}">${exercise.difficulty}</span>
+                    </h4>
+                    <label style="font-weight: 600; color: var(--text-primary); margin-bottom: 12px;">${exercise.q}</label>
+                    <div class="radio-group">
+                        ${mcShuffledOptions[exId].map(opt => `
+                            <div class="radio-option">
+                                <input type="radio" id="${exId}-${opt}" name="${exId}" value="${opt}">
+                                <label for="${exId}-${opt}">${opt}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="checkMCExercise('${exId}', '${exercise.answer}', '${exercise.explanation}')">Prüfen</button>
+                        <button class="btn btn-secondary" onclick="resetExercise('${exId}')">Zurücksetzen</button>
+                    </div>
+                    <div class="result-message" id="${exId}-result"></div>
+                    <div class="explanation-box" id="${exId}-explanation"></div>
+                </div>
+            `;
+        }
+
+        // RENDER FILL EXERCISE
+        function renderFillExercise(exercise, idx, lessonId) {
+            const exId = `ex-${lessonId}-${idx}`;
+            return `
+                <div class="exercise">
+                    <h4>Übung ${idx + 1}
+                        <span class="difficulty-badge difficulty-${exercise.difficulty}">${exercise.difficulty}</span>
+                    </h4>
+                    <div class="exercise-item">
+                        <label>${exercise.q}</label>
+                        <input type="text" id="${exId}-input" placeholder="Antwort">
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="checkFillExercise('${exId}', '${exercise.answer}', '${exercise.explanation}')">Prüfen</button>
+                        <button class="btn btn-secondary" onclick="resetExercise('${exId}')">Zurücksetzen</button>
+                    </div>
+                    <div class="result-message" id="${exId}-result"></div>
+                    <div class="explanation-box" id="${exId}-explanation"></div>
+                </div>
+            `;
+        }
+
+        // CHECK MC EXERCISE
+        function checkMCExercise(exId, correctAnswer, explanation) {
+            const selected = document.querySelector(`input[name="${exId}"]:checked`);
+            const resultDiv = document.getElementById(`${exId}-result`);
+            const explanationDiv = document.getElementById(`${exId}-explanation`);
+
+            if (!selected) {
+                resultDiv.textContent = 'Bitte wähle eine Antwort.';
+                resultDiv.className = 'result-message error';
+                return;
+            }
+
+            const isCorrect = selected.value === correctAnswer;
+            resultDiv.textContent = isCorrect ? '✓ Richtig!' : `✗ Falsch. Richtige Antwort: ${correctAnswer}`;
+            resultDiv.className = `result-message ${isCorrect ? 'success' : 'error'}`;
+            explanationDiv.textContent = explanation;
+            explanationDiv.classList.add('visible');
+
+            if (isCorrect) {
+                addScore(1);
+            }
+        }
+
+        // CHECK FILL EXERCISE
+        function checkFillExercise(exId, correctAnswer, explanation) {
+            const input = document.getElementById(`${exId}-input`);
+            const resultDiv = document.getElementById(`${exId}-result`);
+            const explanationDiv = document.getElementById(`${exId}-explanation`);
+            const userAnswer = input.value.trim().toLowerCase();
+            const correct = correctAnswer.toLowerCase();
+
+            if (!userAnswer) {
+                resultDiv.textContent = 'Bitte gib eine Antwort ein.';
+                resultDiv.className = 'result-message error';
+                return;
+            }
+
+            const isCorrect = userAnswer === correct;
+            resultDiv.textContent = isCorrect ? '✓ Richtig!' : `✗ Falsch. Richtige Antwort: ${correctAnswer}`;
+            resultDiv.className = `result-message ${isCorrect ? 'success' : 'error'}`;
+            explanationDiv.textContent = explanation;
+            explanationDiv.classList.add('visible');
+
+            if (isCorrect) {
+                addScore(1);
+            }
+        }
+
+        // RESET EXERCISE
+        function resetExercise(exId) {
+            document.querySelectorAll(`input[name="${exId}"]`).forEach(radio => radio.checked = false);
+            const input = document.getElementById(`${exId}-input`);
+            if (input) input.value = '';
+            document.getElementById(`${exId}-result`).innerHTML = '';
+            document.getElementById(`${exId}-result`).className = 'result-message';
+            document.getElementById(`${exId}-explanation`).innerHTML = '';
+            document.getElementById(`${exId}-explanation`).classList.remove('visible');
+        }
+
+        // DIFFICULTY FILTER
+        function setDifficultyFilter(difficulty, lessonId) {
+            currentDifficultyFilter = difficulty;
+            renderExercises();
+        }
+
+        // RENDER WELCOME
+        function renderWelcome() {
+            document.getElementById('welcomeTab').classList.add('active');
+            loadProgress();
+        }
+
+        // SCORE AND PROGRESS
+        function addScore(points) {
+            let score = parseInt(localStorage.getItem('totalScoreB1') || 0);
+            score += points;
+            localStorage.setItem('totalScoreB1', score);
+            document.getElementById('totalScore').textContent = score;
+        }
+
+        function markLessonComplete() {
+            let completed = JSON.parse(localStorage.getItem('completedLessonsB1') || '[]');
+            if (!completed.includes(currentLesson.id)) {
+                completed.push(currentLesson.id);
+                localStorage.setItem('completedLessonsB1', JSON.stringify(completed));
+            }
+            updateCompletionChecks();
+            loadProgress();
+        }
+
+        function updateCompletionChecks() {
+            const completed = JSON.parse(localStorage.getItem('completedLessonsB1') || '[]');
+            completed.forEach(lessonId => {
+                const check = document.getElementById(`check-${lessonId}`);
+                if (check) check.style.display = 'inline';
+            });
+        }
+
+        function loadProgress() {
+            const completed = JSON.parse(localStorage.getItem('completedLessonsB1') || '[]');
+            const score = parseInt(localStorage.getItem('totalScoreB1') || 0);
+            document.getElementById('completedCount').textContent = completed.length;
+            document.getElementById('totalScore').textContent = score;
+            document.getElementById('progressText').textContent = `${completed.length}/12 abgeschlossen`;
+        }
+
+        // UTILITY: SHUFFLE ARRAY
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // START
+        init();
+    </script>
+</body>
+</html>

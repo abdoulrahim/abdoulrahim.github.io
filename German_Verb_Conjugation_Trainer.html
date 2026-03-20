@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German Verb Conjugation Trainer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            height: calc(100vh - 150px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .difficulty-options,
+        .tense-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .practice-container {
+            display: none;
+        }
+
+        .practice-container.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .progress-section {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .question-card {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .person-label {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .input-group.full-conjugation {
+            flex-direction: column;
+        }
+
+        .conjugation-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .conjugation-row label {
+            min-width: 100px;
+            margin: 0;
+        }
+
+        .conjugation-row input {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        input[type="text"] {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f9fbff;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-submit,
+        .btn-hint,
+        .btn-secondary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-hint {
+            background: #fff3cd;
+            color: #856404;
+            flex: 1;
+        }
+
+        .btn-hint:hover {
+            background: #ffe69c;
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #495057;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .feedback-content {
+            margin-bottom: 10px;
+        }
+
+        .feedback-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feedback-answer {
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+
+        .feedback-rule {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        .results-container {
+            text-align: center;
+            display: none;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .results-score {
+            font-size: 3em;
+            font-weight: 700;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .results-details {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .results-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 400px;
+        }
+
+        .welcome-screen h2 {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .welcome-screen p {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 25px;
+            max-width: 500px;
+        }
+
+        .welcome-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .hint-text {
+            background: #fffacd;
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+            border-left: 3px solid #ffd700;
+        }
+
+        .score-summary {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .score-summary-text {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+
+            .question-card {
+                padding: 15px;
+            }
+
+            .conjugation-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .conjugation-row label {
+                min-width: unset;
+            }
+
+            .mode-btn {
+                min-width: unset;
+            }
+        }
+
+        .timer {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .timer.warning {
+            color: #ff9800;
+        }
+
+        .timer.critical {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇩🇪 German Verb Conjugation Trainer</h1>
+            <p>Master German verb conjugations through interactive practice</p>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Difficulty Level</div>
+                    <div class="difficulty-options">
+                        <label>
+                            <input type="radio" name="difficulty" value="beginner" checked>
+                            Beginner
+                        </label>
+                        <label>
+                            <input type="radio" name="difficulty" value="intermediate">
+                            Intermediate
+                        </label>
+                        <label>
+                            <input type="radio" name="difficulty" value="advanced">
+                            Advanced
+                        </label>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Tenses to Practice</div>
+                    <div class="tense-options">
+                        <label>
+                            <input type="checkbox" name="tense" value="präsens" checked>
+                            Präsens (Present)
+                        </label>
+                        <label>
+                            <input type="checkbox" name="tense" value="perfekt" checked>
+                            Perfekt (Perfect)
+                        </label>
+                        <label>
+                            <input type="checkbox" name="tense" value="präteritum" checked>
+                            Präteritum (Past)
+                        </label>
+                        <label>
+                            <input type="checkbox" name="tense" value="konjunktiv" checked>
+                            Konjunktiv II
+                        </label>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="btn-primary" onclick="app.startMode('quick')">Start Quick Practice</button>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="btn-primary" onclick="app.startMode('full')">Start Full Conjugation</button>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="btn-primary" onclick="app.startMode('challenge')">Random Challenge</button>
+                </div>
+
+                <div class="sidebar-section">
+                    <button class="btn-secondary" onclick="app.reset()" style="margin-top: 20px;">Reset</button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div class="welcome-screen" id="welcomeScreen">
+                    <h2>Welcome to the German Verb Trainer!</h2>
+                    <p>Choose a practice mode from the left sidebar to get started. Select your difficulty level and preferred tenses.</p>
+                </div>
+
+                <div id="quickPractice" class="practice-container">
+                    <div class="score-summary" id="scoreSummaryQuick" style="display: none;">
+                        <div class="score-summary-text">Score: <span id="scoreQuick">0</span> / <span id="totalQuick">0</span></div>
+                    </div>
+                    <div class="progress-section">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressBarQuick" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-text" id="quickQuestion"></div>
+                        <div class="person-label" id="quickPerson"></div>
+                        <div class="input-group">
+                            <input type="text" id="quickInput" placeholder="Type the conjugated form..." autocomplete="off">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn-submit" onclick="app.submitQuickAnswer()">Submit</button>
+                            <button class="btn-hint" onclick="app.showHintQuick()">Show Hint</button>
+                        </div>
+                        <div class="hint-text" id="hintQuick" style="display: none;"></div>
+                        <div class="feedback" id="feedbackQuick"></div>
+                    </div>
+                </div>
+
+                <div id="fullConjugation" class="practice-container">
+                    <div class="score-summary" id="scoreSummaryFull" style="display: none;">
+                        <div class="score-summary-text">Verb: <span id="currentVerbFull"></span></div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-text" id="fullQuestion"></div>
+                        <div class="input-group full-conjugation" id="fullConjugationInputs"></div>
+                        <div class="button-group">
+                            <button class="btn-submit" onclick="app.submitFullAnswer()">Submit Conjugation</button>
+                            <button class="btn-hint" onclick="app.showHintFull()">Show Hint</button>
+                        </div>
+                        <div class="hint-text" id="hintFull" style="display: none;"></div>
+                        <div class="feedback" id="feedbackFull"></div>
+                    </div>
+                </div>
+
+                <div id="challenge" class="practice-container">
+                    <div class="score-summary" id="scoreSummaryChallenge" style="display: none;">
+                        <div class="score-summary-text">Question: <span id="questionCounter">1</span> / 20</div>
+                    </div>
+                    <div id="timerContainer" style="display: none;" class="timer" id="timer"></div>
+                    <div class="progress-section">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressBarChallenge" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="question-card">
+                        <div class="question-text" id="challengeQuestion"></div>
+                        <div class="person-label" id="challengePerson"></div>
+                        <div class="input-group">
+                            <input type="text" id="challengeInput" placeholder="Type the answer..." autocomplete="off">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn-submit" onclick="app.submitChallengeAnswer()">Submit</button>
+                            <button class="btn-hint" onclick="app.showHintChallenge()">Show Hint</button>
+                        </div>
+                        <div class="hint-text" id="hintChallenge" style="display: none;"></div>
+                        <div class="feedback" id="feedbackChallenge"></div>
+                    </div>
+                </div>
+
+                <div id="resultsScreen" class="results-container">
+                    <h2 style="color: #667eea; margin-bottom: 20px;">Practice Complete!</h2>
+                    <div class="results-score" id="finalScore"></div>
+                    <div class="results-details" id="resultsDetails"></div>
+                    <div class="results-buttons">
+                        <button class="btn-primary" onclick="app.reset()" style="width: auto; padding: 12px 40px;">Back to Home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verb database
+        const verbDatabase = [
+            // Regular verbs
+            { infinitive: 'machen', english: 'to make/do', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'mache', du: 'machst', 'er/sie/es': 'macht', wir: 'machen', ihr: 'macht', 'sie/Sie': 'machen' },
+              perfekt: { ich: 'habe gemacht', du: 'hast gemacht', 'er/sie/es': 'hat gemacht', wir: 'haben gemacht', ihr: 'habt gemacht', 'sie/Sie': 'haben gemacht' },
+              präteritum: { ich: 'machte', du: 'machtest', 'er/sie/es': 'machte', wir: 'machten', ihr: 'machtet', 'sie/Sie': 'machten' },
+              konjunktiv: { ich: 'würde machen', du: 'würdest machen', 'er/sie/es': 'würde machen', wir: 'würden machen', ihr: 'würdet machen', 'sie/Sie': 'würden machen' },
+              partizip: 'gemacht', rule: 'Regular verb - add -e, -st, -t endings' },
+            { infinitive: 'arbeiten', english: 'to work', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'arbeite', du: 'arbeitest', 'er/sie/es': 'arbeitet', wir: 'arbeiten', ihr: 'arbeitet', 'sie/Sie': 'arbeiten' },
+              perfekt: { ich: 'habe gearbeitet', du: 'hast gearbeitet', 'er/sie/es': 'hat gearbeitet', wir: 'haben gearbeitet', ihr: 'habt gearbeitet', 'sie/Sie': 'haben gearbeitet' },
+              präteritum: { ich: 'arbeitete', du: 'arbeitetest', 'er/sie/es': 'arbeitete', wir: 'arbeiteten', ihr: 'arbeitetet', 'sie/Sie': 'arbeiteten' },
+              konjunktiv: { ich: 'würde arbeiten', du: 'würdest arbeiten', 'er/sie/es': 'würde arbeiten', wir: 'würden arbeiten', ihr: 'würdet arbeiten', 'sie/Sie': 'würden arbeiten' },
+              partizip: 'gearbeitet', rule: 'Regular verb with -t- stem (t,d,n endings need extra -e-)' },
+            { infinitive: 'lernen', english: 'to learn', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'lerne', du: 'lernst', 'er/sie/es': 'lernt', wir: 'lernen', ihr: 'lernt', 'sie/Sie': 'lernen' },
+              perfekt: { ich: 'habe gelernt', du: 'hast gelernt', 'er/sie/es': 'hat gelernt', wir: 'haben gelernt', ihr: 'habt gelernt', 'sie/Sie': 'haben gelernt' },
+              präteritum: { ich: 'lernte', du: 'lerntest', 'er/sie/es': 'lernte', wir: 'lernten', ihr: 'lerntet', 'sie/Sie': 'lernten' },
+              konjunktiv: { ich: 'würde lernen', du: 'würdest lernen', 'er/sie/es': 'würde lernen', wir: 'würden lernen', ihr: 'würdet lernen', 'sie/Sie': 'würden lernen' },
+              partizip: 'gelernt', rule: 'Regular verb - add standard endings' },
+            { infinitive: 'spielen', english: 'to play', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'spiele', du: 'spielst', 'er/sie/es': 'spielt', wir: 'spielen', ihr: 'spielt', 'sie/Sie': 'spielen' },
+              perfekt: { ich: 'habe gespielt', du: 'hast gespielt', 'er/sie/es': 'hat gespielt', wir: 'haben gespielt', ihr: 'habt gespielt', 'sie/Sie': 'haben gespielt' },
+              präteritum: { ich: 'spielte', du: 'spieltest', 'er/sie/es': 'spielte', wir: 'spielten', ihr: 'spieltet', 'sie/Sie': 'spielten' },
+              konjunktiv: { ich: 'würde spielen', du: 'würdest spielen', 'er/sie/es': 'würde spielen', wir: 'würden spielen', ihr: 'würdet spielen', 'sie/Sie': 'würden spielen' },
+              partizip: 'gespielt', rule: 'Regular verb - add standard endings' },
+            { infinitive: 'kaufen', english: 'to buy', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'kaufe', du: 'kaufst', 'er/sie/es': 'kauft', wir: 'kaufen', ihr: 'kauft', 'sie/Sie': 'kaufen' },
+              perfekt: { ich: 'habe gekauft', du: 'hast gekauft', 'er/sie/es': 'hat gekauft', wir: 'haben gekauft', ihr: 'habt gekauft', 'sie/Sie': 'haben gekauft' },
+              präteritum: { ich: 'kaufte', du: 'kauftest', 'er/sie/es': 'kaufte', wir: 'kauften', ihr: 'kauftet', 'sie/Sie': 'kauften' },
+              konjunktiv: { ich: 'würde kaufen', du: 'würdest kaufen', 'er/sie/es': 'würde kaufen', wir: 'würden kaufen', ihr: 'würdet kaufen', 'sie/Sie': 'würden kaufen' },
+              partizip: 'gekauft', rule: 'Regular verb - add standard endings' },
+            { infinitive: 'wohnen', english: 'to live/reside', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'wohne', du: 'wohnst', 'er/sie/es': 'wohnt', wir: 'wohnen', ihr: 'wohnt', 'sie/Sie': 'wohnen' },
+              perfekt: { ich: 'habe gewohnt', du: 'hast gewohnt', 'er/sie/es': 'hat gewohnt', wir: 'haben gewohnt', ihr: 'habt gewohnt', 'sie/Sie': 'haben gewohnt' },
+              präteritum: { ich: 'wohnte', du: 'wohntest', 'er/sie/es': 'wohnte', wir: 'wohnten', ihr: 'wohntet', 'sie/Sie': 'wohnten' },
+              konjunktiv: { ich: 'würde wohnen', du: 'würdest wohnen', 'er/sie/es': 'würde wohnen', wir: 'würden wohnen', ihr: 'würdet wohnen', 'sie/Sie': 'würden wohnen' },
+              partizip: 'gewohnt', rule: 'Regular verb - add standard endings' },
+            { infinitive: 'kochen', english: 'to cook', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'koche', du: 'kochst', 'er/sie/es': 'kocht', wir: 'kochen', ihr: 'kocht', 'sie/Sie': 'kochen' },
+              perfekt: { ich: 'habe gekocht', du: 'hast gekocht', 'er/sie/es': 'hat gekocht', wir: 'haben gekocht', ihr: 'habt gekocht', 'sie/Sie': 'haben gekocht' },
+              präteritum: { ich: 'kochte', du: 'kochtest', 'er/sie/es': 'kochte', wir: 'kochten', ihr: 'kochtet', 'sie/Sie': 'kochten' },
+              konjunktiv: { ich: 'würde kochen', du: 'würdest kochen', 'er/sie/es': 'würde kochen', wir: 'würden kochen', ihr: 'würdet kochen', 'sie/Sie': 'würden kochen' },
+              partizip: 'gekocht', rule: 'Regular verb - add standard endings' },
+            { infinitive: 'hören', english: 'to hear', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'höre', du: 'hörst', 'er/sie/es': 'hört', wir: 'hören', ihr: 'hört', 'sie/Sie': 'hören' },
+              perfekt: { ich: 'habe gehört', du: 'hast gehört', 'er/sie/es': 'hat gehört', wir: 'haben gehört', ihr: 'habt gehört', 'sie/Sie': 'haben gehört' },
+              präteritum: { ich: 'hörte', du: 'hörtest', 'er/sie/es': 'hörte', wir: 'hörten', ihr: 'hörtet', 'sie/Sie': 'hörten' },
+              konjunktiv: { ich: 'würde hören', du: 'würdest hören', 'er/sie/es': 'würde hören', wir: 'würden hören', ihr: 'würdet hören', 'sie/Sie': 'würden hören' },
+              partizip: 'gehört', rule: 'Regular verb - add standard endings' },
+            { infinitive: 'tanzen', english: 'to dance', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'tanze', du: 'tanzt', 'er/sie/es': 'tanzt', wir: 'tanzen', ihr: 'tanzt', 'sie/Sie': 'tanzen' },
+              perfekt: { ich: 'habe getanzt', du: 'hast getanzt', 'er/sie/es': 'hat getanzt', wir: 'haben getanzt', ihr: 'habt getanzt', 'sie/Sie': 'haben getanzt' },
+              präteritum: { ich: 'tanzte', du: 'tanztest', 'er/sie/es': 'tanzte', wir: 'tanzten', ihr: 'tanztet', 'sie/Sie': 'tanzten' },
+              konjunktiv: { ich: 'würde tanzen', du: 'würdest tanzen', 'er/sie/es': 'würde tanzen', wir: 'würden tanzen', ihr: 'würdet tanzen', 'sie/Sie': 'würden tanzen' },
+              partizip: 'getanzt', rule: 'Regular verb with -z- stem - add standard endings' },
+            { infinitive: 'fragen', english: 'to ask', type: 'regular', auxilary: 'haben',
+              präsens: { ich: 'frage', du: 'fragst', 'er/sie/es': 'fragt', wir: 'fragen', ihr: 'fragt', 'sie/Sie': 'fragen' },
+              perfekt: { ich: 'habe gefragt', du: 'hast gefragt', 'er/sie/es': 'hat gefragt', wir: 'haben gefragt', ihr: 'habt gefragt', 'sie/Sie': 'haben gefragt' },
+              präteritum: { ich: 'fragte', du: 'fragtest', 'er/sie/es': 'fragte', wir: 'fragten', ihr: 'fragtet', 'sie/Sie': 'fragten' },
+              konjunktiv: { ich: 'würde fragen', du: 'würdest fragen', 'er/sie/es': 'würde fragen', wir: 'würden fragen', ihr: 'würdet fragen', 'sie/Sie': 'würden fragen' },
+              partizip: 'gefragt', rule: 'Regular verb - add standard endings' },
+
+            // Vowel change (e→i)
+            { infinitive: 'essen', english: 'to eat', type: 'vowelchange-e', auxilary: 'haben',
+              präsens: { ich: 'esse', du: 'isst', 'er/sie/es': 'isst', wir: 'essen', ihr: 'esst', 'sie/Sie': 'essen' },
+              perfekt: { ich: 'habe gegessen', du: 'hast gegessen', 'er/sie/es': 'hat gegessen', wir: 'haben gegessen', ihr: 'habt gegessen', 'sie/Sie': 'haben gegessen' },
+              präteritum: { ich: 'aß', du: 'aßt', 'er/sie/es': 'aß', wir: 'aßen', ihr: 'aßt', 'sie/Sie': 'aßen' },
+              konjunktiv: { ich: 'würde essen', du: 'würdest essen', 'er/sie/es': 'würde essen', wir: 'würden essen', ihr: 'würdet essen', 'sie/Sie': 'würden essen' },
+              partizip: 'gegessen', rule: 'Vowel change e→i in du/er/sie/es forms (also änders zu ä in Präteritum)' },
+            { infinitive: 'sprechen', english: 'to speak', type: 'vowelchange-e', auxilary: 'haben',
+              präsens: { ich: 'spreche', du: 'sprichst', 'er/sie/es': 'spricht', wir: 'sprechen', ihr: 'sprecht', 'sie/Sie': 'sprechen' },
+              perfekt: { ich: 'habe gesprochen', du: 'hast gesprochen', 'er/sie/es': 'hat gesprochen', wir: 'haben gesprochen', ihr: 'habt gesprochen', 'sie/Sie': 'haben gesprochen' },
+              präteritum: { ich: 'sprach', du: 'sprachst', 'er/sie/es': 'sprach', wir: 'sprachen', ihr: 'spracht', 'sie/Sie': 'sprachen' },
+              konjunktiv: { ich: 'würde sprechen', du: 'würdest sprechen', 'er/sie/es': 'würde sprechen', wir: 'würden sprechen', ihr: 'würdet sprechen', 'sie/Sie': 'würden sprechen' },
+              partizip: 'gesprochen', rule: 'Vowel change e→i in du/er/sie/es forms' },
+            { infinitive: 'helfen', english: 'to help', type: 'vowelchange-e', auxilary: 'haben',
+              präsens: { ich: 'helfe', du: 'hilfst', 'er/sie/es': 'hilft', wir: 'helfen', ihr: 'helft', 'sie/Sie': 'helfen' },
+              perfekt: { ich: 'habe geholfen', du: 'hast geholfen', 'er/sie/es': 'hat geholfen', wir: 'haben geholfen', ihr: 'habt geholfen', 'sie/Sie': 'haben geholfen' },
+              präteritum: { ich: 'half', du: 'halfst', 'er/sie/es': 'half', wir: 'halfen', ihr: 'halft', 'sie/Sie': 'halfen' },
+              konjunktiv: { ich: 'würde helfen', du: 'würdest helfen', 'er/sie/es': 'würde helfen', wir: 'würden helfen', ihr: 'würdet helfen', 'sie/Sie': 'würden helfen' },
+              partizip: 'geholfen', rule: 'Vowel change e→i in du/er/sie/es forms' },
+            { infinitive: 'nehmen', english: 'to take', type: 'vowelchange-e', auxilary: 'haben',
+              präsens: { ich: 'nehme', du: 'nimmst', 'er/sie/es': 'nimmt', wir: 'nehmen', ihr: 'nehmt', 'sie/Sie': 'nehmen' },
+              perfekt: { ich: 'habe genommen', du: 'hast genommen', 'er/sie/es': 'hat genommen', wir: 'haben genommen', ihr: 'habt genommen', 'sie/Sie': 'haben genommen' },
+              präteritum: { ich: 'nahm', du: 'nahmst', 'er/sie/es': 'nahm', wir: 'nahmen', ihr: 'nahmt', 'sie/Sie': 'nahmen' },
+              konjunktiv: { ich: 'würde nehmen', du: 'würdest nehmen', 'er/sie/es': 'würde nehmen', wir: 'würden nehmen', ihr: 'würdet nehmen', 'sie/Sie': 'würden nehmen' },
+              partizip: 'genommen', rule: 'Vowel change e→i in du/er/sie/es forms' },
+            { infinitive: 'geben', english: 'to give', type: 'vowelchange-e', auxilary: 'haben',
+              präsens: { ich: 'gebe', du: 'gibst', 'er/sie/es': 'gibt', wir: 'geben', ihr: 'gebt', 'sie/Sie': 'geben' },
+              perfekt: { ich: 'habe gegeben', du: 'hast gegeben', 'er/sie/es': 'hat gegeben', wir: 'haben gegeben', ihr: 'habt gegeben', 'sie/Sie': 'haben gegeben' },
+              präteritum: { ich: 'gab', du: 'gabst', 'er/sie/es': 'gab', wir: 'gaben', ihr: 'gabt', 'sie/Sie': 'gaben' },
+              konjunktiv: { ich: 'würde geben', du: 'würdest geben', 'er/sie/es': 'würde geben', wir: 'würden geben', ihr: 'würdet geben', 'sie/Sie': 'würden geben' },
+              partizip: 'gegeben', rule: 'Vowel change e→i in du/er/sie/es forms' },
+            { infinitive: 'lesen', english: 'to read', type: 'vowelchange-e', auxilary: 'haben',
+              präsens: { ich: 'lese', du: 'liest', 'er/sie/es': 'liest', wir: 'lesen', ihr: 'lest', 'sie/Sie': 'lesen' },
+              perfekt: { ich: 'habe gelesen', du: 'hast gelesen', 'er/sie/es': 'hat gelesen', wir: 'haben gelesen', ihr: 'habt gelesen', 'sie/Sie': 'haben gelesen' },
+              präteritum: { ich: 'las', du: 'last', 'er/sie/es': 'las', wir: 'lasen', ihr: 'last', 'sie/Sie': 'lasen' },
+              konjunktiv: { ich: 'würde lesen', du: 'würdest lesen', 'er/sie/es': 'würde lesen', wir: 'würden lesen', ihr: 'würdet lesen', 'sie/Sie': 'würden lesen' },
+              partizip: 'gelesen', rule: 'Vowel change e→i in du/er/sie/es forms' },
+            { infinitive: 'vergessen', english: 'to forget', type: 'vowelchange-e', auxilary: 'haben',
+              präsens: { ich: 'vergesse', du: 'vergisst', 'er/sie/es': 'vergisst', wir: 'vergessen', ihr: 'vergesst', 'sie/Sie': 'vergessen' },
+              perfekt: { ich: 'habe vergessen', du: 'hast vergessen', 'er/sie/es': 'hat vergessen', wir: 'haben vergessen', ihr: 'habt vergessen', 'sie/Sie': 'haben vergessen' },
+              präteritum: { ich: 'vergaß', du: 'vergaßt', 'er/sie/es': 'vergaß', wir: 'vergaßen', ihr: 'vergaßt', 'sie/Sie': 'vergaßen' },
+              konjunktiv: { ich: 'würde vergessen', du: 'würdest vergessen', 'er/sie/es': 'würde vergessen', wir: 'würden vergessen', ihr: 'würdet vergessen', 'sie/Sie': 'würden vergessen' },
+              partizip: 'vergessen', rule: 'Vowel change e→i in du/er/sie/es forms' },
+            { infinitive: 'treffen', english: 'to meet', type: 'vowelchange-e', auxilary: 'haben',
+              präsens: { ich: 'treffe', du: 'triffst', 'er/sie/es': 'trifft', wir: 'treffen', ihr: 'trefft', 'sie/Sie': 'treffen' },
+              perfekt: { ich: 'habe getroffen', du: 'hast getroffen', 'er/sie/es': 'hat getroffen', wir: 'haben getroffen', ihr: 'habt getroffen', 'sie/Sie': 'haben getroffen' },
+              präteritum: { ich: 'traf', du: 'trafst', 'er/sie/es': 'traf', wir: 'trafen', ihr: 'traft', 'sie/Sie': 'trafen' },
+              konjunktiv: { ich: 'würde treffen', du: 'würdest treffen', 'er/sie/es': 'würde treffen', wir: 'würden treffen', ihr: 'würdet treffen', 'sie/Sie': 'würden treffen' },
+              partizip: 'getroffen', rule: 'Vowel change e→i in du/er/sie/es forms' },
+            { infinitive: 'werfen', english: 'to throw', type: 'vowelchange-e', auxilary: 'haben',
+              präsens: { ich: 'werfe', du: 'wirfst', 'er/sie/es': 'wirft', wir: 'werfen', ihr: 'werft', 'sie/Sie': 'werfen' },
+              perfekt: { ich: 'habe geworfen', du: 'hast geworfen', 'er/sie/es': 'hat geworfen', wir: 'haben geworfen', ihr: 'habt geworfen', 'sie/Sie': 'haben geworfen' },
+              präteritum: { ich: 'warf', du: 'warfst', 'er/sie/es': 'warf', wir: 'warfen', ihr: 'warft', 'sie/Sie': 'warfen' },
+              konjunktiv: { ich: 'würde werfen', du: 'würdest werfen', 'er/sie/es': 'würde werfen', wir: 'würden werfen', ihr: 'würdet werfen', 'sie/Sie': 'würden werfen' },
+              partizip: 'geworfen', rule: 'Vowel change e→i in du/er/sie/es forms' },
+
+            // Vowel change (a→ä)
+            { infinitive: 'fahren', english: 'to drive/travel', type: 'vowelchange-a', auxilary: 'sein',
+              präsens: { ich: 'fahre', du: 'fährst', 'er/sie/es': 'fährt', wir: 'fahren', ihr: 'fahrt', 'sie/Sie': 'fahren' },
+              perfekt: { ich: 'bin gefahren', du: 'bist gefahren', 'er/sie/es': 'ist gefahren', wir: 'sind gefahren', ihr: 'seid gefahren', 'sie/Sie': 'sind gefahren' },
+              präteritum: { ich: 'fuhr', du: 'fuhrst', 'er/sie/es': 'fuhr', wir: 'fuhren', ihr: 'fuhrt', 'sie/Sie': 'fuhren' },
+              konjunktiv: { ich: 'würde fahren', du: 'würdest fahren', 'er/sie/es': 'würde fahren', wir: 'würden fahren', ihr: 'würdet fahren', 'sie/Sie': 'würden fahren' },
+              partizip: 'gefahren', rule: 'Vowel change a→ä in du/er/sie/es forms' },
+            { infinitive: 'schlafen', english: 'to sleep', type: 'vowelchange-a', auxilary: 'haben',
+              präsens: { ich: 'schlafe', du: 'schläfst', 'er/sie/es': 'schläft', wir: 'schlafen', ihr: 'schlaft', 'sie/Sie': 'schlafen' },
+              perfekt: { ich: 'habe geschlafen', du: 'hast geschlafen', 'er/sie/es': 'hat geschlafen', wir: 'haben geschlafen', ihr: 'habt geschlafen', 'sie/Sie': 'haben geschlafen' },
+              präteritum: { ich: 'schlief', du: 'schliefst', 'er/sie/es': 'schlief', wir: 'schliefen', ihr: 'schlieft', 'sie/Sie': 'schliefen' },
+              konjunktiv: { ich: 'würde schlafen', du: 'würdest schlafen', 'er/sie/es': 'würde schlafen', wir: 'würden schlafen', ihr: 'würdet schlafen', 'sie/Sie': 'würden schlafen' },
+              partizip: 'geschlafen', rule: 'Vowel change a→ä in du/er/sie/es forms' },
+            { infinitive: 'tragen', english: 'to wear/carry', type: 'vowelchange-a', auxilary: 'haben',
+              präsens: { ich: 'trage', du: 'trägst', 'er/sie/es': 'trägt', wir: 'tragen', ihr: 'tragt', 'sie/Sie': 'tragen' },
+              perfekt: { ich: 'habe getragen', du: 'hast getragen', 'er/sie/es': 'hat getragen', wir: 'haben getragen', ihr: 'habt getragen', 'sie/Sie': 'haben getragen' },
+              präteritum: { ich: 'trug', du: 'trugst', 'er/sie/es': 'trug', wir: 'trugen', ihr: 'trugt', 'sie/Sie': 'trugen' },
+              konjunktiv: { ich: 'würde tragen', du: 'würdest tragen', 'er/sie/es': 'würde tragen', wir: 'würden tragen', ihr: 'würdet tragen', 'sie/Sie': 'würden tragen' },
+              partizip: 'getragen', rule: 'Vowel change a→ä in du/er/sie/es forms' },
+            { infinitive: 'laufen', english: 'to run', type: 'vowelchange-a', auxilary: 'sein',
+              präsens: { ich: 'laufe', du: 'läufst', 'er/sie/es': 'läuft', wir: 'laufen', ihr: 'lauft', 'sie/Sie': 'laufen' },
+              perfekt: { ich: 'bin gelaufen', du: 'bist gelaufen', 'er/sie/es': 'ist gelaufen', wir: 'sind gelaufen', ihr: 'seid gelaufen', 'sie/Sie': 'sind gelaufen' },
+              präteritum: { ich: 'lief', du: 'liefst', 'er/sie/es': 'lief', wir: 'liefen', ihr: 'lieft', 'sie/Sie': 'liefen' },
+              konjunktiv: { ich: 'würde laufen', du: 'würdest laufen', 'er/sie/es': 'würde laufen', wir: 'würden laufen', ihr: 'würdet laufen', 'sie/Sie': 'würden laufen' },
+              partizip: 'gelaufen', rule: 'Vowel change a→ä in du/er/sie/es forms' },
+            { infinitive: 'fallen', english: 'to fall', type: 'vowelchange-a', auxilary: 'sein',
+              präsens: { ich: 'falle', du: 'fällst', 'er/sie/es': 'fällt', wir: 'fallen', ihr: 'fallt', 'sie/Sie': 'fallen' },
+              perfekt: { ich: 'bin gefallen', du: 'bist gefallen', 'er/sie/es': 'ist gefallen', wir: 'sind gefallen', ihr: 'seid gefallen', 'sie/Sie': 'sind gefallen' },
+              präteritum: { ich: 'fiel', du: 'fielst', 'er/sie/es': 'fiel', wir: 'fielen', ihr: 'fielt', 'sie/Sie': 'fielen' },
+              konjunktiv: { ich: 'würde fallen', du: 'würdest fallen', 'er/sie/es': 'würde fallen', wir: 'würden fallen', ihr: 'würdet fallen', 'sie/Sie': 'würden fallen' },
+              partizip: 'gefallen', rule: 'Vowel change a→ä in du/er/sie/es forms' },
+            { infinitive: 'halten', english: 'to hold', type: 'vowelchange-a', auxilary: 'haben',
+              präsens: { ich: 'halte', du: 'hältst', 'er/sie/es': 'hält', wir: 'halten', ihr: 'haltet', 'sie/Sie': 'halten' },
+              perfekt: { ich: 'habe gehalten', du: 'hast gehalten', 'er/sie/es': 'hat gehalten', wir: 'haben gehalten', ihr: 'habt gehalten', 'sie/Sie': 'haben gehalten' },
+              präteritum: { ich: 'hielt', du: 'hieltest', 'er/sie/es': 'hielt', wir: 'hielten', ihr: 'hieltet', 'sie/Sie': 'hielten' },
+              konjunktiv: { ich: 'würde halten', du: 'würdest halten', 'er/sie/es': 'würde halten', wir: 'würden halten', ihr: 'würdet halten', 'sie/Sie': 'würden halten' },
+              partizip: 'gehalten', rule: 'Vowel change a→ä in du/er/sie/es forms' },
+            { infinitive: 'waschen', english: 'to wash', type: 'vowelchange-a', auxilary: 'haben',
+              präsens: { ich: 'wasche', du: 'wäschst', 'er/sie/es': 'wäscht', wir: 'waschen', ihr: 'wascht', 'sie/Sie': 'waschen' },
+              perfekt: { ich: 'habe gewaschen', du: 'hast gewaschen', 'er/sie/es': 'hat gewaschen', wir: 'haben gewaschen', ihr: 'habt gewaschen', 'sie/Sie': 'haben gewaschen' },
+              präteritum: { ich: 'wusch', du: 'wuschst', 'er/sie/es': 'wusch', wir: 'wuschen', ihr: 'wuscht', 'sie/Sie': 'wuschen' },
+              konjunktiv: { ich: 'würde waschen', du: 'würdest waschen', 'er/sie/es': 'würde waschen', wir: 'würden waschen', ihr: 'würdet waschen', 'sie/Sie': 'würden waschen' },
+              partizip: 'gewaschen', rule: 'Vowel change a→ä in du/er/sie/es forms' },
+            { infinitive: 'lassen', english: 'to let/allow', type: 'vowelchange-a', auxilary: 'haben',
+              präsens: { ich: 'lasse', du: 'lässt', 'er/sie/es': 'lässt', wir: 'lassen', ihr: 'lasst', 'sie/Sie': 'lassen' },
+              perfekt: { ich: 'habe gelassen', du: 'hast gelassen', 'er/sie/es': 'hat gelassen', wir: 'haben gelassen', ihr: 'habt gelassen', 'sie/Sie': 'haben gelassen' },
+              präteritum: { ich: 'ließ', du: 'ließt', 'er/sie/es': 'ließ', wir: 'ließen', ihr: 'ließt', 'sie/Sie': 'ließen' },
+              konjunktiv: { ich: 'würde lassen', du: 'würdest lassen', 'er/sie/es': 'würde lassen', wir: 'würden lassen', ihr: 'würdet lassen', 'sie/Sie': 'würden lassen' },
+              partizip: 'gelassen', rule: 'Vowel change a→ä in du/er/sie/es forms' },
+
+            // Irregular verbs
+            { infinitive: 'sein', english: 'to be', type: 'irregular', auxilary: 'sein',
+              präsens: { ich: 'bin', du: 'bist', 'er/sie/es': 'ist', wir: 'sind', ihr: 'seid', 'sie/Sie': 'sind' },
+              perfekt: { ich: 'bin gewesen', du: 'bist gewesen', 'er/sie/es': 'ist gewesen', wir: 'sind gewesen', ihr: 'seid gewesen', 'sie/Sie': 'sind gewesen' },
+              präteritum: { ich: 'war', du: 'warst', 'er/sie/es': 'war', wir: 'waren', ihr: 'wart', 'sie/Sie': 'waren' },
+              konjunktiv: { ich: 'wäre', du: 'wärest', 'er/sie/es': 'wäre', wir: 'wären', ihr: 'wäret', 'sie/Sie': 'wären' },
+              partizip: 'gewesen', rule: 'Highly irregular - memorize!' },
+            { infinitive: 'haben', english: 'to have', type: 'irregular', auxilary: 'haben',
+              präsens: { ich: 'habe', du: 'hast', 'er/sie/es': 'hat', wir: 'haben', ihr: 'habt', 'sie/Sie': 'haben' },
+              perfekt: { ich: 'habe gehabt', du: 'hast gehabt', 'er/sie/es': 'hat gehabt', wir: 'haben gehabt', ihr: 'habt gehabt', 'sie/Sie': 'haben gehabt' },
+              präteritum: { ich: 'hatte', du: 'hattest', 'er/sie/es': 'hatte', wir: 'hatten', ihr: 'hattet', 'sie/Sie': 'hatten' },
+              konjunktiv: { ich: 'hätte', du: 'hättest', 'er/sie/es': 'hätte', wir: 'hätten', ihr: 'hättet', 'sie/Sie': 'hätten' },
+              partizip: 'gehabt', rule: 'Highly irregular - memorize!' },
+            { infinitive: 'werden', english: 'to become', type: 'irregular', auxilary: 'sein',
+              präsens: { ich: 'werde', du: 'wirst', 'er/sie/es': 'wird', wir: 'werden', ihr: 'werdet', 'sie/Sie': 'werden' },
+              perfekt: { ich: 'bin geworden', du: 'bist geworden', 'er/sie/es': 'ist geworden', wir: 'sind geworden', ihr: 'seid geworden', 'sie/Sie': 'sind geworden' },
+              präteritum: { ich: 'wurde', du: 'wurdest', 'er/sie/es': 'wurde', wir: 'wurden', ihr: 'wurdet', 'sie/Sie': 'wurden' },
+              konjunktiv: { ich: 'würde', du: 'würdest', 'er/sie/es': 'würde', wir: 'würden', ihr: 'würdet', 'sie/Sie': 'würden' },
+              partizip: 'geworden', rule: 'Highly irregular - memorize!' },
+            { infinitive: 'wissen', english: 'to know', type: 'irregular', auxilary: 'haben',
+              präsens: { ich: 'weiß', du: 'weißt', 'er/sie/es': 'weiß', wir: 'wissen', ihr: 'wisst', 'sie/Sie': 'wissen' },
+              perfekt: { ich: 'habe gewusst', du: 'hast gewusst', 'er/sie/es': 'hat gewusst', wir: 'haben gewusst', ihr: 'habt gewusst', 'sie/Sie': 'haben gewusst' },
+              präteritum: { ich: 'wusste', du: 'wusstest', 'er/sie/es': 'wusste', wir: 'wussten', ihr: 'wusstet', 'sie/Sie': 'wussten' },
+              konjunktiv: { ich: 'würde wissen', du: 'würdest wissen', 'er/sie/es': 'würde wissen', wir: 'würden wissen', ihr: 'würdet wissen', 'sie/Sie': 'würden wissen' },
+              partizip: 'gewusst', rule: 'Irregular - note the umlaut in Präsens' },
+            { infinitive: 'tun', english: 'to do', type: 'irregular', auxilary: 'haben',
+              präsens: { ich: 'tue', du: 'tust', 'er/sie/es': 'tut', wir: 'tun', ihr: 'tut', 'sie/Sie': 'tun' },
+              perfekt: { ich: 'habe getan', du: 'hast getan', 'er/sie/es': 'hat getan', wir: 'haben getan', ihr: 'habt getan', 'sie/Sie': 'haben getan' },
+              präteritum: { ich: 'tat', du: 'tatst', 'er/sie/es': 'tat', wir: 'taten', ihr: 'tatet', 'sie/Sie': 'taten' },
+              konjunktiv: { ich: 'würde tun', du: 'würdest tun', 'er/sie/es': 'würde tun', wir: 'würden tun', ihr: 'würdet tun', 'sie/Sie': 'würden tun' },
+              partizip: 'getan', rule: 'Irregular - memorize!' },
+            { infinitive: 'mögen', english: 'to like', type: 'irregular', auxilary: 'haben',
+              präsens: { ich: 'mag', du: 'magst', 'er/sie/es': 'mag', wir: 'mögen', ihr: 'mögt', 'sie/Sie': 'mögen' },
+              perfekt: { ich: 'habe gemocht', du: 'hast gemocht', 'er/sie/es': 'hat gemocht', wir: 'haben gemocht', ihr: 'habt gemocht', 'sie/Sie': 'haben gemocht' },
+              präteritum: { ich: 'mochte', du: 'mochtest', 'er/sie/es': 'mochte', wir: 'mochten', ihr: 'mochtet', 'sie/Sie': 'mochten' },
+              konjunktiv: { ich: 'möchte', du: 'möchtest', 'er/sie/es': 'möchte', wir: 'möchten', ihr: 'möchtet', 'sie/Sie': 'möchten' },
+              partizip: 'gemocht', rule: 'Modal verb - changes in all forms' },
+
+            // Modal verbs
+            { infinitive: 'können', english: 'can/to be able to', type: 'modal', auxilary: 'haben',
+              präsens: { ich: 'kann', du: 'kannst', 'er/sie/es': 'kann', wir: 'können', ihr: 'könnt', 'sie/Sie': 'können' },
+              perfekt: { ich: 'habe gekonnt', du: 'hast gekonnt', 'er/sie/es': 'hat gekonnt', wir: 'haben gekonnt', ihr: 'habt gekonnt', 'sie/Sie': 'haben gekonnt' },
+              präteritum: { ich: 'konnte', du: 'konntest', 'er/sie/es': 'konnte', wir: 'konnten', ihr: 'konntet', 'sie/Sie': 'konnten' },
+              konjunktiv: { ich: 'könnte', du: 'könntest', 'er/sie/es': 'könnte', wir: 'könnten', ihr: 'könntet', 'sie/Sie': 'könnten' },
+              partizip: 'gekonnt', rule: 'Modal verb - vowel change ö in Präsens' },
+            { infinitive: 'müssen', english: 'must/have to', type: 'modal', auxilary: 'haben',
+              präsens: { ich: 'muss', du: 'musst', 'er/sie/es': 'muss', wir: 'müssen', ihr: 'müsst', 'sie/Sie': 'müssen' },
+              perfekt: { ich: 'habe gemusst', du: 'hast gemusst', 'er/sie/es': 'hat gemusst', wir: 'haben gemusst', ihr: 'habt gemusst', 'sie/Sie': 'haben gemusst' },
+              präteritum: { ich: 'musste', du: 'musste', 'er/sie/es': 'musste', wir: 'mussten', ihr: 'mussten', 'sie/Sie': 'mussten' },
+              konjunktiv: { ich: 'müsste', du: 'müsstest', 'er/sie/es': 'müsste', wir: 'müssten', ihr: 'müsstet', 'sie/Sie': 'müssten' },
+              partizip: 'gemusst', rule: 'Modal verb - vowel change ü in Präsens' },
+            { infinitive: 'dürfen', english: 'may/to be allowed', type: 'modal', auxilary: 'haben',
+              präsens: { ich: 'darf', du: 'darfst', 'er/sie/es': 'darf', wir: 'dürfen', ihr: 'dürft', 'sie/Sie': 'dürfen' },
+              perfekt: { ich: 'habe gedurft', du: 'hast gedurft', 'er/sie/es': 'hat gedurft', wir: 'haben gedurft', ihr: 'habt gedurft', 'sie/Sie': 'haben gedurft' },
+              präteritum: { ich: 'durfte', du: 'durftest', 'er/sie/es': 'durfte', wir: 'durften', ihr: 'durftet', 'sie/Sie': 'durften' },
+              konjunktiv: { ich: 'dürfte', du: 'dürftest', 'er/sie/es': 'dürfte', wir: 'dürften', ihr: 'dürftet', 'sie/Sie': 'dürften' },
+              partizip: 'gedurft', rule: 'Modal verb - vowel change ü in Präsens' },
+            { infinitive: 'wollen', english: 'to want', type: 'modal', auxilary: 'haben',
+              präsens: { ich: 'will', du: 'willst', 'er/sie/es': 'will', wir: 'wollen', ihr: 'wollt', 'sie/Sie': 'wollen' },
+              perfekt: { ich: 'habe gewollt', du: 'hast gewollt', 'er/sie/es': 'hat gewollt', wir: 'haben gewollt', ihr: 'habt gewollt', 'sie/Sie': 'haben gewollt' },
+              präteritum: { ich: 'wollte', du: 'wolltest', 'er/sie/es': 'wollte', wir: 'wollten', ihr: 'wolltet', 'sie/Sie': 'wollten' },
+              konjunktiv: { ich: 'wollte', du: 'wolltest', 'er/sie/es': 'wollte', wir: 'wollten', ihr: 'wolltet', 'sie/Sie': 'wollten' },
+              partizip: 'gewollt', rule: 'Modal verb - present forms are very irregular' },
+            { infinitive: 'sollen', english: 'should/ought to', type: 'modal', auxilary: 'haben',
+              präsens: { ich: 'soll', du: 'sollst', 'er/sie/es': 'soll', wir: 'sollen', ihr: 'sollt', 'sie/Sie': 'sollen' },
+              perfekt: { ich: 'habe gesollt', du: 'hast gesollt', 'er/sie/es': 'hat gesollt', wir: 'haben gesollt', ihr: 'habt gesollt', 'sie/Sie': 'haben gesollt' },
+              präteritum: { ich: 'sollte', du: 'solltest', 'er/sie/es': 'sollte', wir: 'sollten', ihr: 'solltet', 'sie/Sie': 'sollten' },
+              konjunktiv: { ich: 'sollte', du: 'solltest', 'er/sie/es': 'sollte', wir: 'sollten', ihr: 'solltet', 'sie/Sie': 'sollten' },
+              partizip: 'gesollt', rule: 'Modal verb - same in Präteritum and Konjunktiv' },
+            { infinitive: 'möchten', english: 'would like to', type: 'modal', auxilary: 'haben',
+              präsens: { ich: 'möchte', du: 'möchtest', 'er/sie/es': 'möchte', wir: 'möchten', ihr: 'möchtet', 'sie/Sie': 'möchten' },
+              perfekt: { ich: 'habe gemocht', du: 'hast gemocht', 'er/sie/es': 'hat gemocht', wir: 'haben gemocht', ihr: 'habt gemocht', 'sie/Sie': 'haben gemocht' },
+              präteritum: { ich: 'wollte', du: 'wolltest', 'er/sie/es': 'wollte', wir: 'wollten', ihr: 'wolltet', 'sie/Sie': 'wollten' },
+              konjunktiv: { ich: 'möchte', du: 'möchtest', 'er/sie/es': 'möchte', wir: 'möchten', ihr: 'möchtet', 'sie/Sie': 'möchten' },
+              partizip: 'gemocht', rule: 'Subjunctive form of mögen - polite form' },
+
+            // Separable verbs
+            { infinitive: 'einkaufen', english: 'to shop/do shopping', type: 'separable', auxilary: 'haben',
+              präsens: { ich: 'kaufe ein', du: 'kaufst ein', 'er/sie/es': 'kauft ein', wir: 'kaufen ein', ihr: 'kauft ein', 'sie/Sie': 'kaufen ein' },
+              perfekt: { ich: 'habe eingekauft', du: 'hast eingekauft', 'er/sie/es': 'hat eingekauft', wir: 'haben eingekauft', ihr: 'habt eingekauft', 'sie/Sie': 'haben eingekauft' },
+              präteritum: { ich: 'kaufte ein', du: 'kauftest ein', 'er/sie/es': 'kaufte ein', wir: 'kauften ein', ihr: 'kauftet ein', 'sie/Sie': 'kauften ein' },
+              konjunktiv: { ich: 'würde einkaufen', du: 'würdest einkaufen', 'er/sie/es': 'würde einkaufen', wir: 'würden einkaufen', ihr: 'würdet einkaufen', 'sie/Sie': 'würden einkaufen' },
+              partizip: 'eingekauft', rule: 'Separable verb - prefix "ein" separates in Präsens/Präteritum' },
+            { infinitive: 'aufstehen', english: 'to get up', type: 'separable', auxilary: 'sein',
+              präsens: { ich: 'stehe auf', du: 'stehst auf', 'er/sie/es': 'steht auf', wir: 'stehen auf', ihr: 'steht auf', 'sie/Sie': 'stehen auf' },
+              perfekt: { ich: 'bin aufgestanden', du: 'bist aufgestanden', 'er/sie/es': 'ist aufgestanden', wir: 'sind aufgestanden', ihr: 'seid aufgestanden', 'sie/Sie': 'sind aufgestanden' },
+              präteritum: { ich: 'stand auf', du: 'standst auf', 'er/sie/es': 'stand auf', wir: 'standen auf', ihr: 'standet auf', 'sie/Sie': 'standen auf' },
+              konjunktiv: { ich: 'würde aufstehen', du: 'würdest aufstehen', 'er/sie/es': 'würde aufstehen', wir: 'würden aufstehen', ihr: 'würdet aufstehen', 'sie/Sie': 'würden aufstehen' },
+              partizip: 'aufgestanden', rule: 'Separable verb - prefix "auf" separates in Präsens/Präteritum' },
+            { infinitive: 'anfangen', english: 'to begin', type: 'separable', auxilary: 'haben',
+              präsens: { ich: 'fange an', du: 'fängst an', 'er/sie/es': 'fängt an', wir: 'fangen an', ihr: 'fangt an', 'sie/Sie': 'fangen an' },
+              perfekt: { ich: 'habe angefangen', du: 'hast angefangen', 'er/sie/es': 'hat angefangen', wir: 'haben angefangen', ihr: 'habt angefangen', 'sie/Sie': 'haben angefangen' },
+              präteritum: { ich: 'fing an', du: 'fingst an', 'er/sie/es': 'fing an', wir: 'fingen an', ihr: 'fingt an', 'sie/Sie': 'fingen an' },
+              konjunktiv: { ich: 'würde anfangen', du: 'würdest anfangen', 'er/sie/es': 'würde anfangen', wir: 'würden anfangen', ihr: 'würdet anfangen', 'sie/Sie': 'würden anfangen' },
+              partizip: 'angefangen', rule: 'Separable verb - prefix "an" separates; also has vowel change a→ä' },
+            { infinitive: 'mitkommen', english: 'to come along', type: 'separable', auxilary: 'sein',
+              präsens: { ich: 'komme mit', du: 'kommst mit', 'er/sie/es': 'kommt mit', wir: 'kommen mit', ihr: 'kommt mit', 'sie/Sie': 'kommen mit' },
+              perfekt: { ich: 'bin mitgekommen', du: 'bist mitgekommen', 'er/sie/es': 'ist mitgekommen', wir: 'sind mitgekommen', ihr: 'seid mitgekommen', 'sie/Sie': 'sind mitgekommen' },
+              präteritum: { ich: 'kam mit', du: 'kamst mit', 'er/sie/es': 'kam mit', wir: 'kamen mit', ihr: 'kamt mit', 'sie/Sie': 'kamen mit' },
+              konjunktiv: { ich: 'würde mitkommen', du: 'würdest mitkommen', 'er/sie/es': 'würde mitkommen', wir: 'würden mitkommen', ihr: 'würdet mitkommen', 'sie/Sie': 'würden mitkommen' },
+              partizip: 'mitgekommen', rule: 'Separable verb - prefix "mit" separates in Präsens/Präteritum' },
+            { infinitive: 'einladen', english: 'to invite', type: 'separable', auxilary: 'haben',
+              präsens: { ich: 'lade ein', du: 'lädst ein', 'er/sie/es': 'lädt ein', wir: 'laden ein', ihr: 'ladet ein', 'sie/Sie': 'laden ein' },
+              perfekt: { ich: 'habe eingeladen', du: 'hast eingeladen', 'er/sie/es': 'hat eingeladen', wir: 'haben eingeladen', ihr: 'habt eingeladen', 'sie/Sie': 'haben eingeladen' },
+              präteritum: { ich: 'lud ein', du: 'ludst ein', 'er/sie/es': 'lud ein', wir: 'luden ein', ihr: 'ludet ein', 'sie/Sie': 'luden ein' },
+              konjunktiv: { ich: 'würde einladen', du: 'würdest einladen', 'er/sie/es': 'würde einladen', wir: 'würden einladen', ihr: 'würdet einladen', 'sie/Sie': 'würden einladen' },
+              partizip: 'eingeladen', rule: 'Separable verb - prefix "ein" separates; also has vowel change a→ä' },
+            { infinitive: 'aufräumen', english: 'to tidy up', type: 'separable', auxilary: 'haben',
+              präsens: { ich: 'räume auf', du: 'räumst auf', 'er/sie/es': 'räumt auf', wir: 'räumen auf', ihr: 'räumt auf', 'sie/Sie': 'räumen auf' },
+              perfekt: { ich: 'habe aufgeräumt', du: 'hast aufgeräumt', 'er/sie/es': 'hat aufgeräumt', wir: 'haben aufgeräumt', ihr: 'habt aufgeräumt', 'sie/Sie': 'haben aufgeräumt' },
+              präteritum: { ich: 'räumte auf', du: 'räumtest auf', 'er/sie/es': 'räumte auf', wir: 'räumten auf', ihr: 'räumtet auf', 'sie/Sie': 'räumten auf' },
+              konjunktiv: { ich: 'würde aufräumen', du: 'würdest aufräumen', 'er/sie/es': 'würde aufräumen', wir: 'würden aufräumen', ihr: 'würdet aufräumen', 'sie/Sie': 'würden aufräumen' },
+              partizip: 'aufgeräumt', rule: 'Separable verb - prefix "auf" separates in Präsens/Präteritum' },
+            { infinitive: 'anrufen', english: 'to call/ring up', type: 'separable', auxilary: 'haben',
+              präsens: { ich: 'rufe an', du: 'rufst an', 'er/sie/es': 'ruft an', wir: 'rufen an', ihr: 'ruft an', 'sie/Sie': 'rufen an' },
+              perfekt: { ich: 'habe angerufen', du: 'hast angerufen', 'er/sie/es': 'hat angerufen', wir: 'haben angerufen', ihr: 'habt angerufen', 'sie/Sie': 'haben angerufen' },
+              präteritum: { ich: 'rief an', du: 'riefst an', 'er/sie/es': 'rief an', wir: 'riefen an', ihr: 'rieft an', 'sie/Sie': 'riefen an' },
+              konjunktiv: { ich: 'würde anrufen', du: 'würdest anrufen', 'er/sie/es': 'würde anrufen', wir: 'würden anrufen', ihr: 'würdet anrufen', 'sie/Sie': 'würden anrufen' },
+              partizip: 'angerufen', rule: 'Separable verb - prefix "an" separates in Präsens/Präteritum' },
+            { infinitive: 'fernsehen', english: 'to watch TV', type: 'separable', auxilary: 'haben',
+              präsens: { ich: 'sehe fern', du: 'siehst fern', 'er/sie/es': 'sieht fern', wir: 'sehen fern', ihr: 'seht fern', 'sie/Sie': 'sehen fern' },
+              perfekt: { ich: 'habe ferngesehen', du: 'hast ferngesehen', 'er/sie/es': 'hat ferngesehen', wir: 'haben ferngesehen', ihr: 'habt ferngesehen', 'sie/Sie': 'haben ferngesehen' },
+              präteritum: { ich: 'sah fern', du: 'sahst fern', 'er/sie/es': 'sah fern', wir: 'sahen fern', ihr: 'saht fern', 'sie/Sie': 'sahen fern' },
+              konjunktiv: { ich: 'würde fernsehen', du: 'würdest fernsehen', 'er/sie/es': 'würde fernsehen', wir: 'würden fernsehen', ihr: 'würdet fernsehen', 'sie/Sie': 'würden fernsehen' },
+              partizip: 'ferngesehen', rule: 'Separable verb - prefix "fern" separates; also has vowel change e→ie' },
+
+            // Reflexive verbs
+            { infinitive: 'sich waschen', english: 'to wash oneself', type: 'reflexive', auxilary: 'haben',
+              präsens: { ich: 'wasche mich', du: 'wäschst dich', 'er/sie/es': 'wäscht sich', wir: 'waschen uns', ihr: 'wascht euch', 'sie/Sie': 'waschen sich' },
+              perfekt: { ich: 'habe mich gewaschen', du: 'hast dich gewaschen', 'er/sie/es': 'hat sich gewaschen', wir: 'haben uns gewaschen', ihr: 'habt euch gewaschen', 'sie/Sie': 'haben sich gewaschen' },
+              präteritum: { ich: 'wusch mich', du: 'wuschst dich', 'er/sie/es': 'wusch sich', wir: 'wuschen uns', ihr: 'wuscht euch', 'sie/Sie': 'wuschen sich' },
+              konjunktiv: { ich: 'würde mich waschen', du: 'würdest dich waschen', 'er/sie/es': 'würde sich waschen', wir: 'würden uns waschen', ihr: 'würdet euch waschen', 'sie/Sie': 'würden sich waschen' },
+              partizip: 'gewaschen', rule: 'Reflexive verb - requires reflexive pronoun (mich/dich/sich)' },
+            { infinitive: 'sich freuen', english: 'to be happy/pleased', type: 'reflexive', auxilary: 'haben',
+              präsens: { ich: 'freue mich', du: 'freust dich', 'er/sie/es': 'freut sich', wir: 'freuen uns', ihr: 'freut euch', 'sie/Sie': 'freuen sich' },
+              perfekt: { ich: 'habe mich gefreut', du: 'hast dich gefreut', 'er/sie/es': 'hat sich gefreut', wir: 'haben uns gefreut', ihr: 'habt euch gefreut', 'sie/Sie': 'haben sich gefreut' },
+              präteritum: { ich: 'freute mich', du: 'freutest dich', 'er/sie/es': 'freute sich', wir: 'freuten uns', ihr: 'freutes euch', 'sie/Sie': 'freuten sich' },
+              konjunktiv: { ich: 'würde mich freuen', du: 'würdest dich freuen', 'er/sie/es': 'würde sich freuen', wir: 'würden uns freuen', ihr: 'würdet euch freuen', 'sie/Sie': 'würden sich freuen' },
+              partizip: 'gefreut', rule: 'Reflexive verb - requires reflexive pronoun (mich/dich/sich)' },
+            { infinitive: 'sich ärgern', english: 'to get annoyed', type: 'reflexive', auxilary: 'haben',
+              präsens: { ich: 'ärgere mich', du: 'ärgerst dich', 'er/sie/es': 'ärgert sich', wir: 'ärgern uns', ihr: 'ärgert euch', 'sie/Sie': 'ärgern sich' },
+              perfekt: { ich: 'habe mich geärgert', du: 'hast dich geärgert', 'er/sie/es': 'hat sich geärgert', wir: 'haben uns geärgert', ihr: 'habt euch geärgert', 'sie/Sie': 'haben sich geärgert' },
+              präteritum: { ich: 'ärgerte mich', du: 'ärgertest dich', 'er/sie/es': 'ärgerte sich', wir: 'ärgerten uns', ihr: 'ärgert euch', 'sie/Sie': 'ärgerten sich' },
+              konjunktiv: { ich: 'würde mich ärgern', du: 'würdest dich ärgern', 'er/sie/es': 'würde sich ärgern', wir: 'würden uns ärgern', ihr: 'würdet euch ärgern', 'sie/Sie': 'würden sich ärgern' },
+              partizip: 'geärgert', rule: 'Reflexive verb - requires reflexive pronoun (mich/dich/sich)' },
+            { infinitive: 'sich vorstellen', english: 'to introduce oneself/imagine', type: 'reflexive', auxilary: 'haben',
+              präsens: { ich: 'stelle mich vor', du: 'stellst dich vor', 'er/sie/es': 'stellt sich vor', wir: 'stellen uns vor', ihr: 'stellt euch vor', 'sie/Sie': 'stellen sich vor' },
+              perfekt: { ich: 'habe mich vorgestellt', du: 'hast dich vorgestellt', 'er/sie/es': 'hat sich vorgestellt', wir: 'haben uns vorgestellt', ihr: 'habt euch vorgestellt', 'sie/Sie': 'haben sich vorgestellt' },
+              präteritum: { ich: 'stellte mich vor', du: 'stelltest dich vor', 'er/sie/es': 'stellte sich vor', wir: 'stellten uns vor', ihr: 'stelltet euch vor', 'sie/Sie': 'stellten sich vor' },
+              konjunktiv: { ich: 'würde mich vorstellen', du: 'würdest dich vorstellen', 'er/sie/es': 'würde sich vorstellen', wir: 'würden uns vorstellen', ihr: 'würdet euch vorstellen', 'sie/Sie': 'würden sich vorstellen' },
+              partizip: 'vorgestellt', rule: 'Reflexive separable verb - prefix and reflexive pronoun' },
+            { infinitive: 'sich erinnern', english: 'to remember', type: 'reflexive', auxilary: 'haben',
+              präsens: { ich: 'erinnere mich', du: 'erinnerst dich', 'er/sie/es': 'erinnert sich', wir: 'erinnern uns', ihr: 'erinnert euch', 'sie/Sie': 'erinnern sich' },
+              perfekt: { ich: 'habe mich erinnert', du: 'hast dich erinnert', 'er/sie/es': 'hat sich erinnert', wir: 'haben uns erinnert', ihr: 'habt euch erinnert', 'sie/Sie': 'haben sich erinnert' },
+              präteritum: { ich: 'erinnerte mich', du: 'erinnertest dich', 'er/sie/es': 'erinnerte sich', wir: 'erinnerten uns', ihr: 'erinnertet euch', 'sie/Sie': 'erinnerten sich' },
+              konjunktiv: { ich: 'würde mich erinnern', du: 'würdest dich erinnern', 'er/sie/es': 'würde sich erinnern', wir: 'würden uns erinnern', ihr: 'würdet euch erinnern', 'sie/Sie': 'würden sich erinnern' },
+              partizip: 'erinnert', rule: 'Reflexive verb - requires reflexive pronoun; uses +an' }
+        ];
+
+        const persons = ['ich', 'du', 'er/sie/es', 'wir', 'ihr', 'sie/Sie'];
+        const tenses = ['präsens', 'perfekt', 'präteritum', 'konjunktiv'];
+
+        const app = {
+            currentMode: null,
+            currentVerb: null,
+            currentTense: null,
+            currentPerson: null,
+            score: 0,
+            total: 0,
+            questionIndex: 0,
+            challengeQuestions: [],
+            showingFeedback: false,
+            startTime: null,
+            timerInterval: null,
+
+            getSelectedDifficulty() {
+                return document.querySelector('input[name="difficulty"]:checked').value;
+            },
+
+            getSelectedTenses() {
+                const checked = document.querySelectorAll('input[name="tense"]:checked');
+                return Array.from(checked).map(c => c.value);
+            },
+
+            getFilteredVerbs() {
+                const difficulty = this.getSelectedDifficulty();
+                const tenses = this.getSelectedTenses();
+                if (tenses.length === 0) return [];
+
+                let filtered = verbDatabase;
+
+                if (difficulty === 'beginner') {
+                    filtered = filtered.filter(v => v.type === 'regular' || v.infinitive === 'sein' || v.infinitive === 'haben');
+                } else if (difficulty === 'intermediate') {
+                    filtered = filtered.filter(v => !['modal', 'separable', 'reflexive'].includes(v.type));
+                }
+
+                return filtered;
+            },
+
+            startMode(mode) {
+                this.currentMode = mode;
+                this.score = 0;
+                this.total = 0;
+                this.questionIndex = 0;
+                this.showingFeedback = false;
+
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('resultsScreen').classList.remove('show');
+
+                if (mode === 'quick') {
+                    document.getElementById('quickPractice').classList.add('active');
+                    this.showQuickQuestion();
+                } else if (mode === 'full') {
+                    document.getElementById('fullConjugation').classList.add('active');
+                    this.showFullQuestion();
+                } else if (mode === 'challenge') {
+                    document.getElementById('challenge').classList.add('active');
+                    this.generateChallengeQuestions();
+                    this.startTime = Date.now();
+                    this.showChallengeQuestion();
+                }
+            },
+
+            showQuickQuestion() {
+                const verbs = this.getFilteredVerbs();
+                if (verbs.length === 0) {
+                    alert('No verbs available. Please select at least one tense.');
+                    return;
+                }
+
+                this.currentVerb = verbs[Math.floor(Math.random() * verbs.length)];
+                const tenses = this.getSelectedTenses();
+                this.currentTense = tenses[Math.floor(Math.random() * tenses.length)];
+                this.currentPerson = persons[Math.floor(Math.random() * persons.length)];
+
+                document.getElementById('quickQuestion').textContent = `Conjugate: ${this.currentVerb.infinitive} (${this.currentVerb.english})`;
+                document.getElementById('quickPerson').textContent = `Person: ${this.currentPerson} | Tense: ${this.currentTense.charAt(0).toUpperCase() + this.currentTense.slice(1)}`;
+                document.getElementById('quickInput').value = '';
+                document.getElementById('quickInput').focus();
+                document.getElementById('feedbackQuick').classList.remove('show', 'correct', 'incorrect');
+                document.getElementById('hintQuick').style.display = 'none';
+
+                this.total++;
+                this.updateProgressQuick();
+            },
+
+            submitQuickAnswer() {
+                if (this.showingFeedback) {
+                    this.showQuickQuestion();
+                    return;
+                }
+
+                const userAnswer = document.getElementById('quickInput').value.trim().toLowerCase();
+                const correctAnswer = this.currentVerb[this.currentTense][this.currentPerson].toLowerCase();
+
+                const isCorrect = userAnswer === correctAnswer;
+                if (isCorrect) this.score++;
+
+                const feedback = document.getElementById('feedbackQuick');
+                feedback.classList.add('show', isCorrect ? 'correct' : 'incorrect');
+
+                let feedbackHTML = `<div class="feedback-title">${isCorrect ? '✓ Correct!' : '✗ Incorrect'}</div>`;
+                feedbackHTML += `<div class="feedback-answer"><strong>Answer:</strong> ${this.currentVerb[this.currentTense][this.currentPerson]}</div>`;
+                feedbackHTML += `<div class="feedback-answer"><em>${this.currentVerb.english}</em></div>`;
+                feedbackHTML += `<div class="feedback-rule"><strong>Rule:</strong> ${this.currentVerb.rule}</div>`;
+
+                feedback.innerHTML = feedbackHTML;
+                document.getElementById('quickInput').disabled = true;
+
+                this.showingFeedback = true;
+                document.querySelector('#quickPractice .btn-submit').textContent = 'Next';
+                this.updateProgressQuick();
+            },
+
+            showHintQuick() {
+                const hint = document.getElementById('hintQuick');
+                hint.textContent = `Meaning: ${this.currentVerb.english}`;
+                hint.style.display = 'block';
+            },
+
+            updateProgressQuick() {
+                const progress = this.total > 0 ? (this.score / this.total) * 100 : 0;
+                document.getElementById('progressBarQuick').style.width = progress + '%';
+                document.getElementById('scoreSummaryQuick').style.display = 'block';
+                document.getElementById('scoreQuick').textContent = this.score;
+                document.getElementById('totalQuick').textContent = this.total;
+            },
+
+            showFullQuestion() {
+                const verbs = this.getFilteredVerbs();
+                if (verbs.length === 0) {
+                    alert('No verbs available. Please select at least one tense.');
+                    return;
+                }
+
+                this.currentVerb = verbs[Math.floor(Math.random() * verbs.length)];
+                const tenses = this.getSelectedTenses();
+                this.currentTense = tenses[Math.floor(Math.random() * tenses.length)];
+
+                document.getElementById('fullQuestion').textContent = `Conjugate in ${this.currentTense.charAt(0).toUpperCase() + this.currentTense.slice(1)}: ${this.currentVerb.infinitive} (${this.currentVerb.english})`;
+                document.getElementById('currentVerbFull').textContent = this.currentVerb.infinitive;
+
+                const inputsContainer = document.getElementById('fullConjugationInputs');
+                inputsContainer.innerHTML = '';
+
+                persons.forEach(person => {
+                    const row = document.createElement('div');
+                    row.className = 'conjugation-row';
+                    row.innerHTML = `
+                        <label>${person}</label>
+                        <input type="text" class="person-input" data-person="${person}" placeholder="Type the form..." autocomplete="off">
+                    `;
+                    inputsContainer.appendChild(row);
+                });
+
+                document.getElementById('feedbackFull').classList.remove('show', 'correct', 'incorrect');
+                document.getElementById('hintFull').style.display = 'none';
+                document.querySelector('#fullConjugation .btn-submit').textContent = 'Submit Conjugation';
+                this.showingFeedback = false;
+
+                this.total++;
+                document.getElementById('scoreSummaryFull').style.display = 'block';
+            },
+
+            submitFullAnswer() {
+                if (this.showingFeedback) {
+                    this.showFullQuestion();
+                    return;
+                }
+
+                const inputs = document.querySelectorAll('#fullConjugationInputs .person-input');
+                let correct = 0;
+                let totalAnswers = 0;
+
+                inputs.forEach(input => {
+                    const person = input.dataset.person;
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = this.currentVerb[this.currentTense][person].toLowerCase();
+
+                    totalAnswers++;
+                    if (userAnswer === correctAnswer) {
+                        correct++;
+                        input.style.background = '#d4edda';
+                    } else {
+                        input.style.background = '#f8d7da';
+                        input.placeholder = `Correct: ${this.currentVerb[this.currentTense][person]}`;
+                    }
+                    input.disabled = true;
+                });
+
+                if (correct === totalAnswers) this.score++;
+
+                const feedback = document.getElementById('feedbackFull');
+                feedback.classList.add('show', correct === totalAnswers ? 'correct' : 'incorrect');
+
+                let feedbackHTML = `<div class="feedback-title">${correct}/${totalAnswers} Correct</div>`;
+                feedbackHTML += `<div class="feedback-rule"><strong>Rule:</strong> ${this.currentVerb.rule}</div>`;
+
+                feedback.innerHTML = feedbackHTML;
+                this.showingFeedback = true;
+                document.querySelector('#fullConjugation .btn-submit').textContent = 'Next Verb';
+            },
+
+            showHintFull() {
+                const hint = document.getElementById('hintFull');
+                hint.textContent = `Meaning: ${this.currentVerb.english} | Type: ${this.currentVerb.type}`;
+                hint.style.display = 'block';
+            },
+
+            generateChallengeQuestions() {
+                const verbs = this.getFilteredVerbs();
+                const tenses = this.getSelectedTenses();
+
+                this.challengeQuestions = [];
+                for (let i = 0; i < 20; i++) {
+                    const verb = verbs[Math.floor(Math.random() * verbs.length)];
+                    const tense = tenses[Math.floor(Math.random() * tenses.length)];
+                    const person = persons[Math.floor(Math.random() * persons.length)];
+
+                    this.challengeQuestions.push({ verb, tense, person });
+                }
+            },
+
+            showChallengeQuestion() {
+                if (this.questionIndex >= this.challengeQuestions.length) {
+                    this.showChallengeResults();
+                    return;
+                }
+
+                const q = this.challengeQuestions[this.questionIndex];
+                this.currentVerb = q.verb;
+                this.currentTense = q.tense;
+                this.currentPerson = q.person;
+
+                document.getElementById('challengeQuestion').textContent = `${this.questionIndex + 1}. Conjugate: ${this.currentVerb.infinitive} (${this.currentVerb.english})`;
+                document.getElementById('challengePerson').textContent = `Person: ${this.currentPerson} | Tense: ${this.currentTense.charAt(0).toUpperCase() + this.currentTense.slice(1)}`;
+                document.getElementById('challengeInput').value = '';
+                document.getElementById('challengeInput').focus();
+                document.getElementById('feedbackChallenge').classList.remove('show', 'correct', 'incorrect');
+                document.getElementById('hintChallenge').style.display = 'none';
+
+                const progress = ((this.questionIndex) / this.challengeQuestions.length) * 100;
+                document.getElementById('progressBarChallenge').style.width = progress + '%';
+                document.getElementById('questionCounter').textContent = this.questionIndex + 1;
+
+                this.showingFeedback = false;
+                document.querySelector('#challenge .btn-submit').textContent = 'Submit';
+                this.updateTimer();
+            },
+
+            submitChallengeAnswer() {
+                if (this.showingFeedback) {
+                    this.questionIndex++;
+                    this.showChallengeQuestion();
+                    return;
+                }
+
+                const userAnswer = document.getElementById('challengeInput').value.trim().toLowerCase();
+                const correctAnswer = this.currentVerb[this.currentTense][this.currentPerson].toLowerCase();
+
+                const isCorrect = userAnswer === correctAnswer;
+                if (isCorrect) this.score++;
+
+                const feedback = document.getElementById('feedbackChallenge');
+                feedback.classList.add('show', isCorrect ? 'correct' : 'incorrect');
+
+                let feedbackHTML = `<div class="feedback-title">${isCorrect ? '✓ Correct!' : '✗ Incorrect'}</div>`;
+                feedbackHTML += `<div class="feedback-answer"><strong>Answer:</strong> ${this.currentVerb[this.currentTense][this.currentPerson]}</div>`;
+                feedbackHTML += `<div class="feedback-rule"><strong>Rule:</strong> ${this.currentVerb.rule}</div>`;
+
+                feedback.innerHTML = feedbackHTML;
+                document.getElementById('challengeInput').disabled = true;
+
+                this.showingFeedback = true;
+                document.querySelector('#challenge .btn-submit').textContent = 'Next';
+                this.total++;
+            },
+
+            showHintChallenge() {
+                const hint = document.getElementById('hintChallenge');
+                hint.textContent = `Meaning: ${this.currentVerb.english}`;
+                hint.style.display = 'block';
+            },
+
+            updateTimer() {
+                if (this.timerInterval) clearInterval(this.timerInterval);
+
+                const timerContainer = document.getElementById('timerContainer');
+                timerContainer.style.display = 'block';
+
+                this.timerInterval = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    document.getElementById('timer').textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            },
+
+            showChallengeResults() {
+                if (this.timerInterval) clearInterval(this.timerInterval);
+
+                document.getElementById('challenge').classList.remove('active');
+                document.getElementById('resultsScreen').classList.add('show');
+
+                const percentage = Math.round((this.score / this.total) * 100);
+                const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+
+                document.getElementById('finalScore').textContent = `${this.score}/${this.total} (${percentage}%)`;
+                document.getElementById('resultsDetails').textContent = `Time: ${minutes}m ${seconds}s | Great job!`;
+            },
+
+            reset() {
+                document.querySelectorAll('.practice-container').forEach(el => el.classList.remove('active'));
+                document.getElementById('resultsScreen').classList.remove('show');
+                document.getElementById('welcomeScreen').style.display = 'flex';
+
+                document.querySelector('#quickPractice .btn-submit').textContent = 'Submit';
+                document.querySelector('#fullConjugation .btn-submit').textContent = 'Submit Conjugation';
+                document.querySelector('#challenge .btn-submit').textContent = 'Submit';
+
+                document.getElementById('quickInput').disabled = false;
+                document.getElementById('challengeInput').disabled = false;
+                document.querySelectorAll('#fullConjugationInputs input').forEach(el => el.disabled = false);
+
+                if (this.timerInterval) clearInterval(this.timerInterval);
+
+                this.currentMode = null;
+                this.showingFeedback = false;
+            }
+        };
+
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (app.currentMode === 'quick' && document.getElementById('quickPractice').classList.contains('active')) {
+                    app.submitQuickAnswer();
+                } else if (app.currentMode === 'full' && document.getElementById('fullConjugation').classList.contains('active')) {
+                    app.submitFullAnswer();
+                } else if (app.currentMode === 'challenge' && document.getElementById('challenge').classList.contains('active')) {
+                    app.submitChallengeAnswer();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

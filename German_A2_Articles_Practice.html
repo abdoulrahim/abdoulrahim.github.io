@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Der, Die, Das — A2 Articles Practice</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  :root{
+    --der:#3b82f6;--der-bg:#dbeafe;--der-dark:#1e40af;
+    --die:#ec4899;--die-bg:#fce7f3;--die-dark:#9d174d;
+    --das:#8b5cf6;--das-bg:#ede9fe;--das-dark:#5b21b6;
+    --success:#10b981;--success-bg:#d1fae5;
+    --error:#ef4444;--error-bg:#fee2e2;
+    --accent:#f59e0b;--accent-bg:#fef3c7;
+    --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--g50);color:var(--g800);min-height:100vh;}
+
+  .header{background:linear-gradient(135deg,#0d9488,#3b82f6,#7c3aed);color:white;padding:24px;text-align:center;}
+  .header h1{font-size:24px;font-weight:800;letter-spacing:-0.5px;}
+  .header .level-badge{display:inline-block;background:rgba(255,255,255,0.25);padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:6px;}
+  .header p{font-size:13px;opacity:0.85;margin-top:4px;}
+  .header .legend{display:flex;justify-content:center;gap:16px;margin-top:12px;flex-wrap:wrap;}
+  .header .legend span{font-size:13px;font-weight:600;padding:4px 12px;border-radius:16px;}
+  .legend .m{background:var(--der-bg);color:var(--der-dark);}
+  .legend .f{background:var(--die-bg);color:var(--die-dark);}
+  .legend .n{background:var(--das-bg);color:var(--das-dark);}
+
+  .stats-bar{display:flex;justify-content:center;gap:20px;padding:14px;background:white;border-bottom:1px solid var(--g200);flex-wrap:wrap;}
+  .stat{text-align:center;}
+  .stat .num{font-size:22px;font-weight:800;}
+  .stat .num.c-correct{color:var(--success);}
+  .stat .num.c-wrong{color:var(--error);}
+  .stat .num.c-streak{color:var(--accent);}
+  .stat .lbl{font-size:10px;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px;}
+
+  .progress-row{padding:10px 24px;background:white;border-bottom:1px solid var(--g200);}
+  .prog-outer{height:6px;background:var(--g100);border-radius:3px;overflow:hidden;}
+  .prog-inner{height:100%;border-radius:3px;transition:width 0.4s;background:linear-gradient(90deg,#0d9488,var(--der),var(--das));}
+  .prog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--g400);margin-bottom:4px;}
+
+  .mode-bar{display:flex;gap:0;background:white;border-bottom:1px solid var(--g200);}
+  .mode-tab{
+    flex:1;padding:12px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;
+    color:var(--g400);border-bottom:3px solid transparent;transition:all 0.2s;
+  }
+  .mode-tab:hover{color:var(--g700);}
+  .mode-tab.active{color:var(--der-dark);border-bottom-color:var(--der);}
+
+  .filter-row{display:flex;gap:8px;padding:12px 24px;overflow-x:auto;background:white;border-bottom:1px solid var(--g200);}
+  .chip{
+    padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;
+    border:2px solid var(--g200);background:white;color:var(--g600);white-space:nowrap;transition:all 0.2s;
+  }
+  .chip:hover{border-color:var(--der);}
+  .chip.active{background:var(--g900);color:white;border-color:var(--g900);}
+
+  .main{max-width:600px;margin:0 auto;padding:24px;}
+
+  .quiz-card{
+    background:white;border-radius:16px;padding:40px 32px;text-align:center;
+    box-shadow:0 4px 24px rgba(0,0,0,0.06);margin-bottom:20px;position:relative;
+    border:2px solid var(--g200);transition:border-color 0.3s;
+  }
+  .quiz-card.flash-der{border-color:var(--der);box-shadow:0 0 30px rgba(59,130,246,0.2);}
+  .quiz-card.flash-die{border-color:var(--die);box-shadow:0 0 30px rgba(236,72,153,0.2);}
+  .quiz-card.flash-das{border-color:var(--das);box-shadow:0 0 30px rgba(139,92,246,0.2);}
+
+  .quiz-card .card-num{position:absolute;top:16px;right:20px;font-size:12px;color:var(--g400);}
+  .quiz-card .noun{font-size:36px;font-weight:900;margin-bottom:8px;letter-spacing:-1px;}
+  .quiz-card .noun-en{font-size:14px;color:var(--g400);margin-bottom:6px;font-style:italic;}
+  .quiz-card .plural{font-size:13px;color:var(--g500);margin-bottom:24px;}
+  .quiz-card .sentence{font-size:15px;color:var(--g600);margin-bottom:24px;line-height:1.6;padding:12px 16px;background:var(--g50);border-radius:8px;}
+  .quiz-card .sentence b{color:var(--g900);}
+
+  .gender-btns{display:flex;gap:12px;justify-content:center;margin-bottom:16px;}
+  .gender-btn{
+    padding:14px 28px;border-radius:12px;font-size:18px;font-weight:800;cursor:pointer;
+    border:3px solid;transition:all 0.2s;min-width:100px;
+  }
+  .gender-btn:hover{transform:scale(1.05);}
+  .gender-btn.btn-der{border-color:var(--der);color:var(--der);background:var(--der-bg);}
+  .gender-btn.btn-die{border-color:var(--die);color:var(--die);background:var(--die-bg);}
+  .gender-btn.btn-das{border-color:var(--das);color:var(--das);background:var(--das-bg);}
+  .gender-btn.correct{background:var(--success-bg)!important;border-color:var(--success)!important;color:#065f46!important;}
+  .gender-btn.wrong{background:var(--error-bg)!important;border-color:var(--error)!important;color:#991b1b!important;opacity:0.5;}
+  .gender-btn:disabled{cursor:default;transform:none;}
+
+  .result-line{font-size:15px;font-weight:600;margin-top:12px;min-height:24px;}
+  .result-line.r-correct{color:var(--success);}
+  .result-line.r-wrong{color:var(--error);}
+
+  .tip-box{background:var(--accent-bg);border-radius:8px;padding:10px 14px;font-size:13px;color:#78350f;margin-top:12px;text-align:left;display:none;}
+  .tip-box.show{display:block;}
+
+  .sent-card{
+    background:white;border-radius:16px;padding:32px;
+    box-shadow:0 4px 24px rgba(0,0,0,0.06);margin-bottom:20px;
+    border:2px solid var(--g200);
+  }
+  .sent-card .sent-num{font-size:12px;color:var(--g400);margin-bottom:12px;}
+  .sent-text{font-size:18px;line-height:2;margin-bottom:16px;}
+  .sent-text .blank-input{
+    width:80px;border:none;border-bottom:3px solid var(--g300);font-size:18px;
+    text-align:center;font-family:inherit;outline:none;background:transparent;
+    transition:border-color 0.2s;font-weight:700;
+  }
+  .sent-text .blank-input:focus{border-bottom-color:var(--der);}
+  .sent-text .blank-input.correct{border-bottom-color:var(--success);color:var(--success);background:var(--success-bg);}
+  .sent-text .blank-input.incorrect{border-bottom-color:var(--error);color:var(--error);background:var(--error-bg);}
+  .sent-hint{font-size:13px;color:var(--g400);font-style:italic;margin-bottom:12px;}
+  .sent-en{font-size:13px;color:var(--g500);margin-top:8px;display:none;}
+  .sent-en.show{display:block;}
+
+  .speed-area{text-align:center;}
+  .speed-timer{font-size:48px;font-weight:900;color:var(--g900);margin:16px 0;}
+  .speed-noun{font-size:42px;font-weight:900;margin:24px 0;letter-spacing:-1px;}
+  .speed-score{font-size:18px;color:var(--g600);margin:12px 0;}
+  .speed-start{
+    padding:16px 48px;background:linear-gradient(135deg,#0d9488,var(--der));color:white;
+    border:none;border-radius:12px;font-size:18px;font-weight:700;cursor:pointer;
+  }
+  .speed-start:hover{transform:scale(1.05);}
+
+  .nav-row{display:flex;gap:12px;justify-content:center;margin:20px 0;}
+  .nav-btn{
+    padding:12px 28px;border-radius:10px;font-size:14px;font-weight:600;
+    cursor:pointer;transition:all 0.2s;border:none;
+  }
+  .nav-btn.prev{background:var(--g100);color:var(--g700);}
+  .nav-btn.next{background:var(--g900);color:white;}
+  .nav-btn:disabled{opacity:0.3;cursor:default;}
+  .nav-btn:hover:not(:disabled){transform:translateY(-1px);}
+
+  .kbd-hint{text-align:center;font-size:11px;color:var(--g400);margin-top:8px;}
+  .kbd-hint kbd{background:var(--g100);border:1px solid var(--g300);padding:1px 5px;border-radius:3px;font-family:inherit;font-size:10px;}
+
+  .done-card{background:linear-gradient(135deg,var(--success),#059669);color:white;border-radius:16px;padding:48px 32px;text-align:center;margin:24px 0;}
+  .done-card h2{font-size:28px;margin-bottom:8px;}
+  .done-card p{opacity:0.9;margin-bottom:16px;}
+  .done-card button{background:white;color:var(--success);border:none;padding:12px 32px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;}
+
+  @media(max-width:500px){
+    .quiz-card .noun{font-size:28px;}
+    .gender-btn{padding:12px 20px;font-size:16px;min-width:80px;}
+    .main{padding:16px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="level-badge">A2 — Elementary</div>
+  <h1>Der, Die oder Das?</h1>
+  <p>A2-level nouns with Wechselpräpositionen & cases</p>
+  <div class="legend">
+    <span class="m">der — maskulin</span>
+    <span class="f">die — feminin</span>
+    <span class="n">das — neutral</span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="num c-correct" id="sCorrect">0</div><div class="lbl">Correct</div></div>
+  <div class="stat"><div class="num c-wrong" id="sWrong">0</div><div class="lbl">Wrong</div></div>
+  <div class="stat"><div class="num" id="sAccuracy">—</div><div class="lbl">Accuracy</div></div>
+  <div class="stat"><div class="num c-streak" id="sStreak">0</div><div class="lbl">Streak</div></div>
+</div>
+
+<div class="progress-row">
+  <div class="prog-label"><span id="pLabel">Card 1</span><span id="pPct">0%</span></div>
+  <div class="prog-outer"><div class="prog-inner" id="pBar" style="width:0%"></div></div>
+</div>
+
+<div class="mode-bar">
+  <div class="mode-tab active" onclick="setMode('gender')">🎯 Gender Quiz</div>
+  <div class="mode-tab" onclick="setMode('sentences')">✏️ Articles in Sentences</div>
+  <div class="mode-tab" onclick="setMode('speed')">⚡ Speed Round</div>
+</div>
+
+<div class="filter-row" id="filterRow"></div>
+
+<div class="main" id="mainArea"></div>
+
+<script>
+// ============ A2 NOUN DATA ============
+const nouns = [
+  // ---- Maskulin (der) ----
+  // Beruf & Arbeit
+  {noun:'Kollege',article:'der',en:'colleague (m)',plural:'Kollegen',cat:'Beruf',tip:'Male persons → der. Note: weak noun (n-Deklination).',
+   sent:'___ Kollege hilft mir bei der Arbeit.',sentEn:'The colleague helps me at work.'},
+  {noun:'Chef',article:'der',en:'boss',plural:'Chefs',cat:'Beruf',tip:'Male professions → der.',
+   sent:'Mein ___ ist sehr streng.',sentEn:'My boss is very strict.',sentBlank:'Chef'},
+  {noun:'Kunde',article:'der',en:'customer (m)',plural:'Kunden',cat:'Beruf',tip:'Weak noun: der Kunde, den Kunden, dem Kunden.',
+   sent:'___ Kunde möchte eine Beratung.',sentEn:'The customer wants a consultation.'},
+  {noun:'Vertrag',article:'der',en:'contract',plural:'Verträge',cat:'Beruf',tip:'Der Vertrag — masculine.',
+   sent:'Ich muss ___ Vertrag unterschreiben.',sentEn:'I have to sign the contract.'},
+  {noun:'Termin',article:'der',en:'appointment',plural:'Termine',cat:'Beruf',tip:'Der Termin — masculine.',
+   sent:'Hast du morgen einen ___?',sentEn:'Do you have an appointment tomorrow?',sentBlank:'Termin'},
+  {noun:'Erfolg',article:'der',en:'success',plural:'Erfolge',cat:'Beruf',tip:'Der Erfolg — masculine.',
+   sent:'___ Erfolg kommt nicht über Nacht.',sentEn:'Success doesn\'t come overnight.'},
+  {noun:'Unterschied',article:'der',en:'difference',plural:'Unterschiede',cat:'Alltag',tip:'Der Unterschied — masculine.',
+   sent:'Was ist ___ Unterschied?',sentEn:'What is the difference?'},
+  // Gesundheit
+  {noun:'Körper',article:'der',en:'body',plural:'Körper',cat:'Gesundheit',tip:'Der Körper — masculine.',
+   sent:'___ Körper braucht Bewegung.',sentEn:'The body needs exercise.'},
+  {noun:'Kopf',article:'der',en:'head',plural:'Köpfe',cat:'Gesundheit',tip:'Most body parts are masculine: der Kopf, der Arm, der Fuß.',
+   sent:'Mir tut ___ Kopf weh.',sentEn:'My head hurts.'},
+  {noun:'Rücken',article:'der',en:'back',plural:'Rücken',cat:'Gesundheit',tip:'Der Rücken — masculine body part.',
+   sent:'Ich habe Schmerzen im ___.',sentEn:'I have pain in my back.',sentBlank:'Rücken'},
+  {noun:'Magen',article:'der',en:'stomach',plural:'Mägen',cat:'Gesundheit',tip:'Der Magen — masculine.',
+   sent:'Mein ___ tut weh.',sentEn:'My stomach hurts.',sentBlank:'Magen'},
+  {noun:'Finger',article:'der',en:'finger',plural:'Finger',cat:'Gesundheit',tip:'Der Finger — masculine.',
+   sent:'___ Finger ist gebrochen.',sentEn:'The finger is broken.'},
+  {noun:'Arzt',article:'der',en:'doctor',plural:'Ärzte',cat:'Gesundheit',tip:'Male professions → der.',
+   sent:'Ich gehe morgen zum ___.',sentEn:'I go to the doctor tomorrow.',sentBlank:'Arzt'},
+  {noun:'Schmerz',article:'der',en:'pain',plural:'Schmerzen',cat:'Gesundheit',tip:'Der Schmerz — masculine.',
+   sent:'___ Schmerz ist stark.',sentEn:'The pain is strong.'},
+  // Wohnen & Haus
+  {noun:'Garten',article:'der',en:'garden',plural:'Gärten',cat:'Wohnen',tip:'Der Garten — masculine.',
+   sent:'___ Garten ist sehr schön.',sentEn:'The garden is very beautiful.'},
+  {noun:'Balkon',article:'der',en:'balcony',plural:'Balkone',cat:'Wohnen',tip:'Der Balkon — masculine.',
+   sent:'Ich sitze gerne auf ___ Balkon.',sentEn:'I like to sit on the balcony.',sentBlank:'dem'},
+  {noun:'Flur',article:'der',en:'hallway',plural:'Flure',cat:'Wohnen',tip:'Der Flur — masculine.',
+   sent:'___ Flur ist lang und dunkel.',sentEn:'The hallway is long and dark.'},
+  {noun:'Aufzug',article:'der',en:'elevator',plural:'Aufzüge',cat:'Wohnen',tip:'Der Aufzug — masculine.',
+   sent:'Nehmen wir ___ Aufzug?',sentEn:'Shall we take the elevator?'},
+  {noun:'Spiegel',article:'der',en:'mirror',plural:'Spiegel',cat:'Wohnen',tip:'Der Spiegel — masculine.',
+   sent:'___ Spiegel hängt an der Wand.',sentEn:'The mirror hangs on the wall.'},
+  // Reisen & Verkehr
+  {noun:'Flughafen',article:'der',en:'airport',plural:'Flughäfen',cat:'Reisen',tip:'Compound noun: der Hafen → der Flughafen.',
+   sent:'Wir fahren zum ___.',sentEn:'We drive to the airport.',sentBlank:'Flughafen'},
+  {noun:'Bahnhof',article:'der',en:'train station',plural:'Bahnhöfe',cat:'Reisen',tip:'Der Bahnhof — masculine compound noun.',
+   sent:'___ Bahnhof ist in der Nähe.',sentEn:'The train station is nearby.'},
+  {noun:'Koffer',article:'der',en:'suitcase',plural:'Koffer',cat:'Reisen',tip:'Der Koffer — masculine.',
+   sent:'Hast du ___ Koffer gepackt?',sentEn:'Have you packed the suitcase?'},
+  {noun:'Urlaub',article:'der',en:'vacation',plural:'Urlaube',cat:'Reisen',tip:'Der Urlaub — masculine.',
+   sent:'Ich brauche dringend ___.',sentEn:'I urgently need vacation.',sentBlank:'Urlaub'},
+  {noun:'Strand',article:'der',en:'beach',plural:'Strände',cat:'Reisen',tip:'Der Strand — masculine.',
+   sent:'___ Strand ist wunderschön.',sentEn:'The beach is beautiful.'},
+  {noun:'Berg',article:'der',en:'mountain',plural:'Berge',cat:'Reisen',tip:'Der Berg — masculine.',
+   sent:'Wir wandern auf ___ Berg.',sentEn:'We hike up the mountain.',sentBlank:'den'},
+  // Natur & Wetter
+  {noun:'Regen',article:'der',en:'rain',plural:'—',cat:'Natur',tip:'Weather words: der Regen, der Schnee, der Wind.',
+   sent:'___ Regen hört nicht auf.',sentEn:'The rain doesn\'t stop.'},
+  {noun:'Schnee',article:'der',en:'snow',plural:'—',cat:'Natur',tip:'Weather → der.',
+   sent:'___ Schnee ist weiß.',sentEn:'The snow is white.'},
+  {noun:'Wind',article:'der',en:'wind',plural:'Winde',cat:'Natur',tip:'Der Wind — masculine.',
+   sent:'___ Wind ist heute stark.',sentEn:'The wind is strong today.'},
+  {noun:'Wald',article:'der',en:'forest',plural:'Wälder',cat:'Natur',tip:'Der Wald — masculine.',
+   sent:'Wir gehen im ___ spazieren.',sentEn:'We take a walk in the forest.',sentBlank:'Wald'},
+  {noun:'See',article:'der',en:'lake',plural:'Seen',cat:'Natur',tip:'der See = lake, die See = sea! Gender changes meaning!',
+   sent:'___ See ist kalt im Winter.',sentEn:'The lake is cold in winter.'},
+  // Essen & Trinken
+  {noun:'Reis',article:'der',en:'rice',plural:'—',cat:'Essen',tip:'Der Reis — masculine.',
+   sent:'___ Reis ist fertig.',sentEn:'The rice is ready.'},
+  {noun:'Käse',article:'der',en:'cheese',plural:'—',cat:'Essen',tip:'Der Käse — masculine.',
+   sent:'Ich nehme ___ Käse aufs Brot.',sentEn:'I put cheese on bread.',sentBlank:'den'},
+  {noun:'Salat',article:'der',en:'salad',plural:'Salate',cat:'Essen',tip:'Der Salat — masculine.',
+   sent:'___ Salat schmeckt frisch.',sentEn:'The salad tastes fresh.'},
+
+  // ---- Feminin (die) ----
+  // Beruf & Arbeit
+  {noun:'Kollegin',article:'die',en:'colleague (f)',plural:'Kolleginnen',cat:'Beruf',tip:'-in ending (female form) → always die.',
+   sent:'___ Kollegin ist sehr freundlich.',sentEn:'The colleague is very friendly.'},
+  {noun:'Besprechung',article:'die',en:'meeting',plural:'Besprechungen',cat:'Beruf',tip:'-ung ending → always die!',
+   sent:'___ Besprechung beginnt um 10 Uhr.',sentEn:'The meeting starts at 10 o\'clock.'},
+  {noun:'Bewerbung',article:'die',en:'application',plural:'Bewerbungen',cat:'Beruf',tip:'-ung → always die.',
+   sent:'Ich schreibe eine ___.',sentEn:'I\'m writing an application.',sentBlank:'Bewerbung'},
+  {noun:'Erfahrung',article:'die',en:'experience',plural:'Erfahrungen',cat:'Beruf',tip:'-ung → always die.',
+   sent:'___ Erfahrung ist sehr wichtig.',sentEn:'Experience is very important.'},
+  {noun:'Ausbildung',article:'die',en:'training/education',plural:'Ausbildungen',cat:'Beruf',tip:'-ung → always die.',
+   sent:'Die ___ dauert drei Jahre.',sentEn:'The training lasts three years.',sentBlank:'Ausbildung'},
+  {noun:'Abteilung',article:'die',en:'department',plural:'Abteilungen',cat:'Beruf',tip:'-ung → always die.',
+   sent:'In welcher ___ arbeiten Sie?',sentEn:'In which department do you work?',sentBlank:'Abteilung'},
+  // Gesundheit
+  {noun:'Gesundheit',article:'die',en:'health',plural:'—',cat:'Gesundheit',tip:'-heit ending → always die.',
+   sent:'___ Gesundheit ist das Wichtigste.',sentEn:'Health is the most important thing.'},
+  {noun:'Krankheit',article:'die',en:'illness',plural:'Krankheiten',cat:'Gesundheit',tip:'-heit → always die.',
+   sent:'___ Krankheit dauert zwei Wochen.',sentEn:'The illness lasts two weeks.'},
+  {noun:'Erkältung',article:'die',en:'cold (illness)',plural:'Erkältungen',cat:'Gesundheit',tip:'-ung → always die.',
+   sent:'Ich habe eine ___.',sentEn:'I have a cold.',sentBlank:'Erkältung'},
+  {noun:'Apotheke',article:'die',en:'pharmacy',plural:'Apotheken',cat:'Gesundheit',tip:'-e ending → often die.',
+   sent:'___ Apotheke ist um die Ecke.',sentEn:'The pharmacy is around the corner.'},
+  {noun:'Tablette',article:'die',en:'pill/tablet',plural:'Tabletten',cat:'Gesundheit',tip:'-e ending → often die.',
+   sent:'Nimm eine ___ gegen die Schmerzen.',sentEn:'Take a pill for the pain.',sentBlank:'Tablette'},
+  {noun:'Untersuchung',article:'die',en:'examination',plural:'Untersuchungen',cat:'Gesundheit',tip:'-ung → always die.',
+   sent:'___ Untersuchung war in Ordnung.',sentEn:'The examination was fine.'},
+  // Wohnen
+  {noun:'Wand',article:'die',en:'wall',plural:'Wände',cat:'Wohnen',tip:'Die Wand — feminine.',
+   sent:'___ Wand ist weiß gestrichen.',sentEn:'The wall is painted white.'},
+  {noun:'Treppe',article:'die',en:'stairs',plural:'Treppen',cat:'Wohnen',tip:'-e ending → often die.',
+   sent:'___ Treppe ist sehr steil.',sentEn:'The stairs are very steep.'},
+  {noun:'Heizung',article:'die',en:'heating',plural:'Heizungen',cat:'Wohnen',tip:'-ung → always die.',
+   sent:'___ Heizung funktioniert nicht.',sentEn:'The heating doesn\'t work.'},
+  {noun:'Miete',article:'die',en:'rent',plural:'Mieten',cat:'Wohnen',tip:'-e ending → often die.',
+   sent:'___ Miete ist zu hoch.',sentEn:'The rent is too high.'},
+  {noun:'Nachbarschaft',article:'die',en:'neighborhood',plural:'Nachbarschaften',cat:'Wohnen',tip:'-schaft ending → always die.',
+   sent:'___ Nachbarschaft ist ruhig.',sentEn:'The neighborhood is quiet.'},
+  // Reisen
+  {noun:'Reise',article:'die',en:'trip/journey',plural:'Reisen',cat:'Reisen',tip:'-e ending → often die.',
+   sent:'___ Reise war fantastisch.',sentEn:'The trip was fantastic.'},
+  {noun:'Unterkunft',article:'die',en:'accommodation',plural:'Unterkünfte',cat:'Reisen',tip:'-kunft → die.',
+   sent:'Hast du eine ___ gefunden?',sentEn:'Have you found an accommodation?',sentBlank:'Unterkunft'},
+  {noun:'Fahrkarte',article:'die',en:'ticket',plural:'Fahrkarten',cat:'Reisen',tip:'Compound: die Karte → die Fahrkarte.',
+   sent:'Ich habe ___ Fahrkarte vergessen.',sentEn:'I forgot the ticket.'},
+  {noun:'Verspätung',article:'die',en:'delay',plural:'Verspätungen',cat:'Reisen',tip:'-ung → always die.',
+   sent:'___ Zug hat 20 Minuten ___.',sentEn:'The train has 20 minutes delay.',sentBlank:'Verspätung'},
+  {noun:'Grenze',article:'die',en:'border',plural:'Grenzen',cat:'Reisen',tip:'-e ending → often die.',
+   sent:'___ Grenze ist nicht weit.',sentEn:'The border is not far.'},
+  // Natur
+  {noun:'Luft',article:'die',en:'air',plural:'—',cat:'Natur',tip:'Die Luft — feminine.',
+   sent:'___ Luft ist frisch.',sentEn:'The air is fresh.'},
+  {noun:'Sonne',article:'die',en:'sun',plural:'—',cat:'Natur',tip:'-e ending → often die.',
+   sent:'___ Sonne scheint.',sentEn:'The sun is shining.'},
+  {noun:'Wolke',article:'die',en:'cloud',plural:'Wolken',cat:'Natur',tip:'-e ending → often die.',
+   sent:'Eine ___ verdeckt die Sonne.',sentEn:'A cloud covers the sun.',sentBlank:'Wolke'},
+  {noun:'Umwelt',article:'die',en:'environment',plural:'—',cat:'Natur',tip:'Die Umwelt — feminine.',
+   sent:'Wir müssen ___ Umwelt schützen.',sentEn:'We must protect the environment.'},
+  // Essen
+  {noun:'Soße',article:'die',en:'sauce',plural:'Soßen',cat:'Essen',tip:'-e ending → often die.',
+   sent:'___ Soße schmeckt gut.',sentEn:'The sauce tastes good.'},
+  {noun:'Zutat',article:'die',en:'ingredient',plural:'Zutaten',cat:'Essen',tip:'Die Zutat — feminine.',
+   sent:'Welche ___ fehlt noch?',sentEn:'Which ingredient is still missing?',sentBlank:'Zutat'},
+  {noun:'Mahlzeit',article:'die',en:'meal',plural:'Mahlzeiten',cat:'Essen',tip:'-eit ending → often die.',
+   sent:'___ Mahlzeit war lecker.',sentEn:'The meal was delicious.'},
+  // Medien & Kommunikation
+  {noun:'Nachricht',article:'die',en:'message/news',plural:'Nachrichten',cat:'Medien',tip:'Die Nachricht — feminine.',
+   sent:'Hast du ___ Nachricht gelesen?',sentEn:'Did you read the message?'},
+  {noun:'Sendung',article:'die',en:'show/program',plural:'Sendungen',cat:'Medien',tip:'-ung → always die.',
+   sent:'___ Sendung kommt um 20 Uhr.',sentEn:'The show comes on at 8 PM.'},
+  {noun:'Zeitschrift',article:'die',en:'magazine',plural:'Zeitschriften',cat:'Medien',tip:'-schrift → die.',
+   sent:'___ Zeitschrift ist interessant.',sentEn:'The magazine is interesting.'},
+  {noun:'Meinung',article:'die',en:'opinion',plural:'Meinungen',cat:'Medien',tip:'-ung → always die.',
+   sent:'Was ist deine ___?',sentEn:'What is your opinion?',sentBlank:'Meinung'},
+  {noun:'Mannschaft',article:'die',en:'team',plural:'Mannschaften',cat:'Freizeit',tip:'-schaft ending → always die.',
+   sent:'___ Mannschaft hat gewonnen.',sentEn:'The team won.'},
+  {noun:'Veranstaltung',article:'die',en:'event',plural:'Veranstaltungen',cat:'Freizeit',tip:'-ung → always die.',
+   sent:'___ Veranstaltung war toll.',sentEn:'The event was great.'},
+
+  // ---- Neutral (das) ----
+  // Beruf
+  {noun:'Gehalt',article:'das',en:'salary',plural:'Gehälter',cat:'Beruf',tip:'Das Gehalt — neutral.',
+   sent:'___ Gehalt ist gut.',sentEn:'The salary is good.'},
+  {noun:'Unternehmen',article:'das',en:'company',plural:'Unternehmen',cat:'Beruf',tip:'Nominalized infinitives (das + Verb) → always das.',
+   sent:'___ Unternehmen wächst schnell.',sentEn:'The company is growing fast.'},
+  {noun:'Praktikum',article:'das',en:'internship',plural:'Praktika',cat:'Beruf',tip:'-um ending (from Latin) → always das.',
+   sent:'Ich mache ein ___ bei Siemens.',sentEn:'I\'m doing an internship at Siemens.',sentBlank:'Praktikum'},
+  {noun:'Büro',article:'das',en:'office',plural:'Büros',cat:'Beruf',tip:'Das Büro — neutral.',
+   sent:'___ Büro ist im dritten Stock.',sentEn:'The office is on the third floor.'},
+  {noun:'Zeugnis',article:'das',en:'certificate/report',plural:'Zeugnisse',cat:'Beruf',tip:'-nis ending → usually das.',
+   sent:'Ich brauche mein ___.',sentEn:'I need my certificate.',sentBlank:'Zeugnis'},
+  // Gesundheit
+  {noun:'Krankenhaus',article:'das',en:'hospital',plural:'Krankenhäuser',cat:'Gesundheit',tip:'Compound: das Haus → das Krankenhaus.',
+   sent:'___ Krankenhaus ist in der Nähe.',sentEn:'The hospital is nearby.'},
+  {noun:'Medikament',article:'das',en:'medication',plural:'Medikamente',cat:'Gesundheit',tip:'Das Medikament — neutral.',
+   sent:'Nimmst du ___ Medikament regelmäßig?',sentEn:'Do you take the medication regularly?'},
+  {noun:'Rezept',article:'das',en:'prescription/recipe',plural:'Rezepte',cat:'Gesundheit',tip:'Das Rezept — neutral.',
+   sent:'Ich brauche ein ___ vom Arzt.',sentEn:'I need a prescription from the doctor.',sentBlank:'Rezept'},
+  {noun:'Fieber',article:'das',en:'fever',plural:'—',cat:'Gesundheit',tip:'Das Fieber — neutral.',
+   sent:'Das Kind hat hohes ___.',sentEn:'The child has a high fever.',sentBlank:'Fieber'},
+  // Wohnen
+  {noun:'Gebäude',article:'das',en:'building',plural:'Gebäude',cat:'Wohnen',tip:'Ge- prefix + -e ending → always das.',
+   sent:'___ Gebäude ist sehr alt.',sentEn:'The building is very old.'},
+  {noun:'Geschoss',article:'das',en:'floor/story',plural:'Geschosse',cat:'Wohnen',tip:'Das Geschoss — neutral.',
+   sent:'Wir wohnen im dritten ___.',sentEn:'We live on the third floor.',sentBlank:'Geschoss'},
+  {noun:'Erdgeschoss',article:'das',en:'ground floor',plural:'Erdgeschosse',cat:'Wohnen',tip:'Compound: das Geschoss → das Erdgeschoss.',
+   sent:'Die Wohnung ist im ___.',sentEn:'The apartment is on the ground floor.',sentBlank:'Erdgeschoss'},
+  {noun:'Schlafzimmer',article:'das',en:'bedroom',plural:'Schlafzimmer',cat:'Wohnen',tip:'Compound: das Zimmer → das Schlafzimmer.',
+   sent:'___ Schlafzimmer ist gemütlich.',sentEn:'The bedroom is cozy.'},
+  {noun:'Badezimmer',article:'das',en:'bathroom',plural:'Badezimmer',cat:'Wohnen',tip:'Compound: das Zimmer → das Badezimmer.',
+   sent:'___ Badezimmer muss renoviert werden.',sentEn:'The bathroom needs to be renovated.'},
+  // Reisen
+  {noun:'Hotel',article:'das',en:'hotel',plural:'Hotels',cat:'Reisen',tip:'Das Hotel — neutral.',
+   sent:'___ Hotel liegt am Strand.',sentEn:'The hotel is on the beach.'},
+  {noun:'Gepäck',article:'das',en:'luggage',plural:'—',cat:'Reisen',tip:'Ge- prefix → often das.',
+   sent:'Wo ist mein ___?',sentEn:'Where is my luggage?',sentBlank:'Gepäck'},
+  {noun:'Visum',article:'das',en:'visa',plural:'Visa',cat:'Reisen',tip:'-um ending → always das.',
+   sent:'Brauchst du ein ___ für die Reise?',sentEn:'Do you need a visa for the trip?',sentBlank:'Visum'},
+  {noun:'Abenteuer',article:'das',en:'adventure',plural:'Abenteuer',cat:'Reisen',tip:'Das Abenteuer — neutral.',
+   sent:'___ Abenteuer beginnt jetzt!',sentEn:'The adventure begins now!'},
+  // Natur
+  {noun:'Wetter',article:'das',en:'weather',plural:'—',cat:'Natur',tip:'Das Wetter — neutral.',
+   sent:'___ Wetter ist heute schlecht.',sentEn:'The weather is bad today.'},
+  {noun:'Klima',article:'das',en:'climate',plural:'—',cat:'Natur',tip:'Das Klima — neutral.',
+   sent:'___ Klima verändert sich.',sentEn:'The climate is changing.'},
+  {noun:'Gebirge',article:'das',en:'mountain range',plural:'Gebirge',cat:'Natur',tip:'Ge- prefix + -e → das.',
+   sent:'___ Gebirge ist beeindruckend.',sentEn:'The mountain range is impressive.'},
+  {noun:'Meer',article:'das',en:'sea/ocean',plural:'Meere',cat:'Natur',tip:'Das Meer — neutral.',
+   sent:'___ Meer ist blau.',sentEn:'The sea is blue.'},
+  {noun:'Gewitter',article:'das',en:'thunderstorm',plural:'Gewitter',cat:'Natur',tip:'Ge- prefix → often das.',
+   sent:'Heute Abend gibt es ein ___.',sentEn:'There will be a thunderstorm this evening.',sentBlank:'Gewitter'},
+  // Essen
+  {noun:'Gericht',article:'das',en:'dish/meal',plural:'Gerichte',cat:'Essen',tip:'Das Gericht — neutral.',
+   sent:'___ Gericht ist typisch deutsch.',sentEn:'The dish is typically German.'},
+  {noun:'Gemüse',article:'das',en:'vegetables',plural:'—',cat:'Essen',tip:'Ge- prefix + -e → das.',
+   sent:'___ Gemüse ist frisch vom Markt.',sentEn:'The vegetables are fresh from the market.'},
+  {noun:'Getränk',article:'das',en:'drink/beverage',plural:'Getränke',cat:'Essen',tip:'Ge- prefix → often das.',
+   sent:'Welches ___ möchten Sie?',sentEn:'Which drink would you like?',sentBlank:'Getränk'},
+  {noun:'Frühstück',article:'das',en:'breakfast',plural:'—',cat:'Essen',tip:'Das Frühstück — neutral.',
+   sent:'___ Frühstück ist im Preis inbegriffen.',sentEn:'Breakfast is included in the price.'},
+  // Medien
+  {noun:'Ergebnis',article:'das',en:'result',plural:'Ergebnisse',cat:'Medien',tip:'-nis ending → usually das.',
+   sent:'___ Ergebnis war überraschend.',sentEn:'The result was surprising.'},
+  {noun:'Programm',article:'das',en:'program',plural:'Programme',cat:'Medien',tip:'Das Programm — neutral.',
+   sent:'___ Programm beginnt um acht.',sentEn:'The program starts at eight.'},
+  {noun:'Interesse',article:'das',en:'interest',plural:'Interessen',cat:'Medien',tip:'Das Interesse — neutral.',
+   sent:'Ich habe großes ___ an Kunst.',sentEn:'I have great interest in art.',sentBlank:'Interesse'},
+  // Freizeit
+  {noun:'Konzert',article:'das',en:'concert',plural:'Konzerte',cat:'Freizeit',tip:'Das Konzert — neutral.',
+   sent:'___ Konzert war fantastisch.',sentEn:'The concert was fantastic.'},
+  {noun:'Museum',article:'das',en:'museum',plural:'Museen',cat:'Freizeit',tip:'-um ending → always das.',
+   sent:'___ Museum hat heute geschlossen.',sentEn:'The museum is closed today.'},
+  {noun:'Stadion',article:'das',en:'stadium',plural:'Stadien',cat:'Freizeit',tip:'Das Stadion — neutral.',
+   sent:'___ Stadion ist ausverkauft.',sentEn:'The stadium is sold out.'},
+  {noun:'Hobby',article:'das',en:'hobby',plural:'Hobbys',cat:'Freizeit',tip:'Das Hobby — neutral.',
+   sent:'Was ist dein liebstes ___?',sentEn:'What is your favorite hobby?',sentBlank:'Hobby'},
+  {noun:'Instrument',article:'das',en:'instrument',plural:'Instrumente',cat:'Freizeit',tip:'Das Instrument — neutral.',
+   sent:'Spielst du ein ___?',sentEn:'Do you play an instrument?',sentBlank:'Instrument'},
+];
+
+// ========== STATE ==========
+let mode='gender';
+let filtered=[...nouns];
+let idx=0;
+let answered=false;
+let stats=JSON.parse(localStorage.getItem('artStatsA2')||'{"c":0,"w":0,"streak":0,"best":0}');
+let activeFilter='Alle';
+let speedActive=false;
+let speedTimer=null;
+let speedTime=30;
+let speedScore=0;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+// ========== FILTERS ==========
+function renderFilters(){
+  const cats=['Alle',...new Set(nouns.map(n=>n.cat))];
+  document.getElementById('filterRow').innerHTML=cats.map(c=>
+    `<div class="chip ${activeFilter===c?'active':''}" onclick="setFilter('${c}')">${c} (${c==='Alle'?nouns.length:nouns.filter(x=>x.cat===c).length})</div>`
+  ).join('');
+}
+function setFilter(c){
+  activeFilter=c;
+  filtered=c==='Alle'?[...nouns]:nouns.filter(x=>x.cat===c);
+  shuffle(filtered);idx=0;answered=false;
+  renderFilters();render();
+}
+
+// ========== MODES ==========
+function setMode(m){
+  mode=m;idx=0;answered=false;
+  if(speedTimer){clearInterval(speedTimer);speedTimer=null;}speedActive=false;
+  document.querySelectorAll('.mode-tab').forEach((t,i)=>{
+    t.classList.toggle('active',['gender','sentences','speed'][i]===m);
+  });
+  shuffle(filtered);render();
+}
+
+// ========== RENDER ==========
+function render(){
+  updateStats();updateProgress();
+  if(mode==='gender') renderGender();
+  else if(mode==='sentences') renderSentences();
+  else renderSpeed();
+}
+
+function renderGender(){
+  if(idx>=filtered.length){showDone();return;}
+  const n=filtered[idx];
+  document.getElementById('mainArea').innerHTML=`
+    <div class="quiz-card" id="quizCard">
+      <div class="card-num">${idx+1} / ${filtered.length}</div>
+      <div class="noun">${n.noun}</div>
+      <div class="noun-en">${n.en}</div>
+      <div class="plural">Plural: die ${n.plural}</div>
+      <div class="sentence">${n.sent.replace('___','<b>___</b>')}</div>
+      <div class="gender-btns">
+        <button class="gender-btn btn-der" id="btn-der" onclick="pickGender('der')">der</button>
+        <button class="gender-btn btn-die" id="btn-die" onclick="pickGender('die')">die</button>
+        <button class="gender-btn btn-das" id="btn-das" onclick="pickGender('das')">das</button>
+      </div>
+      <div class="result-line" id="resultLine"></div>
+      <div class="tip-box" id="tipBox">💡 ${n.tip}</div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn prev" onclick="go(-1)" ${idx===0?'disabled':''}>← Back</button>
+      <button class="nav-btn next" onclick="go(1)" id="nextBtn" ${!answered?'disabled':''}>Next →</button>
+    </div>
+    <div class="kbd-hint"><kbd>1</kbd> der &nbsp; <kbd>2</kbd> die &nbsp; <kbd>3</kbd> das &nbsp; <kbd>→</kbd> Next</div>
+  `;
+}
+
+function pickGender(choice){
+  if(answered)return;
+  answered=true;
+  const n=filtered[idx];
+  const correct=choice===n.article;
+  const card=document.getElementById('quizCard');
+  const res=document.getElementById('resultLine');
+  const tip=document.getElementById('tipBox');
+  ['der','die','das'].forEach(a=>{
+    const btn=document.getElementById('btn-'+a);
+    btn.disabled=true;
+    if(a===n.article) btn.classList.add('correct');
+    else if(a===choice&&!correct) btn.classList.add('wrong');
+  });
+  card.classList.add('flash-'+n.article);
+  if(correct){
+    res.textContent='✓ Richtig! — '+n.article+' '+n.noun;
+    res.className='result-line r-correct';
+    stats.c++;stats.streak++;
+    if(stats.streak>stats.best)stats.best=stats.streak;
+  } else {
+    res.textContent='✗ '+n.article+' '+n.noun+' (not '+choice+')';
+    res.className='result-line r-wrong';
+    stats.w++;stats.streak=0;
+  }
+  tip.classList.add('show');
+  document.getElementById('nextBtn').disabled=false;
+  localStorage.setItem('artStatsA2',JSON.stringify(stats));
+  updateStats();
+}
+
+function renderSentences(){
+  if(idx>=filtered.length){showDone();return;}
+  const n=filtered[idx];
+  let sentHTML,answer,hint;
+  if(n.sentBlank){
+    sentHTML=n.sent.replace(n.sentBlank,`<input class="blank-input" id="sentInput" placeholder="..." autocomplete="off">`);
+    answer=n.sentBlank;
+    hint=`Fill in the missing word. (${n.article} ${n.noun} = ${n.en})`;
+  } else {
+    sentHTML=n.sent.replace('___',`<input class="blank-input" id="sentInput" placeholder="..." autocomplete="off">`);
+    answer=n.article.charAt(0).toUpperCase()+n.article.slice(1);
+    hint=`What article goes here? (${n.noun} = ${n.en})`;
+  }
+  document.getElementById('mainArea').innerHTML=`
+    <div class="sent-card">
+      <div class="sent-num">${idx+1} / ${filtered.length} &nbsp;·&nbsp; ${n.article} ${n.noun} (${n.en})</div>
+      <div class="sent-text">${sentHTML}</div>
+      <div class="sent-hint">💡 ${hint}</div>
+      <div class="nav-row" style="justify-content:flex-start;margin-top:16px;">
+        <button class="nav-btn next" onclick="checkSentence('${answer.replace(/'/g,"\\'")}')">Check ✓</button>
+      </div>
+      <div class="result-line" id="sentResult" style="margin-top:12px;"></div>
+      <div class="sent-en" id="sentEn">🇬🇧 ${n.sentEn}</div>
+      <div class="tip-box" id="tipBox">💡 ${n.tip}</div>
+    </div>
+    <div class="nav-row">
+      <button class="nav-btn prev" onclick="go(-1)" ${idx===0?'disabled':''}>← Back</button>
+      <button class="nav-btn next" onclick="go(1)" id="nextBtn" disabled>Next →</button>
+    </div>
+    <div class="kbd-hint"><kbd>Enter</kbd> Check &nbsp; <kbd>→</kbd> Next</div>
+  `;
+  document.getElementById('sentInput')?.focus();
+}
+
+function checkSentence(answer){
+  if(answered)return;
+  const input=document.getElementById('sentInput');
+  if(!input)return;
+  const val=input.value.trim();
+  if(!val)return;
+  answered=true;
+  const correct=val.toLowerCase()===answer.toLowerCase();
+  input.classList.add(correct?'correct':'incorrect');
+  input.disabled=true;
+  const res=document.getElementById('sentResult');
+  if(correct){
+    res.textContent='✓ Richtig!';res.className='result-line r-correct';
+    stats.c++;stats.streak++;if(stats.streak>stats.best)stats.best=stats.streak;
+  } else {
+    res.textContent=`✗ Answer: ${answer}`;res.className='result-line r-wrong';
+    stats.w++;stats.streak=0;
+  }
+  document.getElementById('sentEn').classList.add('show');
+  document.getElementById('tipBox').classList.add('show');
+  document.getElementById('nextBtn').disabled=false;
+  localStorage.setItem('artStatsA2',JSON.stringify(stats));
+  updateStats();
+}
+
+function renderSpeed(){
+  if(!speedActive){
+    document.getElementById('mainArea').innerHTML=`
+      <div class="speed-area">
+        <div style="margin:40px 0;">
+          <p style="font-size:16px;color:var(--g600);margin-bottom:8px;">How fast can you go?</p>
+          <p style="font-size:14px;color:var(--g400);">Pick <b>der</b>, <b>die</b>, or <b>das</b> for each noun.<br>30 seconds on the clock!</p>
+        </div>
+        <button class="speed-start" onclick="startSpeed()">Start ⚡</button>
+      </div>
+    `;
+  }
+}
+
+function startSpeed(){
+  speedActive=true;speedTime=30;speedScore=0;
+  shuffle(filtered);idx=0;
+  renderSpeedCard();
+  speedTimer=setInterval(()=>{
+    speedTime--;
+    document.getElementById('speedClock').textContent=speedTime;
+    if(speedTime<=0){clearInterval(speedTimer);speedTimer=null;endSpeed();}
+  },1000);
+}
+
+function renderSpeedCard(){
+  if(idx>=filtered.length){shuffle(filtered);idx=0;}
+  const n=filtered[idx];
+  document.getElementById('mainArea').innerHTML=`
+    <div class="speed-area">
+      <div class="speed-timer" id="speedClock">${speedTime}</div>
+      <div class="speed-noun">${n.noun}</div>
+      <div class="speed-score">Score: ${speedScore}</div>
+      <div class="gender-btns">
+        <button class="gender-btn btn-der" onclick="speedPick('der')">der</button>
+        <button class="gender-btn btn-die" onclick="speedPick('die')">die</button>
+        <button class="gender-btn btn-das" onclick="speedPick('das')">das</button>
+      </div>
+      <div style="font-size:13px;color:var(--g400);margin-top:8px;">${n.en}</div>
+    </div>
+  `;
+}
+
+function speedPick(choice){
+  const n=filtered[idx];
+  if(choice===n.article){speedScore++;stats.c++;stats.streak++;if(stats.streak>stats.best)stats.best=stats.streak;}
+  else{stats.w++;stats.streak=0;}
+  localStorage.setItem('artStatsA2',JSON.stringify(stats));
+  idx++;renderSpeedCard();
+}
+
+function endSpeed(){
+  speedActive=false;
+  document.getElementById('mainArea').innerHTML=`
+    <div class="done-card">
+      <h2>⚡ Time's up!</h2>
+      <p>You got <b>${speedScore}</b> correct in 30 seconds!</p>
+      <p>${speedScore>=20?'Amazing! 🏆':speedScore>=15?'Great job! 🌟':speedScore>=10?'Good work! 👍':'Keep practicing! 💪'}</p>
+      <button onclick="renderSpeed()">Play Again</button>
+    </div>
+  `;
+  updateStats();
+}
+
+// ========== NAVIGATION ==========
+function go(dir){
+  idx+=dir;if(idx<0)idx=0;
+  answered=false;render();
+}
+
+function showDone(){
+  const pct=stats.c+stats.w>0?Math.round(stats.c/(stats.c+stats.w)*100):0;
+  document.getElementById('mainArea').innerHTML=`
+    <div class="done-card">
+      <h2>🎉 Runde geschafft!</h2>
+      <p>You completed all ${filtered.length} nouns!</p>
+      <p>Accuracy: ${pct}% · Best streak: ${stats.best} 🔥</p>
+      <button onclick="shuffle(filtered);idx=0;answered=false;render();">Shuffle & Restart 🔄</button>
+    </div>
+  `;
+}
+
+// ========== STATS & PROGRESS ==========
+function updateStats(){
+  document.getElementById('sCorrect').textContent=stats.c;
+  document.getElementById('sWrong').textContent=stats.w;
+  const total=stats.c+stats.w;
+  document.getElementById('sAccuracy').textContent=total>0?Math.round(stats.c/total*100)+'%':'—';
+  document.getElementById('sStreak').textContent=stats.streak+' 🔥';
+}
+function updateProgress(){
+  const p=filtered.length>0?Math.round(idx/filtered.length*100):0;
+  document.getElementById('pLabel').textContent=`Card ${Math.min(idx+1,filtered.length)} of ${filtered.length}`;
+  document.getElementById('pPct').textContent=p+'%';
+  document.getElementById('pBar').style.width=p+'%';
+}
+
+// ========== KEYBOARD ==========
+document.addEventListener('keydown',e=>{
+  if(mode==='gender'&&!answered){
+    if(e.key==='1')pickGender('der');
+    else if(e.key==='2')pickGender('die');
+    else if(e.key==='3')pickGender('das');
+  }
+  if(mode==='speed'&&speedActive){
+    if(e.key==='1')speedPick('der');
+    else if(e.key==='2')speedPick('die');
+    else if(e.key==='3')speedPick('das');
+  }
+  if(mode==='sentences'&&!answered&&e.key==='Enter'){
+    document.querySelector('.nav-btn.next')?.click();
+  }
+  if(e.key==='ArrowRight'&&answered)go(1);
+  if(e.key==='ArrowLeft')go(-1);
+});
+
+// ========== INIT ==========
+shuffle(filtered);
+renderFilters();
+render();
+</script>
+</body>
+</html>

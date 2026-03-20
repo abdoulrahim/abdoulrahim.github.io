@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German Vocabulary Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-controls {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .control-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        select, button {
+            padding: 10px 15px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #333;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.active {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .flashcard {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 50px;
+            text-align: center;
+            cursor: pointer;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.02);
+        }
+
+        .flashcard.flipped {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .flashcard-front {
+            display: none;
+        }
+
+        .flashcard.flipped .flashcard-front {
+            display: block;
+        }
+
+        .flashcard.flipped .flashcard-back {
+            display: none;
+        }
+
+        .flashcard-back {
+            display: block;
+        }
+
+        .word-text {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .word-level {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .example-sentence {
+            font-size: 1.1em;
+            font-style: italic;
+            margin: 15px 0;
+            max-width: 600px;
+        }
+
+        .translation {
+            font-size: 1.8em;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .article-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 8px 20px;
+            border-radius: 5px;
+            margin: 10px 5px;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .plural-form {
+            font-size: 1em;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .card-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 0.95em;
+        }
+
+        .quiz-question {
+            background: #f0f4ff;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .quiz-text {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 600px) {
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .quiz-btn {
+            padding: 20px;
+            text-align: center;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        .quiz-btn:hover {
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .quiz-btn.correct {
+            background: #4caf50;
+            color: white;
+            border-color: #4caf50;
+        }
+
+        .quiz-btn.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .article-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 600px) {
+            .article-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .spelling-input {
+            font-size: 1.2em;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .feedback.correct {
+            background: #4caf50;
+            color: white;
+        }
+
+        .feedback.incorrect {
+            background: #f44336;
+            color: white;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .weak-words-list {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .weak-words-list h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .weak-word-item {
+            background: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .weak-word-item button {
+            padding: 5px 10px;
+            font-size: 0.85em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .mode-section {
+            display: none;
+        }
+
+        .mode-section.active {
+            display: block;
+        }
+
+        .card-counter {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+
+        .streak-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 5px;
+        }
+
+        .show-examples-toggle {
+            margin: 15px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .topic-info {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .topic-info h3 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .topic-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .topic-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .topic-stats {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .topic-percentage {
+            color: #667eea;
+            font-weight: bold;
+            min-width: 50px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .flashcard {
+                padding: 30px;
+                min-height: 250px;
+            }
+
+            .word-text {
+                font-size: 1.8em;
+            }
+
+            .translation {
+                font-size: 1.4em;
+            }
+
+            .stat {
+                padding: 10px;
+            }
+
+            .stat-value {
+                font-size: 1.4em;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇩🇪 German Vocabulary Builder</h1>
+            <p>Master German vocabulary with interactive flashcards and practice modes</p>
+        </header>
+
+        <div class="main-controls">
+            <div class="control-row">
+                <div>
+                    <label for="topic-select">Topic:</label><br><br>
+                    <select id="topic-select">
+                        <option value="">All Topics</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="level-select">Level:</label><br><br>
+                    <select id="level-select">
+                        <option value="">All Levels</option>
+                        <option value="A1">A1 (Beginner)</option>
+                        <option value="A2">A2 (Elementary)</option>
+                        <option value="B1">B1 (Intermediate)</option>
+                    </select>
+                </div>
+                <div>
+                    <button onclick="loadVocabulary()">Apply Filters</button>
+                    <button onclick="clearProgress()" style="margin-top: 10px;">Clear Progress</button>
+                </div>
+            </div>
+
+            <div style="margin: 15px 0;">
+                <label>Practice Mode:</label><br><br>
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="flashcard" onclick="switchMode('flashcard')">Flashcards</button>
+                    <button class="mode-btn" data-mode="quiz" onclick="switchMode('quiz')">Quiz</button>
+                    <button class="mode-btn" data-mode="article" onclick="switchMode('article')">Article Practice</button>
+                    <button class="mode-btn" data-mode="spelling" onclick="switchMode('spelling')">Spelling</button>
+                    <button class="mode-btn" data-mode="progress" onclick="switchMode('progress')">Progress</button>
+                </div>
+            </div>
+
+            <div class="show-examples-toggle">
+                <input type="checkbox" id="show-examples" checked>
+                <label for="show-examples">Show example sentences</label>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-value" id="score">0</div>
+                    <div class="stat-label">Score</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="streak">0</div>
+                    <div class="stat-label">Streak</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="card-count">0</div>
+                    <div class="stat-label">Total Cards</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="mastered-count">0</div>
+                    <div class="stat-label">Mastered</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <!-- FLASHCARD MODE -->
+            <div id="flashcard-mode" class="mode-section active">
+                <div class="topic-info" id="topic-info"></div>
+                <div class="card-counter" id="card-counter"></div>
+
+                <div class="flashcard" id="flashcard">
+                    <div class="flashcard-front">
+                        <div class="word-level" id="card-level"></div>
+                        <div class="word-text" id="german-word"></div>
+                        <div style="opacity: 0.8; font-size: 0.95em;">Click to reveal translation</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="word-level" id="card-level-back"></div>
+                        <div class="translation" id="english-translation"></div>
+                        <div class="article-badge" id="article-display"></div>
+                        <div class="plural-form" id="plural-display"></div>
+                        <div class="example-sentence" id="example-de"></div>
+                        <div class="example-sentence" id="example-en" style="color: rgba(255,255,255,0.9);"></div>
+                    </div>
+                </div>
+
+                <div class="card-controls">
+                    <button class="btn-small" onclick="toggleFlashcard()">Flip Card</button>
+                    <button class="btn-small" onclick="markAsWeak()" style="background: #ff6b6b;">Need Practice</button>
+                    <button class="btn-small" onclick="nextCard()" style="background: #4caf50;">Got It!</button>
+                </div>
+
+                <div id="weak-words" class="weak-words-list hidden">
+                    <h3>Words to Practice</h3>
+                    <div id="weak-words-content"></div>
+                </div>
+            </div>
+
+            <!-- QUIZ MODE -->
+            <div id="quiz-mode" class="mode-section">
+                <div class="quiz-question">
+                    <div class="card-counter" id="quiz-counter"></div>
+                    <div class="quiz-text" id="quiz-text"></div>
+                    <div class="quiz-options" id="quiz-options"></div>
+                    <div id="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <!-- ARTICLE PRACTICE MODE -->
+            <div id="article-mode" class="mode-section">
+                <div class="quiz-question">
+                    <div class="card-counter" id="article-counter"></div>
+                    <div class="quiz-text" id="article-question"></div>
+                    <div class="article-options" id="article-options"></div>
+                    <div id="article-feedback"></div>
+                </div>
+            </div>
+
+            <!-- SPELLING MODE -->
+            <div id="spelling-mode" class="mode-section">
+                <div class="quiz-question">
+                    <div class="card-counter" id="spelling-counter"></div>
+                    <div class="quiz-text" id="spelling-question"></div>
+                    <input type="text" id="spelling-input" class="spelling-input" placeholder="Type the German word..." autocomplete="off">
+                    <button onclick="checkSpelling()" style="margin-top: 10px;">Check</button>
+                    <div id="spelling-feedback"></div>
+                </div>
+            </div>
+
+            <!-- PROGRESS MODE -->
+            <div id="progress-mode" class="mode-section">
+                <h2>Your Progress</h2>
+                <div id="progress-display"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // VOCABULARY DATA
+        const vocabularyData = {
+            "Begrüßung & Vorstellung": [
+                { word: "heißen", plural: "heißen", english: "to be called", article: "verb", gender: "v", example_de: "Ich heiße Anna.", example_en: "I am called Anna.", level: "A1" },
+                { word: "sich vorstellen", plural: "sich vorstellen", english: "to introduce oneself", article: "verb", gender: "v", example_de: "Ich stelle mich vor.", example_en: "I introduce myself.", level: "A1" },
+                { word: "der Name", plural: "die Namen", english: "name", article: "der", gender: "m", example_de: "Mein Name ist Tom.", example_en: "My name is Tom.", level: "A1" },
+                { word: "der Vorname", plural: "die Vornamen", english: "first name", article: "der", gender: "m", example_de: "Sein Vorname ist Michael.", example_en: "His first name is Michael.", level: "A1" },
+                { word: "der Nachname", plural: "die Nachnamen", english: "last name", article: "der", gender: "m", example_de: "Der Nachname ist Schmidt.", example_en: "The last name is Schmidt.", level: "A1" },
+                { word: "die Telefonnummer", plural: "die Telefonnummern", english: "phone number", article: "die", gender: "f", example_de: "Meine Telefonnummer ist 123456.", example_en: "My phone number is 123456.", level: "A1" },
+                { word: "die E-Mail-Adresse", plural: "die E-Mail-Adressen", english: "email address", article: "die", gender: "f", example_de: "Meine E-Mail-Adresse ist anna@example.com.", example_en: "My email address is anna@example.com.", level: "A1" },
+                { word: "Frau", plural: "Frauen", english: "Mrs./Ms.", article: "die", gender: "f", example_de: "Frau Müller ist eine Lehrerin.", example_en: "Mrs. Müller is a teacher.", level: "A1" },
+                { word: "Herr", plural: "Herren", english: "Mr.", article: "der", gender: "m", example_de: "Herr Weber ist mein Chef.", example_en: "Mr. Weber is my boss.", level: "A1" },
+                { word: "Wer?", plural: "Wer?", english: "Who?", article: "pronoun", gender: "pronoun", example_de: "Wer bist du?", example_en: "Who are you?", level: "A1" },
+                { word: "Wie?", plural: "Wie?", english: "How?", article: "pronoun", gender: "pronoun", example_de: "Wie geht es dir?", example_en: "How are you?", level: "A1" },
+                { word: "Wie heißt du?", plural: "Wie heißt du?", english: "What is your name?", article: "phrase", gender: "phrase", example_de: "Wie heißt du?", example_en: "What is your name?", level: "A1" },
+                { word: "Wo?", plural: "Wo?", english: "Where?", article: "pronoun", gender: "pronoun", example_de: "Wo wohnst du?", example_en: "Where do you live?", level: "A1" },
+                { word: "wohnen in", plural: "wohnen in", english: "to live in", article: "verb", gender: "v", example_de: "Ich wohne in Berlin.", example_en: "I live in Berlin.", level: "A1" },
+                { word: "in", plural: "in", english: "in", article: "prep", gender: "prep", example_de: "Ich lebe in Deutschland.", example_en: "I live in Germany.", level: "A1" },
+                { word: "Woher?", plural: "Woher?", english: "Where from?", article: "pronoun", gender: "pronoun", example_de: "Woher kommst du?", example_en: "Where are you from?", level: "A1" },
+                { word: "kommen aus", plural: "kommen aus", english: "to come from", article: "verb", gender: "v", example_de: "Ich komme aus Deutschland.", example_en: "I come from Germany.", level: "A1" },
+                { word: "aus", plural: "aus", english: "from", article: "prep", gender: "prep", example_de: "Ich bin aus Spanien.", example_en: "I am from Spain.", level: "A1" },
+                { word: "ich", plural: "ich", english: "I", article: "pronoun", gender: "pronoun", example_de: "Ich bin Anna.", example_en: "I am Anna.", level: "A1" },
+                { word: "mein-", plural: "mein-", english: "my", article: "possessive", gender: "possessive", example_de: "Mein Name ist Tom.", example_en: "My name is Tom.", level: "A1" },
+                { word: "du", plural: "du", english: "you (informal)", article: "pronoun", gender: "pronoun", example_de: "Du bist nett.", example_en: "You are nice.", level: "A1" },
+                { word: "er", plural: "er", english: "he", article: "pronoun", gender: "pronoun", example_de: "Er ist groß.", example_en: "He is tall.", level: "A1" },
+                { word: "sie", plural: "sie", english: "she/they", article: "pronoun", gender: "pronoun", example_de: "Sie ist klug.", example_en: "She is smart.", level: "A1" },
+                { word: "Sie", plural: "Sie", english: "you (formal)", article: "pronoun", gender: "pronoun", example_de: "Sie sind freundlich.", example_en: "You are friendly.", level: "A1" }
+            ],
+            "Essen & Trinken": [
+                { word: "der Apfel", plural: "die Äpfel", english: "apple", article: "der", gender: "m", example_de: "Ich esse jeden Tag einen Apfel.", example_en: "I eat an apple every day.", level: "A1" },
+                { word: "das Brot", plural: "die Brote", english: "bread", article: "das", gender: "n", example_de: "Das Brot schmeckt sehr gut.", example_en: "The bread tastes very good.", level: "A1" },
+                { word: "die Milch", plural: "die Milch", english: "milk", article: "die", gender: "f", example_de: "Ich trinke Milch zum Frühstück.", example_en: "I drink milk for breakfast.", level: "A1" },
+                { word: "der Kaffee", plural: "die Kaffees", english: "coffee", article: "der", gender: "m", example_de: "Möchtest du eine Tasse Kaffee?", example_en: "Would you like a cup of coffee?", level: "A1" },
+                { word: "das Wasser", plural: "die Wasser", english: "water", article: "das", gender: "n", example_de: "Ich trinke viel Wasser.", example_en: "I drink a lot of water.", level: "A1" },
+                { word: "der Käse", plural: "die Käsesorten", english: "cheese", article: "der", gender: "m", example_de: "Der Käse ist lecker.", example_en: "The cheese is delicious.", level: "A1" },
+                { word: "die Kartoffel", plural: "die Kartoffeln", english: "potato", article: "die", gender: "f", example_de: "Kartoffeln sind sehr nahrhaft.", example_en: "Potatoes are very nutritious.", level: "A1" },
+                { word: "das Ei", plural: "die Eier", english: "egg", article: "das", gender: "n", example_de: "Zum Frühstück esse ich zwei Eier.", example_en: "For breakfast I eat two eggs.", level: "A1" },
+                { word: "der Reis", plural: "die Reissorten", english: "rice", article: "der", gender: "m", example_de: "Ich koche Reis zum Mittagessen.", example_en: "I cook rice for lunch.", level: "A1" },
+                { word: "das Fleisch", plural: "die Fleischsorten", english: "meat", article: "das", gender: "n", example_de: "Das Fleisch ist zu teuer.", example_en: "The meat is too expensive.", level: "A2" },
+                { word: "der Fisch", plural: "die Fische", english: "fish", article: "der", gender: "m", example_de: "Fisch ist sehr gesund.", example_en: "Fish is very healthy.", level: "A1" },
+                { word: "die Suppe", plural: "die Suppen", english: "soup", article: "die", gender: "f", example_de: "Die Suppe ist heiß.", example_en: "The soup is hot.", level: "A1" },
+                { word: "der Kuchen", plural: "die Kuchen", english: "cake", article: "der", gender: "m", example_de: "Der Kuchen schmeckt süß.", example_en: "The cake tastes sweet.", level: "A1" },
+                { word: "das Gemüse", plural: "das Gemüse", english: "vegetables", article: "das", gender: "n", example_de: "Magst du grünes Gemüse?", example_en: "Do you like green vegetables?", level: "A1" },
+                { word: "das Obst", plural: "das Obst", english: "fruit", article: "das", gender: "n", example_de: "Obst ist gesund und lecker.", example_en: "Fruit is healthy and tasty.", level: "A1" },
+                { word: "die Butter", plural: "die Butter", english: "butter", article: "die", gender: "f", example_de: "Ich streiche Butter auf das Brot.", example_en: "I spread butter on the bread.", level: "A1" },
+                { word: "der Salat", plural: "die Salate", english: "salad", article: "der", gender: "m", example_de: "Der Salat ist frisch.", example_en: "The salad is fresh.", level: "A1" },
+                { word: "die Nudeln", plural: "die Nudeln", english: "pasta", article: "die", gender: "f", example_de: "Ich esse gerne Nudeln.", example_en: "I like to eat pasta.", level: "A1" },
+                { word: "der Zucker", plural: "die Zuckersorten", english: "sugar", article: "der", gender: "m", example_de: "Der Kaffee braucht etwas Zucker.", example_en: "The coffee needs some sugar.", level: "A1" },
+                { word: "das Salz", plural: "das Salz", english: "salt", article: "das", gender: "n", example_de: "Bitte pass das Salz.", example_en: "Please pass the salt.", level: "A1" },
+                { word: "die Banane", plural: "die Bananen", english: "banana", article: "die", gender: "f", example_de: "Die Banane ist gelb.", example_en: "The banana is yellow.", level: "A1" },
+                { word: "die Orange", plural: "die Orangen", english: "orange", article: "die", gender: "f", example_de: "Die Orange ist süß.", example_en: "The orange is sweet.", level: "A1" },
+                { word: "die Zitrone", plural: "die Zitronen", english: "lemon", article: "die", gender: "f", example_de: "Die Zitrone ist sauer.", example_en: "The lemon is sour.", level: "A1" },
+                { word: "das Getränk", plural: "die Getränke", english: "beverage", article: "das", gender: "n", example_de: "Das Getränk ist erfrischend.", example_en: "The beverage is refreshing.", level: "A1" },
+                { word: "der Orangensaft", plural: "die Orangensäfte", english: "orange juice", article: "der", gender: "m", example_de: "Der Orangensaft ist lecker.", example_en: "The orange juice is delicious.", level: "A1" },
+                { word: "der Apfelsaft", plural: "die Apfelsäfte", english: "apple juice", article: "der", gender: "m", example_de: "Der Apfelsaft ist süß.", example_en: "The apple juice is sweet.", level: "A1" },
+                { word: "der Wein", plural: "die Weine", english: "wine", article: "der", gender: "m", example_de: "Der Wein ist rot.", example_en: "The wine is red.", level: "A2" },
+                { word: "die Cola", plural: "die Colas", english: "cola", article: "die", gender: "f", example_de: "Die Cola ist kalt.", example_en: "The cola is cold.", level: "A1" },
+                { word: "die Milch", plural: "die Milch", english: "milk", article: "die", gender: "f", example_de: "Ich trinke Milch.", example_en: "I drink milk.", level: "A1" },
+                { word: "der Milchkaffee", plural: "die Milchkaffees", english: "coffee with milk", article: "der", gender: "m", example_de: "Der Milchkaffee ist warm.", example_en: "The coffee with milk is warm.", level: "A1" },
+                { word: "die Lebensmittel (Pl.)", plural: "die Lebensmittel", english: "food/groceries", article: "die", gender: "pl", example_de: "Ich kaufe Lebensmittel.", example_en: "I buy groceries.", level: "A1" },
+                { word: "die Marmelade", plural: "die Marmeladen", english: "jam", article: "die", gender: "f", example_de: "Die Marmelade ist süß.", example_en: "The jam is sweet.", level: "A1" },
+                { word: "das Milchprodukt", plural: "die Milchprodukte", english: "dairy product", article: "das", gender: "n", example_de: "Das Milchprodukt ist gesund.", example_en: "The dairy product is healthy.", level: "A2" },
+                { word: "der Joghurt", plural: "die Joghurts", english: "yogurt", article: "der", gender: "m", example_de: "Der Joghurt schmeckt gut.", example_en: "The yogurt tastes good.", level: "A1" },
+                { word: "die Butter", plural: "die Butter", english: "butter", article: "die", gender: "f", example_de: "Ich esse Butter zum Frühstück.", example_en: "I eat butter for breakfast.", level: "A1" },
+                { word: "das Öl", plural: "die Öle", english: "oil", article: "das", gender: "n", example_de: "Das Öl ist klar.", example_en: "The oil is clear.", level: "A2" },
+                { word: "das Hähnchen", plural: "die Hähnchen", english: "chicken", article: "das", gender: "n", example_de: "Das Hähnchen ist lecker.", example_en: "The chicken is delicious.", level: "A1" },
+                { word: "der Hamburger", plural: "die Hamburger", english: "hamburger", article: "der", gender: "m", example_de: "Der Hamburger schmeckt gut.", example_en: "The hamburger tastes good.", level: "A1" },
+                { word: "das Brot", plural: "die Brote", english: "bread", article: "das", gender: "n", example_de: "Das Brot ist frisch.", example_en: "The bread is fresh.", level: "A1" },
+                { word: "die Lasagne", plural: "die Lasagnen", english: "lasagna", article: "die", gender: "f", example_de: "Die Lasagne ist köstlich.", example_en: "The lasagna is delicious.", level: "A2" },
+                { word: "das Croissant", plural: "die Croissants", english: "croissant", article: "das", gender: "n", example_de: "Das Croissant ist fluffig.", example_en: "The croissant is fluffy.", level: "A1" },
+                { word: "das Brötchen", plural: "die Brötchen", english: "roll/bun", article: "das", gender: "n", example_de: "Das Brötchen ist warm.", example_en: "The roll is warm.", level: "A1" },
+                { word: "der Toast", plural: "die Toasts", english: "toast", article: "der", gender: "m", example_de: "Der Toast ist knusprig.", example_en: "The toast is crispy.", level: "A1" },
+                { word: "der Honig", plural: "der Honig", english: "honey", article: "der", gender: "m", example_de: "Der Honig ist süß.", example_en: "The honey is sweet.", level: "A1" },
+                { word: "die Wurst", plural: "die Würste", english: "sausage", article: "die", gender: "f", example_de: "Die Wurst ist lecker.", example_en: "The sausage is delicious.", level: "A1" },
+                { word: "der Schinken", plural: "der Schinken", english: "ham", article: "der", gender: "m", example_de: "Der Schinken ist salzig.", example_en: "The ham is salty.", level: "A1" },
+                { word: "essen, du isst, er isst", plural: "essen", english: "to eat", article: "verb", gender: "v", example_de: "Ich esse ein Brötchen.", example_en: "I eat a roll.", level: "A1" },
+                { word: "trinken", plural: "trinken", english: "to drink", article: "verb", gender: "v", example_de: "Ich trinke Kaffee.", example_en: "I drink coffee.", level: "A1" },
+                { word: "einkaufen", plural: "einkaufen", english: "to shop", article: "verb", gender: "v", example_de: "Ich gehe einkaufen.", example_en: "I go shopping.", level: "A1" },
+                { word: "einkaufen gehen", plural: "einkaufen gehen", english: "to go shopping", article: "verb", gender: "v", example_de: "Wir gehen einkaufen.", example_en: "We go shopping.", level: "A1" },
+                { word: "kaufen", plural: "kaufen", english: "to buy", article: "verb", gender: "v", example_de: "Ich kaufe einen Apfel.", example_en: "I buy an apple.", level: "A1" },
+                { word: "brauchen", plural: "brauchen", english: "to need", article: "verb", gender: "v", example_de: "Ich brauche Milch.", example_en: "I need milk.", level: "A1" },
+                { word: "der Preis", plural: "die Preise", english: "price", article: "der", gender: "m", example_de: "Der Preis ist hoch.", example_en: "The price is high.", level: "A1" },
+                { word: "der Cent", plural: "die Cents", english: "cent", article: "der", gender: "m", example_de: "Das kostet 50 Cent.", example_en: "That costs 50 cents.", level: "A1" },
+                { word: "der Euro", plural: "die Euros", english: "euro", article: "der", gender: "m", example_de: "Das kostet 5 Euro.", example_en: "That costs 5 euros.", level: "A1" },
+                { word: "billig", plural: "billig", english: "cheap", article: "adj", gender: "adj", example_de: "Das ist billig.", example_en: "That is cheap.", level: "A1" },
+                { word: "teuer", plural: "teuer", english: "expensive", article: "adj", gender: "adj", example_de: "Das ist teuer.", example_en: "That is expensive.", level: "A1" },
+                { word: "kosten", plural: "kosten", english: "to cost", article: "verb", gender: "v", example_de: "Das kostet 10 Euro.", example_en: "That costs 10 euros.", level: "A1" },
+                { word: "Was kostet das?", plural: "Was kostet das?", english: "What does it cost?", article: "phrase", gender: "phrase", example_de: "Was kostet das?", example_en: "What does it cost?", level: "A1" },
+                { word: "Wie viel kostet / kosten ...?", plural: "Wie viel kostet / kosten ...?", english: "How much does/do ... cost?", article: "phrase", gender: "phrase", example_de: "Wie viel kosten die Äpfel?", example_en: "How much do the apples cost?", level: "A1" },
+                { word: "essen gehen", plural: "essen gehen", english: "to eat out", article: "verb", gender: "v", example_de: "Wir essen gehen.", example_en: "We eat out.", level: "A1" },
+                { word: "das Restaurant", plural: "die Restaurants", english: "restaurant", article: "das", gender: "n", example_de: "Das Restaurant ist schön.", example_en: "The restaurant is nice.", level: "A1" },
+                { word: "Noch einmal, bitte.", plural: "Noch einmal, bitte.", english: "One more, please.", article: "phrase", gender: "phrase", example_de: "Noch einmal, bitte.", example_en: "One more, please.", level: "A1" },
+                { word: "der Koch", plural: "die Köche", english: "chef/cook", article: "der", gender: "m", example_de: "Der Koch macht leckeres Essen.", example_en: "The chef makes delicious food.", level: "A2" },
+                { word: "die Köchin", plural: "die Köchinnen", english: "female chef/cook", article: "die", gender: "f", example_de: "Die Köchin ist talentiert.", example_en: "The chef is talented.", level: "A2" },
+                { word: "der Gast", plural: "die Gäste", english: "guest", article: "der", gender: "m", example_de: "Der Gast ist zufrieden.", example_en: "The guest is satisfied.", level: "A2" },
+                { word: "das Lieblingessen", plural: "das Lieblingessen", english: "favorite food", article: "das", gender: "n", example_de: "Mein Lieblingessen ist Pizza.", example_en: "My favorite food is pizza.", level: "A1" },
+                { word: "Was ist dein Lieblingessen?", plural: "Was ist dein Lieblingessen?", english: "What is your favorite food?", article: "phrase", gender: "phrase", example_de: "Was ist dein Lieblingessen?", example_en: "What is your favorite food?", level: "A1" },
+                { word: "der Familienvater", plural: "die Familienväter", english: "father (family head)", article: "der", gender: "m", example_de: "Der Familienvater kocht.", example_en: "The family father cooks.", level: "A2" },
+                { word: "der Student", plural: "die Studenten", english: "student (male)", article: "der", gender: "m", example_de: "Der Student isst Pizza.", example_en: "The student eats pizza.", level: "A1" },
+                { word: "die Studentin", plural: "die Studentinnen", english: "student (female)", article: "die", gender: "f", example_de: "Die Studentin isst gesund.", example_en: "The student eats healthy.", level: "A1" },
+                { word: "richtig", plural: "richtig", english: "correct/right", article: "adj", gender: "adj", example_de: "Das ist richtig.", example_en: "That is correct.", level: "A1" }
+            ],
+            "Zu Hause": [
+                { word: "die Küche", plural: "die Küchen", english: "kitchen", article: "die", gender: "f", example_de: "Ich koche in der Küche.", example_en: "I cook in the kitchen.", level: "A1" },
+                { word: "das Bad", plural: "die Bäder", english: "bathroom", article: "das", gender: "n", example_de: "Das Bad ist sauber.", example_en: "The bathroom is clean.", level: "A1" },
+                { word: "das Schlafzimmer", plural: "die Schlafzimmer", english: "bedroom", article: "das", gender: "n", example_de: "Mein Schlafzimmer ist groß.", example_en: "My bedroom is large.", level: "A1" },
+                { word: "das Wohnzimmer", plural: "die Wohnzimmer", english: "living room", article: "das", gender: "n", example_de: "Wir sitzen im Wohnzimmer.", example_en: "We sit in the living room.", level: "A1" },
+                { word: "der Tisch", plural: "die Tische", english: "table", article: "der", gender: "m", example_de: "Der Tisch ist aus Holz.", example_en: "The table is made of wood.", level: "A1" },
+                { word: "der Stuhl", plural: "die Stühle", english: "chair", article: "der", gender: "m", example_de: "Ich sitze auf einem Stuhl.", example_en: "I sit on a chair.", level: "A1" },
+                { word: "das Bett", plural: "die Betten", english: "bed", article: "das", gender: "n", example_de: "Ich schlafe in meinem Bett.", example_en: "I sleep in my bed.", level: "A1" },
+                { word: "der Schrank", plural: "die Schränke", english: "cupboard/wardrobe", article: "der", gender: "m", example_de: "Meine Kleider sind im Schrank.", example_en: "My clothes are in the wardrobe.", level: "A1" },
+                { word: "die Lampe", plural: "die Lampen", english: "lamp", article: "die", gender: "f", example_de: "Die Lampe ist hell.", example_en: "The lamp is bright.", level: "A1" },
+                { word: "der Kühlschrank", plural: "die Kühlschränke", english: "refrigerator", article: "der", gender: "m", example_de: "Das Essen ist im Kühlschrank.", example_en: "The food is in the refrigerator.", level: "A1" },
+                { word: "die Waschmaschine", plural: "die Waschmaschinen", english: "washing machine", article: "die", gender: "f", example_de: "Die Waschmaschine ist neu.", example_en: "The washing machine is new.", level: "A2" },
+                { word: "der Fernseher", plural: "die Fernseher", english: "television", article: "der", gender: "m", example_de: "Der Fernseher ist im Wohnzimmer.", example_en: "The television is in the living room.", level: "A1" },
+                { word: "das Fenster", plural: "die Fenster", english: "window", article: "das", gender: "n", example_de: "Das Fenster ist offen.", example_en: "The window is open.", level: "A1" },
+                { word: "die Tür", plural: "die Türen", english: "door", article: "die", gender: "f", example_de: "Die Tür ist geschlossen.", example_en: "The door is closed.", level: "A1" },
+                { word: "der Spiegel", plural: "die Spiegel", english: "mirror", article: "der", gender: "m", example_de: "Ich schaue in den Spiegel.", example_en: "I look in the mirror.", level: "A2" },
+                { word: "die Treppe", plural: "die Treppen", english: "stairs", article: "die", gender: "f", example_de: "Die Treppe führt nach oben.", example_en: "The stairs lead upstairs.", level: "A2" },
+                { word: "der Garten", plural: "die Gärten", english: "garden", article: "der", gender: "m", example_de: "Ich arbeite gerne im Garten.", example_en: "I like to work in the garden.", level: "A1" },
+                { word: "die Garage", plural: "die Garagen", english: "garage", article: "die", gender: "f", example_de: "Das Auto ist in der Garage.", example_en: "The car is in the garage.", level: "A2" },
+                { word: "das Regal", plural: "die Regale", english: "shelf", article: "das", gender: "n", example_de: "Die Bücher sind auf dem Regal.", example_en: "The books are on the shelf.", level: "A2" },
+                { word: "der Herd", plural: "die Herde", english: "stove", article: "der", gender: "m", example_de: "Der Herd ist heiß.", example_en: "The stove is hot.", level: "A2" },
+                { word: "die Möbel (Pl.)", plural: "die Möbel", english: "furniture", article: "die", gender: "pl", example_de: "Die Möbel sind schön.", example_en: "The furniture is nice.", level: "A1" },
+                { word: "der Fernseher", plural: "die Fernseher", english: "TV", article: "der", gender: "m", example_de: "Der Fernseher funktioniert.", example_en: "The TV works.", level: "A1" },
+                { word: "die Couch", plural: "die Couches", english: "couch", article: "die", gender: "f", example_de: "Die Couch ist bequem.", example_en: "The couch is comfortable.", level: "A1" },
+                { word: "das Bild", plural: "die Bilder", english: "picture", article: "das", gender: "n", example_de: "Das Bild ist schön.", example_en: "The picture is beautiful.", level: "A1" },
+                { word: "das Bett", plural: "die Betten", english: "bed", article: "das", gender: "n", example_de: "Das Bett ist weich.", example_en: "The bed is soft.", level: "A1" },
+                { word: "die Mikrowelle", plural: "die Mikrowellen", english: "microwave", article: "die", gender: "f", example_de: "Die Mikrowelle wärmt das Essen.", example_en: "The microwave heats the food.", level: "A2" },
+                { word: "der Kühlschrank", plural: "die Kühlschränke", english: "refrigerator", article: "der", gender: "m", example_de: "Der Kühlschrank ist voll.", example_en: "The refrigerator is full.", level: "A1" },
+                { word: "die Dusche", plural: "die Duschen", english: "shower", article: "die", gender: "f", example_de: "Die Dusche ist heiß.", example_en: "The shower is hot.", level: "A1" },
+                { word: "das WC", plural: "die WCs", english: "toilet", article: "das", gender: "n", example_de: "Das WC ist sauber.", example_en: "The toilet is clean.", level: "A1" },
+                { word: "die Wohnung", plural: "die Wohnungen", english: "apartment/flat", article: "die", gender: "f", example_de: "Die Wohnung ist groß.", example_en: "The apartment is big.", level: "A1" },
+                { word: "die WG", plural: "die WGs", english: "shared flat", article: "die", gender: "f", example_de: "Ich lebe in einer WG.", example_en: "I live in a shared flat.", level: "A1" },
+                { word: "die Miete", plural: "die Mieten", english: "rent", article: "die", gender: "f", example_de: "Die Miete ist teuer.", example_en: "The rent is expensive.", level: "A2" },
+                { word: "der Balkon", plural: "die Balkone", english: "balcony", article: "der", gender: "m", example_de: "Der Balkon hat Blumen.", example_en: "The balcony has flowers.", level: "A2" },
+                { word: "hell", plural: "hell", english: "bright", article: "adj", gender: "adj", example_de: "Das Zimmer ist hell.", example_en: "The room is bright.", level: "A1" },
+                { word: "dunkel", plural: "dunkel", english: "dark", article: "adj", gender: "adj", example_de: "Das Zimmer ist dunkel.", example_en: "The room is dark.", level: "A1" },
+                { word: "laut", plural: "laut", english: "loud", article: "adj", gender: "adj", example_de: "Der Fernseher ist laut.", example_en: "The TV is loud.", level: "A1" },
+                { word: "ruhig", plural: "ruhig", english: "quiet", article: "adj", gender: "adj", example_de: "Das Zimmer ist ruhig.", example_en: "The room is quiet.", level: "A1" }
+            ],
+            "Beruf & Alltag": [
+                { word: "die Firma", plural: "die Firmen", english: "company", article: "die", gender: "f", example_de: "Die Firma ist groß.", example_en: "The company is big.", level: "A1" },
+                { word: "die Visitenkarte", plural: "die Visitenkarten", english: "business card", article: "die", gender: "f", example_de: "Die Visitenkarte ist klein.", example_en: "The business card is small.", level: "A2" },
+                { word: "arbeiten", plural: "arbeiten", english: "to work", article: "verb", gender: "v", example_de: "Ich arbeite als Lehrer.", example_en: "I work as a teacher.", level: "A1" },
+                { word: "arbeitslos", plural: "arbeitslos", english: "unemployed", article: "adj", gender: "adj", example_de: "Ich bin arbeitslos.", example_en: "I am unemployed.", level: "A2" },
+                { word: "die Arbeit", plural: "die Arbeiten", english: "work", article: "die", gender: "f", example_de: "Die Arbeit ist interessant.", example_en: "The work is interesting.", level: "A1" },
+                { word: "der Beruf", plural: "die Berufe", english: "profession/job", article: "der", gender: "m", example_de: "Mein Beruf ist Arzt.", example_en: "My profession is doctor.", level: "A1" },
+                { word: "der Polizist", plural: "die Polizisten", english: "police officer (m)", article: "der", gender: "m", example_de: "Der Polizist ist mutig.", example_en: "The police officer is brave.", level: "A1" },
+                { word: "die Polizistin", plural: "die Polizistinnen", english: "police officer (f)", article: "die", gender: "f", example_de: "Die Polizistin ist nett.", example_en: "The police officer is nice.", level: "A1" },
+                { word: "der Manager", plural: "die Manager", english: "manager", article: "der", gender: "m", example_de: "Der Manager ist beschäftigt.", example_en: "The manager is busy.", level: "A2" },
+                { word: "die Managerin", plural: "die Managerinnen", english: "manager (f)", article: "die", gender: "f", example_de: "Die Managerin ist erfolgreich.", example_en: "The manager is successful.", level: "A2" },
+                { word: "der Ingenieur", plural: "die Ingenieure", english: "engineer", article: "der", gender: "m", example_de: "Der Ingenieur arbeitet an einem Projekt.", example_en: "The engineer works on a project.", level: "A1" },
+                { word: "die IT-Ingenieurin", plural: "die IT-Ingenieurinnen", english: "IT engineer (f)", article: "die", gender: "f", example_de: "Die IT-Ingenieurin programmiert.", example_en: "The IT engineer programs.", level: "A2" },
+                { word: "der Taxifahrer", plural: "die Taxifahrer", english: "taxi driver", article: "der", gender: "m", example_de: "Der Taxifahrer ist freundlich.", example_en: "The taxi driver is friendly.", level: "A1" },
+                { word: "die Taxifahrerin", plural: "die Taxifahrerinnen", english: "taxi driver (f)", article: "die", gender: "f", example_de: "Die Taxifahrerin kennt die Stadt.", example_en: "The taxi driver knows the city.", level: "A1" },
+                { word: "der Text", plural: "die Texte", english: "text", article: "der", gender: "m", example_de: "Der Text ist lang.", example_en: "The text is long.", level: "A2" },
+                { word: "Wann?", plural: "Wann?", english: "When?", article: "pronoun", gender: "pronoun", example_de: "Wann kommst du?", example_en: "When are you coming?", level: "A1" },
+                { word: "um", plural: "um", english: "at (time)", article: "prep", gender: "prep", example_de: "Ich komme um 9 Uhr.", example_en: "I come at 9 o'clock.", level: "A1" },
+                { word: "Wie spät ist es?", plural: "Wie spät ist es?", english: "What time is it?", article: "phrase", gender: "phrase", example_de: "Wie spät ist es?", example_en: "What time is it?", level: "A1" },
+                { word: "Es ist ... Uhr.", plural: "Es ist ... Uhr.", english: "It is ... o'clock.", article: "phrase", gender: "phrase", example_de: "Es ist 10 Uhr.", example_en: "It is 10 o'clock.", level: "A1" },
+                { word: "vor", plural: "vor", english: "before/ago", article: "prep", gender: "prep", example_de: "Ich komme vor dir.", example_en: "I come before you.", level: "A2" },
+                { word: "nach", plural: "nach", english: "after", article: "prep", gender: "prep", example_de: "Ich komme nach dir.", example_en: "I come after you.", level: "A2" },
+                { word: "das Viertel", plural: "die Viertel", english: "quarter", article: "das", gender: "n", example_de: "Es ist Viertel nach neun.", example_en: "It is a quarter past nine.", level: "A1" },
+                { word: "halb", plural: "halb", english: "half", article: "adj", gender: "adj", example_de: "Es ist halb zehn.", example_en: "It is half past nine.", level: "A1" },
+                { word: "der Termin", plural: "die Termine", english: "appointment", article: "der", gender: "m", example_de: "Der Termin ist morgen.", example_en: "The appointment is tomorrow.", level: "A2" },
+                { word: "der Monat", plural: "die Monate", english: "month", article: "der", gender: "m", example_de: "Der Monat hat 30 Tage.", example_en: "The month has 30 days.", level: "A1" },
+                { word: "der Tag", plural: "die Tage", english: "day", article: "der", gender: "m", example_de: "Heute ist ein schöner Tag.", example_en: "Today is a beautiful day.", level: "A1" },
+                { word: "nicht", plural: "nicht", english: "not", article: "adv", gender: "adv", example_de: "Ich komme nicht.", example_en: "I'm not coming.", level: "A1" },
+                { word: "da", plural: "da", english: "there", article: "adv", gender: "adv", example_de: "Ich bin da.", example_en: "I am there.", level: "A1" },
+                { word: "Was?", plural: "Was?", english: "What?", article: "pronoun", gender: "pronoun", example_de: "Was ist das?", example_en: "What is that?", level: "A1" },
+                { word: "super", plural: "super", english: "great", article: "adj", gender: "adj", example_de: "Das ist super!", example_en: "That is great!", level: "A1" },
+                { word: "der Rennter", plural: "die Rentner", english: "retiree", article: "der", gender: "m", example_de: "Der Rentner ist alt.", example_en: "The retiree is old.", level: "A2" },
+                { word: "die Rentnerin", plural: "die Rentnerinnen", english: "retiree (f)", article: "die", gender: "f", example_de: "Die Rentnerin ist nett.", example_en: "The retiree is nice.", level: "A2" },
+                { word: "die Party", plural: "die Partys", english: "party", article: "die", gender: "f", example_de: "Die Party ist morgen.", example_en: "The party is tomorrow.", level: "A1" }
+            ],
+            "Freizeit & Hobbys": [
+                { word: "die Freizeit", plural: "die Freizeiten", english: "leisure", article: "die", gender: "f", example_de: "Ich liebe meine Freizeit.", example_en: "I love my leisure time.", level: "A1" },
+                { word: "der Stress", plural: "der Stress", english: "stress", article: "der", gender: "m", example_de: "Der Stress ist groß.", example_en: "The stress is big.", level: "A1" },
+                { word: "Das ist Stress.", plural: "Das ist Stress.", english: "That is stressful.", article: "phrase", gender: "phrase", example_de: "Das ist Stress.", example_en: "That is stressful.", level: "A1" },
+                { word: "der Spaß", plural: "die Spaße", english: "fun", article: "der", gender: "m", example_de: "Der Spaß ist groß.", example_en: "The fun is great.", level: "A1" },
+                { word: "Das macht Spaß.", plural: "Das macht Spaß.", english: "That is fun.", article: "phrase", gender: "phrase", example_de: "Das macht Spaß.", example_en: "That is fun.", level: "A1" },
+                { word: "der Park", plural: "die Parks", english: "park", article: "der", gender: "m", example_de: "Der Park ist grün.", example_en: "The park is green.", level: "A1" },
+                { word: "Golf spielen", plural: "Golf spielen", english: "to play golf", article: "verb", gender: "v", example_de: "Ich spiele Golf.", example_en: "I play golf.", level: "A2" },
+                { word: "snowboarden", plural: "snowboarden", english: "to snowboard", article: "verb", gender: "v", example_de: "Ich gehe snowboarden.", example_en: "I go snowboarding.", level: "A2" },
+                { word: "Rad fahren, du fährst Rad, er fährt Rad", plural: "Rad fahren", english: "to ride a bike", article: "verb", gender: "v", example_de: "Ich fahre Rad.", example_en: "I ride a bike.", level: "A1" },
+                { word: "das Rad", plural: "die Räder", english: "bike", article: "das", gender: "n", example_de: "Das Rad ist rot.", example_en: "The bike is red.", level: "A1" },
+                { word: "schwimmen", plural: "schwimmen", english: "to swim", article: "verb", gender: "v", example_de: "Ich schwimme im Pool.", example_en: "I swim in the pool.", level: "A1" },
+                { word: "wandern", plural: "wandern", english: "to hike", article: "verb", gender: "v", example_de: "Ich wandere in den Bergen.", example_en: "I hike in the mountains.", level: "A1" },
+                { word: "walken", plural: "walken", english: "to walk/go walking", article: "verb", gender: "v", example_de: "Ich gehe walken.", example_en: "I go walking.", level: "A1" },
+                { word: "Aerobic machen", plural: "Aerobic machen", english: "to do aerobics", article: "verb", gender: "v", example_de: "Ich mache Aerobic.", example_en: "I do aerobics.", level: "A1" },
+                { word: "das Aerobic", plural: "das Aerobic", english: "aerobics", article: "das", gender: "n", example_de: "Aerobic ist gesund.", example_en: "Aerobics are healthy.", level: "A1" },
+                { word: "der Kurs", plural: "die Kurse", english: "course/class", article: "der", gender: "m", example_de: "Der Kurs ist interessant.", example_en: "The course is interesting.", level: "A2" },
+                { word: "das Fitness-Studio", plural: "die Fitness-Studios", english: "fitness studio", article: "das", gender: "n", example_de: "Das Fitness-Studio ist modern.", example_en: "The fitness studio is modern.", level: "A2" },
+                { word: "der Pool", plural: "die Pools", english: "pool", article: "der", gender: "m", example_de: "Der Pool ist groß.", example_en: "The pool is big.", level: "A1" },
+                { word: "ausgehen", plural: "ausgehen", english: "to go out", article: "verb", gender: "v", example_de: "Wir gehen aus.", example_en: "We go out.", level: "A1" },
+                { word: "Wohnzimmer", plural: "Wohnzimmer", english: "living room", article: "das", gender: "n", example_de: "Wir sitzen im Wohnzimmer.", example_en: "We sit in the living room.", level: "A1" },
+                { word: "gehen", plural: "gehen", english: "to go", article: "verb", gender: "v", example_de: "Ich gehe ins Kino.", example_en: "I go to the cinema.", level: "A1" },
+                { word: "tanzen", plural: "tanzen", english: "to dance", article: "verb", gender: "v", example_de: "Ich liebe zu tanzen.", example_en: "I love to dance.", level: "A1" },
+                { word: "treffen, du triffst, er trifft", plural: "treffen", english: "to meet", article: "verb", gender: "v", example_de: "Ich treffe meine Freunde.", example_en: "I meet my friends.", level: "A1" },
+                { word: "besuchen", plural: "besuchen", english: "to visit", article: "verb", gender: "v", example_de: "Ich besuche meine Tante.", example_en: "I visit my aunt.", level: "A1" },
+                { word: "ein laden, du lädst ein, er lädt ein", plural: "ein laden", english: "to invite", article: "verb", gender: "v", example_de: "Ich lade dich ein.", example_en: "I invite you.", level: "A1" },
+                { word: "feiern", plural: "feiern", english: "to celebrate", article: "verb", gender: "v", example_de: "Wir feiern den Geburtstag.", example_en: "We celebrate the birthday.", level: "A1" },
+                { word: "das Kino", plural: "die Kinos", english: "cinema/movie theater", article: "das", gender: "n", example_de: "Das Kino ist groß.", example_en: "The cinema is big.", level: "A1" },
+                { word: "die Disco", plural: "die Discos", english: "disco/nightclub", article: "die", gender: "f", example_de: "Die Disco ist laut.", example_en: "The disco is loud.", level: "A1" },
+                { word: "der Club", plural: "die Clubs", english: "club", article: "der", gender: "m", example_de: "Der Club ist modern.", example_en: "The club is modern.", level: "A1" },
+                { word: "das Konzert", plural: "die Konzerte", english: "concert", article: "das", gender: "n", example_de: "Das Konzert ist morgen.", example_en: "The concert is tomorrow.", level: "A1" },
+                { word: "das Theater", plural: "die Theater", english: "theater", article: "das", gender: "n", example_de: "Das Theater ist interessant.", example_en: "The theater is interesting.", level: "A1" },
+                { word: "über Freizeit sprechen", plural: "über Freizeit sprechen", english: "to talk about leisure", article: "verb", gender: "v", example_de: "Wir sprechen über Freizeit.", example_en: "We talk about leisure.", level: "A1" },
+                { word: "fern sehen, du siehst fern, er sieht fern", plural: "fern sehen", english: "to watch TV", article: "verb", gender: "v", example_de: "Ich sehe fern.", example_en: "I watch TV.", level: "A1" },
+                { word: "lesen, du liest, er liest", plural: "lesen", english: "to read", article: "verb", gender: "v", example_de: "Ich lese ein Buch.", example_en: "I read a book.", level: "A1" }
+            ],
+            "Stadt & Wohnung": [
+                { word: "das Geschäft", plural: "die Geschäfte", english: "shop", article: "das", gender: "n", example_de: "Das Geschäft ist groß.", example_en: "The shop is big.", level: "A1" },
+                { word: "die Bank", plural: "die Banken", english: "bank", article: "die", gender: "f", example_de: "Die Bank ist modern.", example_en: "The bank is modern.", level: "A1" },
+                { word: "das Haus", plural: "die Häuser", english: "house", article: "das", gender: "n", example_de: "Das Haus ist alt.", example_en: "The house is old.", level: "A1" },
+                { word: "die Kirche", plural: "die Kirchen", english: "church", article: "die", gender: "f", example_de: "Die Kirche ist schön.", example_en: "The church is beautiful.", level: "A2" },
+                { word: "die Schule", plural: "die Schulen", english: "school", article: "die", gender: "f", example_de: "Die Schule ist groß.", example_en: "The school is big.", level: "A1" },
+                { word: "das Café", plural: "die Cafés", english: "café", article: "das", gender: "n", example_de: "Das Café ist gemütlich.", example_en: "The café is cozy.", level: "A1" },
+                { word: "der Bahnhof", plural: "die Bahnhöfe", english: "railway station", article: "der", gender: "m", example_de: "Der Bahnhof ist zentral.", example_en: "The station is central.", level: "A2" },
+                { word: "interessant", plural: "interessant", english: "interesting", article: "adj", gender: "adj", example_de: "Die Stadt ist interessant.", example_en: "The city is interesting.", level: "A1" },
+                { word: "langweilig", plural: "langweilig", english: "boring", article: "adj", gender: "adj", example_de: "Das ist langweilig.", example_en: "That is boring.", level: "A2" },
+                { word: "modern", plural: "modern", english: "modern", article: "adj", gender: "adj", example_de: "Das Haus ist modern.", example_en: "The house is modern.", level: "A1" },
+                { word: "schön", plural: "schön", english: "beautiful/nice", article: "adj", gender: "adj", example_de: "Die Stadt ist schön.", example_en: "The city is beautiful.", level: "A1" },
+                { word: "hässlich", plural: "hässlich", english: "ugly", article: "adj", gender: "adj", example_de: "Das Gebäude ist hässlich.", example_en: "The building is ugly.", level: "A2" },
+                { word: "neu", plural: "neu", english: "new", article: "adj", gender: "adj", example_de: "Das Haus ist neu.", example_en: "The house is new.", level: "A1" },
+                { word: "alt", plural: "alt", english: "old", article: "adj", gender: "adj", example_de: "Das Haus ist alt.", example_en: "The house is old.", level: "A1" },
+                { word: "wichtig", plural: "wichtig", english: "important", article: "adj", gender: "adj", example_de: "Das ist wichtig.", example_en: "That is important.", level: "A2" },
+                { word: "grillen", plural: "grillen", english: "to grill", article: "verb", gender: "v", example_de: "Wir grillen am Wochenende.", example_en: "We grill on the weekend.", level: "A2" },
+                { word: "der Single", plural: "die Singles", english: "single person", article: "der", gender: "m", example_de: "Der Single lebt allein.", example_en: "The single person lives alone.", level: "A2" },
+                { word: "die Person", plural: "die Personen", english: "person", article: "die", gender: "f", example_de: "Die Person ist nett.", example_en: "The person is nice.", level: "A1" },
+                { word: "wo ist denn dein Lieblingsplatz?", plural: "wo ist denn dein Lieblingsplatz?", english: "Where is your favorite place?", article: "phrase", gender: "phrase", example_de: "Wo ist denn dein Lieblingsplatz?", example_en: "Where is your favorite place?", level: "A1" },
+                { word: "Wo liegt ...?", plural: "Wo liegt ...?", english: "Where is/located?", article: "phrase", gender: "phrase", example_de: "Wo liegt Berlin?", example_en: "Where is Berlin located?", level: "A1" },
+                { word: "eine Wanderung machen", plural: "eine Wanderung machen", english: "to take a walk/hike", article: "verb", gender: "v", example_de: "Wir machen eine Wanderung.", example_en: "We take a hike.", level: "A1" },
+                { word: "der Berg", plural: "die Berge", english: "mountain", article: "der", gender: "m", example_de: "Der Berg ist hoch.", example_en: "The mountain is high.", level: "A1" },
+                { word: "die Insel", plural: "die Inseln", english: "island", article: "die", gender: "f", example_de: "Die Insel ist klein.", example_en: "The island is small.", level: "A1" },
+                { word: "der Strand", plural: "die Strände", english: "beach", article: "der", gender: "m", example_de: "Der Strand ist schön.", example_en: "The beach is beautiful.", level: "A1" },
+                { word: "der See", plural: "die Seen", english: "lake", article: "der", gender: "m", example_de: "Der See ist groß.", example_en: "The lake is big.", level: "A1" },
+                { word: "der Wald", plural: "die Wälder", english: "forest", article: "der", gender: "m", example_de: "Der Wald ist dicht.", example_en: "The forest is dense.", level: "A1" },
+                { word: "das Meer", plural: "die Meere", english: "sea", article: "das", gender: "n", example_de: "Das Meer ist blau.", example_en: "The sea is blue.", level: "A1" },
+                { word: "die Nordseee", plural: "die Nordsee", english: "North Sea", article: "die", gender: "f", example_de: "Die Nordsee ist kalt.", example_en: "The North Sea is cold.", level: "A2" },
+                { word: "der Ort", plural: "die Orte", english: "place/location", article: "der", gender: "m", example_de: "Das ist ein schöner Ort.", example_en: "That is a nice place.", level: "A2" },
+                { word: "der Lieblingsort", plural: "die Lieblingsorte", english: "favorite place", article: "der", gender: "m", example_de: "Das ist mein Lieblingsort.", example_en: "That is my favorite place.", level: "A1" },
+                { word: "das Zimmer", plural: "die Zimmer", english: "room", article: "das", gender: "n", example_de: "Das Zimmer ist groß.", example_en: "The room is big.", level: "A1" },
+                { word: "das Wohnzimmer", plural: "die Wohnzimmer", english: "living room", article: "das", gender: "n", example_de: "Das Wohnzimmer ist gemütlich.", example_en: "The living room is cozy.", level: "A1" },
+                { word: "das Schlafzimmer", plural: "die Schlafzimmer", english: "bedroom", article: "das", gender: "n", example_de: "Das Schlafzimmer ist ruhig.", example_en: "The bedroom is quiet.", level: "A1" },
+                { word: "das Gästezimmer", plural: "die Gästezimmer", english: "guest room", article: "das", gender: "n", example_de: "Das Gästezimmer ist sauber.", example_en: "The guest room is clean.", level: "A2" },
+                { word: "die Küche", plural: "die Küchen", english: "kitchen", article: "die", gender: "f", example_de: "Die Küche ist modern.", example_en: "The kitchen is modern.", level: "A1" }
+            ],
+            "Wetter & Datum": [
+                { word: "das Wetter", plural: "das Wetter", english: "weather", article: "das", gender: "n", example_de: "Wie ist das Wetter?", example_en: "What is the weather?", level: "A1" },
+                { word: "Wie ist das Wetter?", plural: "Wie ist das Wetter?", english: "What is the weather?", article: "phrase", gender: "phrase", example_de: "Wie ist das Wetter?", example_en: "What is the weather?", level: "A1" },
+                { word: "die Sonne", plural: "die Sonnen", english: "sun", article: "die", gender: "f", example_de: "Die Sonne scheint.", example_en: "The sun shines.", level: "A1" },
+                { word: "sonnig", plural: "sonnig", english: "sunny", article: "adj", gender: "adj", example_de: "Es ist sonnig.", example_en: "It is sunny.", level: "A1" },
+                { word: "der Regen", plural: "die Regen", english: "rain", article: "der", gender: "m", example_de: "Der Regen ist nass.", example_en: "The rain is wet.", level: "A1" },
+                { word: "regnen, es hat geregnet", plural: "regnen", english: "to rain", article: "verb", gender: "v", example_de: "Es regnet.", example_en: "It rains.", level: "A1" },
+                { word: "der Schnee", plural: "der Schnee", english: "snow", article: "der", gender: "m", example_de: "Der Schnee ist weiß.", example_en: "The snow is white.", level: "A1" },
+                { word: "schneien, es hat geschneit", plural: "schneien", english: "to snow", article: "verb", gender: "v", example_de: "Es schneit.", example_en: "It snows.", level: "A1" },
+                { word: "die Wolke", plural: "die Wolken", english: "cloud", article: "die", gender: "f", example_de: "Die Wolke ist grau.", example_en: "The cloud is gray.", level: "A1" },
+                { word: "bewölkt", plural: "bewölkt", english: "cloudy", article: "adj", gender: "adj", example_de: "Es ist bewölkt.", example_en: "It is cloudy.", level: "A1" },
+                { word: "der Grad (Celsius)", plural: "die Grade", english: "degree", article: "der", gender: "m", example_de: "Es sind 20 Grad.", example_en: "It is 20 degrees.", level: "A1" },
+                { word: "warm", plural: "warm", english: "warm", article: "adj", gender: "adj", example_de: "Es ist warm.", example_en: "It is warm.", level: "A1" },
+                { word: "kalt", plural: "kalt", english: "cold", article: "adj", gender: "adj", example_de: "Es ist kalt.", example_en: "It is cold.", level: "A1" },
+                { word: "schlecht", plural: "schlecht", english: "bad", article: "adj", gender: "adj", example_de: "Das Wetter ist schlecht.", example_en: "The weather is bad.", level: "A1" },
+                { word: "richtig (richtig kalt)", plural: "richtig", english: "really/properly", article: "adv", gender: "adv", example_de: "Es ist richtig kalt.", example_en: "It is really cold.", level: "A1" },
+                { word: "über", plural: "über", english: "over/above", article: "prep", gender: "prep", example_de: "Es ist über 30 Grad.", example_en: "It is over 30 degrees.", level: "A2" },
+                { word: "bis (20 Grad)", plural: "bis", english: "until/up to", article: "prep", gender: "prep", example_de: "Es wird bis 20 Grad.", example_en: "It will be up to 20 degrees.", level: "A2" },
+                { word: "plus 5 Grad", plural: "plus", english: "plus/plus", article: "prep", gender: "prep", example_de: "Es sind plus 5 Grad.", example_en: "It is plus 5 degrees.", level: "A1" },
+                { word: "minus 5 Grad", plural: "minus", english: "minus/minus", article: "prep", gender: "prep", example_de: "Es sind minus 5 Grad.", example_en: "It is minus 5 degrees.", level: "A1" },
+                { word: "der Himmel", plural: "die Himmel", english: "sky", article: "der", gender: "m", example_de: "Der Himmel ist blau.", example_en: "The sky is blue.", level: "A1" },
+                { word: "die Himmelsrichtungen", plural: "die Himmelsrichtungen", english: "compass directions", article: "die", gender: "f", example_de: "Der Norden ist kalt.", example_en: "The north is cold.", level: "A1" },
+                { word: "der Norden", plural: "der Norden", english: "north", article: "der", gender: "m", example_de: "Der Norden ist kalt.", example_en: "The north is cold.", level: "A1" },
+                { word: "der Süden", plural: "der Süden", english: "south", article: "der", gender: "m", example_de: "Der Süden ist warm.", example_en: "The south is warm.", level: "A1" },
+                { word: "der Westen", plural: "der Westen", english: "west", article: "der", gender: "m", example_de: "Der Westen ist schön.", example_en: "The west is beautiful.", level: "A1" },
+                { word: "der Osten", plural: "der Osten", english: "east", article: "der", gender: "m", example_de: "Der Osten ist interessant.", example_en: "The east is interesting.", level: "A1" },
+                { word: "der Januar", plural: "die Januare", english: "January", article: "der", gender: "m", example_de: "Der Januar ist kalt.", example_en: "January is cold.", level: "A1" },
+                { word: "der Februar", plural: "die Februar", english: "February", article: "der", gender: "m", example_de: "Der Februar ist kurz.", example_en: "February is short.", level: "A1" },
+                { word: "der März", plural: "die März", english: "March", article: "der", gender: "m", example_de: "Der März ist Frühling.", example_en: "March is spring.", level: "A1" },
+                { word: "der April", plural: "die April", english: "April", article: "der", gender: "m", example_de: "Der April ist schön.", example_en: "April is beautiful.", level: "A1" },
+                { word: "der Mai", plural: "die Mai", english: "May", article: "der", gender: "m", example_de: "Der Mai ist warm.", example_en: "May is warm.", level: "A1" },
+                { word: "der Juni", plural: "die Juni", english: "June", article: "der", gender: "m", example_de: "Der Juni ist heiß.", example_en: "June is hot.", level: "A1" },
+                { word: "der Juli", plural: "die Juli", english: "July", article: "der", gender: "m", example_de: "Der Juli ist sehr heiß.", example_en: "July is very hot.", level: "A1" },
+                { word: "der August", plural: "die August", english: "August", article: "der", gender: "m", example_de: "Der August ist sonnig.", example_en: "August is sunny.", level: "A1" },
+                { word: "der September", plural: "die September", english: "September", article: "der", gender: "m", example_de: "Der September ist mild.", example_en: "September is mild.", level: "A1" },
+                { word: "der Oktober", plural: "die Oktober", english: "October", article: "der", gender: "m", example_de: "Der Oktober ist nass.", example_en: "October is wet.", level: "A1" },
+                { word: "der November", plural: "die November", english: "November", article: "der", gender: "m", example_de: "Der November ist grau.", example_en: "November is gray.", level: "A1" },
+                { word: "der Dezember", plural: "die Dezember", english: "December", article: "der", gender: "m", example_de: "Der Dezember ist kalt.", example_en: "December is cold.", level: "A1" },
+                { word: "die Sekunde", plural: "die Sekunden", english: "second", article: "die", gender: "f", example_de: "Eine Sekunde ist kurz.", example_en: "A second is short.", level: "A1" },
+                { word: "die Minute", plural: "die Minuten", english: "minute", article: "die", gender: "f", example_de: "Eine Minute ist kurz.", example_en: "A minute is short.", level: "A1" },
+                { word: "die Stunde", plural: "die Stunden", english: "hour", article: "die", gender: "f", example_de: "Eine Stunde ist lang.", example_en: "An hour is long.", level: "A1" },
+                { word: "die Woche", plural: "die Wochen", english: "week", article: "die", gender: "f", example_de: "Eine Woche hat 7 Tage.", example_en: "A week has 7 days.", level: "A1" },
+                { word: "das Jahr", plural: "die Jahre", english: "year", article: "das", gender: "n", example_de: "Ein Jahr hat 12 Monate.", example_en: "A year has 12 months.", level: "A1" },
+                { word: "das Wochenende", plural: "die Wochenenden", english: "weekend", article: "das", gender: "n", example_de: "Das Wochenende ist schön.", example_en: "The weekend is nice.", level: "A1" },
+                { word: "Was machst du am Wochenende?", plural: "Was machst du am Wochenende?", english: "What do you do on the weekend?", article: "phrase", gender: "phrase", example_de: "Was machst du am Wochenende?", example_en: "What do you do on the weekend?", level: "A1" },
+                { word: "am Wochenende", plural: "am Wochenende", english: "on the weekend", article: "phrase", gender: "phrase", example_de: "Am Wochenende gehe ich ins Kino.", example_en: "On the weekend I go to the cinema.", level: "A1" },
+                { word: "rund um die Uhr", plural: "rund um die Uhr", english: "around the clock", article: "phrase", gender: "phrase", example_de: "Der Service ist rund um die Uhr.", example_en: "The service is around the clock.", level: "A2" },
+                { word: "offen", plural: "offen", english: "open", article: "adj", gender: "adj", example_de: "Das Geschäft ist offen.", example_en: "The shop is open.", level: "A1" },
+                { word: "schließen", plural: "schließen", english: "to close", article: "verb", gender: "v", example_de: "Das Geschäft schließt um 18 Uhr.", example_en: "The shop closes at 6 PM.", level: "A1" },
+                { word: "gleich", plural: "gleich", english: "right now/soon", article: "adv", gender: "adv", example_de: "Es ist gleich 9 Uhr.", example_en: "It is almost 9 o'clock.", level: "A1" },
+                { word: "jetzt", plural: "jetzt", english: "now", article: "adv", gender: "adv", example_de: "Jetzt ist es 9 Uhr.", example_en: "Now it is 9 o'clock.", level: "A1" },
+                { word: "morgens", plural: "morgens", english: "in the morning", article: "adv", gender: "adv", example_de: "Morgens gehe ich zur Schule.", example_en: "In the morning I go to school.", level: "A1" },
+                { word: "vormittags", plural: "vormittags", english: "in the forenoon", article: "adv", gender: "adv", example_de: "Vormittags arbeite ich.", example_en: "In the forenoon I work.", level: "A1" },
+                { word: "mittags", plural: "mittags", english: "at noon", article: "adv", gender: "adv", example_de: "Mittags esse ich zu Mittag.", example_en: "At noon I eat lunch.", level: "A1" },
+                { word: "nachmittags", plural: "nachmittags", english: "in the afternoon", article: "adv", gender: "adv", example_de: "Nachmittags gehe ich spazieren.", example_en: "In the afternoon I go for a walk.", level: "A1" },
+                { word: "abends", plural: "abends", english: "in the evening", article: "adv", gender: "adv", example_de: "Abends sehe ich fern.", example_en: "In the evening I watch TV.", level: "A1" },
+                { word: "nachts", plural: "nachts", english: "at night", article: "adv", gender: "adv", example_de: "Nachts schlafe ich.", example_en: "At night I sleep.", level: "A1" }
+            ],
+            "Verkehr & Reisen": [
+                { word: "der Verkehr", plural: "der Verkehr", english: "traffic", article: "der", gender: "m", example_de: "Der Verkehr ist schlecht.", example_en: "The traffic is bad.", level: "A1" },
+                { word: "die Umwelt", plural: "die Umwelt", english: "environment", article: "die", gender: "f", example_de: "Die Umwelt ist wichtig.", example_en: "The environment is important.", level: "A2" },
+                { word: "gut für", plural: "gut für", english: "good for", article: "prep", gender: "prep", example_de: "Das ist gut für die Umwelt.", example_en: "That is good for the environment.", level: "A1" },
+                { word: "der Stau", plural: "die Staus", english: "traffic jam", article: "der", gender: "m", example_de: "Es gibt einen Stau.", example_en: "There is a traffic jam.", level: "A1" },
+                { word: "die A8", plural: "die A8", english: "A8 (highway)", article: "die", gender: "f", example_de: "Die A8 ist voll.", example_en: "The A8 is full.", level: "A2" },
+                { word: "das Carsharing", plural: "das Carsharing", english: "car sharing", article: "das", gender: "n", example_de: "Carsharing ist praktisch.", example_en: "Car sharing is practical.", level: "A2" },
+                { word: "mieten, hat gemietet", plural: "mieten", english: "to rent", article: "verb", gender: "v", example_de: "Ich miete ein Auto.", example_en: "I rent a car.", level: "A1" },
+                { word: "hin-kommen, ist hingekommen", plural: "hin-kommen", english: "to get there", article: "verb", gender: "v", example_de: "Wie kommst du dahin?", example_en: "How do you get there?", level: "A1" },
+                { word: "bequem", plural: "bequem", english: "comfortable", article: "adj", gender: "adj", example_de: "Das Auto ist bequem.", example_en: "The car is comfortable.", level: "A1" },
+                { word: "ideal", plural: "ideal", english: "ideal", article: "adj", gender: "adj", example_de: "Das ist ideal.", example_en: "That is ideal.", level: "A1" },
+                { word: "Und wie kommst du ins Büro?", plural: "Und wie kommst du ins Büro?", english: "And how do you get to the office?", article: "phrase", gender: "phrase", example_de: "Und wie kommst du ins Büro?", example_en: "And how do you get to the office?", level: "A1" },
+                { word: "zu Fuß", plural: "zu Fuß", english: "on foot", article: "phrase", gender: "phrase", example_de: "Ich gehe zu Fuß.", example_en: "I go on foot.", level: "A1" },
+                { word: "mit Verkehrsmitteln fahren", plural: "mit Verkehrsmitteln fahren", english: "to use public transport", article: "verb", gender: "v", example_de: "Ich fahre mit Verkehrsmitteln.", example_en: "I use public transport.", level: "A1" },
+                { word: "das Verkehrsmittel", plural: "die Verkehrsmittel", english: "means of transport", article: "das", gender: "n", example_de: "Das Auto ist ein Verkehrsmittel.", example_en: "The car is a means of transport.", level: "A1" },
+                { word: "der Motorrad", plural: "die Motorräder", english: "motorcycle", article: "der", gender: "m", example_de: "Das Motorrad ist schnell.", example_en: "The motorcycle is fast.", level: "A1" },
+                { word: "Wann fährt der nächste Zug ab?", plural: "Wann fährt der nächste Zug ab?", english: "When does the next train depart?", article: "phrase", gender: "phrase", example_de: "Wann fährt der nächste Zug ab?", example_en: "When does the next train depart?", level: "A1" },
+                { word: "nächst-", plural: "nächst-", english: "next", article: "adj", gender: "adj", example_de: "Der nächste Zug.", example_en: "The next train.", level: "A1" },
+                { word: "Die Ankuft", plural: "die Ankünfte", english: "arrival", article: "die", gender: "f", example_de: "Die Ankunft ist pünktlich.", example_en: "The arrival is on time.", level: "A2" },
+                { word: "warten, hat gewartet", plural: "warten", english: "to wait", article: "verb", gender: "v", example_de: "Ich warte auf den Bus.", example_en: "I wait for the bus.", level: "A1" },
+                { word: "das Gleis", plural: "die Gleise", english: "track/platform", article: "das", gender: "n", example_de: "Der Zug fährt von Gleis 3 ab.", example_en: "The train departs from track 3.", level: "A2" },
+                { word: "die Abfahrt", plural: "die Abfahrten", english: "departure", article: "die", gender: "f", example_de: "Die Abfahrt ist um 10 Uhr.", example_en: "The departure is at 10 o'clock.", level: "A2" },
+                { word: "ab fahren, du fährst ab, er fährt ab, ist abgefahren", plural: "ab fahren", english: "to depart", article: "verb", gender: "v", example_de: "Der Zug fährt ab.", example_en: "The train departs.", level: "A1" },
+                { word: "fit", plural: "fit", english: "fit/in good condition", article: "adj", gender: "adj", example_de: "Das Auto ist fit.", example_en: "The car is in good condition.", level: "A2" },
+                { word: "bleiben, ist geblieben", plural: "bleiben", english: "to stay/remain", article: "verb", gender: "v", example_de: "Ich bleibe in Berlin.", example_en: "I stay in Berlin.", level: "A1" },
+                { word: "Ja, es gibt ...", plural: "Ja, es gibt ...", english: "Yes, there is/are ...", article: "phrase", gender: "phrase", example_de: "Ja, es gibt einen Bus.", example_en: "Yes, there is a bus.", level: "A1" },
+                { word: "so", plural: "so", english: "so/this way", article: "adv", gender: "adv", example_de: "Und so kommst du ins Büro.", example_en: "And this way you get to the office.", level: "A1" }
+            ],
+            "Restaurant & Freunde": [
+                { word: "im Café", plural: "im Café", english: "in the café", article: "phrase", gender: "phrase", example_de: "Wir treffen uns im Café.", example_en: "We meet in the café.", level: "A1" },
+                { word: "der Flohmarkt", plural: "die Flohmärkte", english: "flea market", article: "der", gender: "m", example_de: "Der Flohmarkt ist interessant.", example_en: "The flea market is interesting.", level: "A1" },
+                { word: "der Markt", plural: "die Märkte", english: "market", article: "der", gender: "m", example_de: "Der Markt ist voll.", example_en: "The market is full.", level: "A1" },
+                { word: "der Besucher", plural: "die Besucher", english: "visitor", article: "der", gender: "m", example_de: "Der Besucher ist freundlich.", example_en: "The visitor is friendly.", level: "A1" },
+                { word: "das Musikinstrument", plural: "die Musikinstrumente", english: "musical instrument", article: "das", gender: "n", example_de: "Das Musikinstrument ist laut.", example_en: "The musical instrument is loud.", level: "A1" },
+                { word: "das Instrument", plural: "die Instrumente", english: "instrument", article: "das", gender: "n", example_de: "Das Instrument ist schön.", example_en: "The instrument is beautiful.", level: "A1" },
+                { word: "die Handtasche", plural: "die Handtaschen", english: "handbag", article: "die", gender: "f", example_de: "Die Handtasche ist neu.", example_en: "The handbag is new.", level: "A1" },
+                { word: "die Tasche", plural: "die Taschen", english: "bag", article: "die", gender: "f", example_de: "Die Tasche ist groß.", example_en: "The bag is big.", level: "A1" },
+                { word: "der Schuh", plural: "die Schuhe", english: "shoe", article: "der", gender: "m", example_de: "Der Schuh ist rot.", example_en: "The shoe is red.", level: "A1" },
+                { word: "die Geldbörse", plural: "die Geldbörsen", english: "purse/wallet", article: "die", gender: "f", example_de: "Die Geldbörse ist leer.", example_en: "The purse is empty.", level: "A1" },
+                { word: "das Geld", plural: "das Geld", english: "money", article: "das", gender: "n", example_de: "Das Geld ist wichtig.", example_en: "The money is important.", level: "A1" },
+                { word: "die Börse", plural: "die Börsen", english: "stock exchange/purse", article: "die", gender: "f", example_de: "Die Börse ist geschlossen.", example_en: "The stock exchange is closed.", level: "A2" },
+                { word: "das Buch", plural: "die Bücher", english: "book", article: "das", gender: "n", example_de: "Das Buch ist interessant.", example_en: "The book is interesting.", level: "A1" },
+                { word: "der Durst", plural: "der Durst", english: "thirst", article: "der", gender: "m", example_de: "Ich habe Durst.", example_en: "I am thirsty.", level: "A1" },
+                { word: "Durst haben", plural: "Durst haben", english: "to be thirsty", article: "verb", gender: "v", example_de: "Ich habe Durst.", example_en: "I am thirsty.", level: "A1" },
+                { word: "der Hunger", plural: "der Hunger", english: "hunger", article: "der", gender: "m", example_de: "Ich habe Hunger.", example_en: "I am hungry.", level: "A1" },
+                { word: "Hunger haben", plural: "Hunger haben", english: "to be hungry", article: "verb", gender: "v", example_de: "Ich habe Hunger.", example_en: "I am hungry.", level: "A1" },
+                { word: "Hunger haben", plural: "Hunger haben", english: "to be hungry", article: "verb", gender: "v", example_de: "Hast du Hunger?", example_en: "Are you hungry?", level: "A1" },
+                { word: "gefriedelt mögen, du magst, er mag, hat gemocht", plural: "gefriedel mögen", english: "may/like", article: "verb", gender: "v", example_de: "Was darf es denn sein?", example_en: "What would you like?", level: "A1" },
+                { word: "Für mich ... bitte.", plural: "Für mich ... bitte.", english: "For me ... please.", article: "phrase", gender: "phrase", example_de: "Für mich ein Bier, bitte.", example_en: "A beer for me, please.", level: "A1" },
+                { word: "Ich nehme ..., bitte.", plural: "Ich nehme ..., bitte.", english: "I'll have ... please.", article: "phrase", gender: "phrase", example_de: "Ich nehme einen Kaffee, bitte.", example_en: "I'll have a coffee, please.", level: "A1" },
+                { word: "zahlen, hat gezahlt", plural: "zahlen", english: "to pay", article: "verb", gender: "v", example_de: "Ich zahle.", example_en: "I pay.", level: "A1" },
+                { word: "die Rechnung", plural: "die Rechnungen", english: "bill/receipt", article: "die", gender: "f", example_de: "Die Rechnung, bitte.", example_en: "The bill, please.", level: "A1" },
+                { word: "Nein, danke, für mich nichts.", plural: "Nein, danke, für mich nichts.", english: "No, thank you, nothing for me.", article: "phrase", gender: "phrase", example_de: "Nein, danke, für mich nichts.", example_en: "No, thank you, nothing for me.", level: "A1" },
+                { word: "die Nachspeise", plural: "die Nachspeisen", english: "dessert", article: "die", gender: "f", example_de: "Die Nachspeise ist lecker.", example_en: "The dessert is delicious.", level: "A1" },
+                { word: "der Espresso", plural: "die Espressos", english: "espresso", article: "der", gender: "m", example_de: "Der Espresso ist stark.", example_en: "The espresso is strong.", level: "A1" },
+                { word: "Was darf's denn sein?", plural: "Was darf's denn sein?", english: "What would you like?", article: "phrase", gender: "phrase", example_de: "Was darf's denn sein?", example_en: "What would you like?", level: "A1" },
+                { word: "die Kaffeemaschine", plural: "die Kaffeemaschinen", english: "coffee machine", article: "die", gender: "f", example_de: "Die Kaffeemaschine ist neu.", example_en: "The coffee machine is new.", level: "A1" },
+                { word: "die Maschine", plural: "die Maschinen", english: "machine", article: "die", gender: "f", example_de: "Die Maschine funktioniert.", example_en: "The machine works.", level: "A1" },
+                { word: "der Kellner", plural: "die Kellner", english: "waiter", article: "der", gender: "m", example_de: "Der Kellner ist freundlich.", example_en: "The waiter is friendly.", level: "A1" },
+                { word: "die Kellnerin", plural: "die Kellnerinnen", english: "waitress", article: "die", gender: "f", example_de: "Die Kellnerin ist nett.", example_en: "The waitress is nice.", level: "A1" },
+                { word: "die Nachspeise", plural: "die Nachspeisen", english: "dessert", article: "die", gender: "f", example_de: "Die Nachspeise schmeckt gut.", example_en: "The dessert tastes good.", level: "A1" }
+            ],
+            "Urlaub & Reiseziele": [
+                { word: "der Urlaub", plural: "die Urlaube", english: "vacation", article: "der", gender: "m", example_de: "Der Urlaub ist schön.", example_en: "The vacation is nice.", level: "A1" },
+                { word: "der Campingurlaub", plural: "die Campingurlabe", english: "camping vacation", article: "der", gender: "m", example_de: "Der Campingurlaub ist günstig.", example_en: "The camping vacation is cheap.", level: "A1" },
+                { word: "in Urlaub", plural: "in Urlaub", english: "on vacation", article: "phrase", gender: "phrase", example_de: "Ich fahre in Urlaub.", example_en: "I go on vacation.", level: "A1" },
+                { word: "nach Spanien / Madrid ...", plural: "nach Spanien / Madrid ...", english: "to Spain / Madrid ...", article: "phrase", gender: "phrase", example_de: "Ich fahre nach Spanien.", example_en: "I go to Spain.", level: "A1" },
+                { word: "Wo liegt ...?", plural: "Wo liegt ...?", english: "Where is ... located?", article: "phrase", gender: "phrase", example_de: "Wo liegt Spanien?", example_en: "Where is Spain located?", level: "A1" },
+                { word: "eine Wanderung machen", plural: "eine Wanderung machen", english: "to take a hike", article: "verb", gender: "v", example_de: "Wir machen eine Wanderung.", example_en: "We take a hike.", level: "A1" },
+                { word: "der Berg", plural: "die Berge", english: "mountain", article: "der", gender: "m", example_de: "Der Berg ist hoch.", example_en: "The mountain is high.", level: "A1" },
+                { word: "die Insel", plural: "die Inseln", english: "island", article: "die", gender: "f", example_de: "Die Insel ist klein.", example_en: "The island is small.", level: "A1" },
+                { word: "der Strand", plural: "die Strände", english: "beach", article: "der", gender: "m", example_de: "Der Strand ist schön.", example_en: "The beach is beautiful.", level: "A1" },
+                { word: "der See", plural: "die Seen", english: "lake", article: "der", gender: "m", example_de: "Der See ist groß.", example_en: "The lake is big.", level: "A1" },
+                { word: "der Wald", plural: "die Wälder", english: "forest", article: "der", gender: "m", example_de: "Der Wald ist grün.", example_en: "The forest is green.", level: "A1" },
+                { word: "das Meer", plural: "die Meere", english: "sea", article: "das", gender: "n", example_de: "Das Meer ist blau.", example_en: "The sea is blue.", level: "A1" },
+                { word: "die Nordsee", plural: "die Nordsee", english: "North Sea", article: "die", gender: "f", example_de: "Die Nordsee ist kühl.", example_en: "The North Sea is cool.", level: "A2" },
+                { word: "der Alltag", plural: "die Alltage", english: "everyday life", article: "der", gender: "m", example_de: "Der Alltag ist anstrengend.", example_en: "Everyday life is tiring.", level: "A1" },
+                { word: "jeden Tag", plural: "jeden Tag", english: "every day", article: "phrase", gender: "phrase", example_de: "Ich arbeite jeden Tag.", example_en: "I work every day.", level: "A1" },
+                { word: "der Typ", plural: "die Typen", english: "type", article: "der", gender: "m", example_de: "Der Typ ist interessant.", example_en: "The type is interesting.", level: "A2" },
+                { word: "frühFrühstück", plural: "das Frühstück", english: "breakfast", article: "das", gender: "n", example_de: "Das Frühstück ist wichtig.", example_en: "Breakfast is important.", level: "A1" },
+                { word: "schon", plural: "schon", english: "already", article: "adv", gender: "adv", example_de: "Es ist schon spät.", example_en: "It is already late.", level: "A1" },
+                { word: "gerade", plural: "gerade", english: "just/exactly", article: "adv", gender: "adv", example_de: "Er ist gerade angekommen.", example_en: "He has just arrived.", level: "A1" },
+                { word: "eigenlich", plural: "eigentlich", english: "actually", article: "adv", gender: "adv", example_de: "Eigentlich bin ich müde.", example_en: "Actually I am tired.", level: "A1" },
+                { word: "fehlen, hat gefehlt", plural: "fehlen", english: "to be missing", article: "verb", gender: "v", example_de: "Es fehlen noch Lebensmittel.", example_en: "Some groceries are still missing.", level: "A2" },
+                { word: "wie lange", plural: "wie lange", english: "how long", article: "phrase", gender: "phrase", example_de: "Wie lange dauert der Urlaub?", example_en: "How long is the vacation?", level: "A1" },
+                { word: "welch-", plural: "welch-", english: "which", article: "pronoun", gender: "pronoun", example_de: "Welcher Berg ist das?", example_en: "Which mountain is that?", level: "A1" },
+                { word: "da war ich nie!", plural: "da war ich nie!", english: "I have never been there!", article: "phrase", gender: "phrase", example_de: "Da war ich nie!", example_en: "I have never been there!", level: "A1" },
+                { word: "Da war ich!", plural: "Da war ich!", english: "I was there!", article: "phrase", gender: "phrase", example_de: "Da war ich schon!", example_en: "I was already there!", level: "A1" },
+                { word: "Wie war's?", plural: "Wie war's?", english: "How was it?", article: "phrase", gender: "phrase", example_de: "Wie war's im Urlaub?", example_en: "How was the vacation?", level: "A1" },
+                { word: "sterben, du stirbst, er stirbt, ist gestorben", plural: "sterben", english: "to die", article: "verb", gender: "v", example_de: "Das Licht stirbt.", example_en: "The light is dying.", level: "B1" },
+                { word: "der Geschäftsmann", plural: "die Geschäftsmänner", english: "businessman", article: "der", gender: "m", example_de: "Der Geschäftsmann arbeitet viel.", example_en: "The businessman works a lot.", level: "A2" },
+                { word: "der Hotelier", plural: "die Hoteliers", english: "hotelier", article: "der", gender: "m", example_de: "Der Hotelier ist freundlich.", example_en: "The hotelier is friendly.", level: "A2" }
+            ],
+            "Körper & Gesundheit": [
+                { word: "der Kopf", plural: "die Köpfe", english: "head", article: "der", gender: "m", example_de: "Mein Kopf tut weh.", example_en: "My head hurts.", level: "A1" },
+                { word: "das Auge", plural: "die Augen", english: "eye", article: "das", gender: "n", example_de: "Deine Augen sind blau.", example_en: "Your eyes are blue.", level: "A1" },
+                { word: "die Nase", plural: "die Nasen", english: "nose", article: "die", gender: "f", example_de: "Meine Nase ist groß.", example_en: "My nose is big.", level: "A1" },
+                { word: "der Mund", plural: "die Münder", english: "mouth", article: "der", gender: "m", example_de: "Der Mund ist rot.", example_en: "The mouth is red.", level: "A1" },
+                { word: "das Ohr", plural: "die Ohren", english: "ear", article: "das", gender: "n", example_de: "Ich höre mit meinen Ohren.", example_en: "I hear with my ears.", level: "A1" },
+                { word: "das Haar", plural: "die Haare", english: "hair", article: "das", gender: "n", example_de: "Das Haar ist lang.", example_en: "The hair is long.", level: "A1" },
+                { word: "der Arm", plural: "die Arme", english: "arm", article: "der", gender: "m", example_de: "Mein Arm ist verletzt.", example_en: "My arm is injured.", level: "A1" },
+                { word: "die Hand", plural: "die Hände", english: "hand", article: "die", gender: "f", example_de: "Ich schreibe mit meiner Hand.", example_en: "I write with my hand.", level: "A1" },
+                { word: "der Finger", plural: "die Finger", english: "finger", article: "der", gender: "m", example_de: "Ich habe zehn Finger.", example_en: "I have ten fingers.", level: "A1" },
+                { word: "das Bein", plural: "die Beine", english: "leg", article: "das", gender: "n", example_de: "Mein Bein ist lang.", example_en: "My leg is long.", level: "A1" },
+                { word: "der Fuß", plural: "die Füße", english: "foot", article: "der", gender: "m", example_de: "Mein Fuß tut weh.", example_en: "My foot hurts.", level: "A1" },
+                { word: "der Rücken", plural: "die Rücken", english: "back", article: "der", gender: "m", example_de: "Der Rücken schmerzt.", example_en: "The back aches.", level: "A2" },
+                { word: "der Bauch", plural: "die Bäuche", english: "belly/stomach", article: "der", gender: "m", example_de: "Der Bauch ist voll.", example_en: "The belly is full.", level: "A2" },
+                { word: "das Herz", plural: "die Herzen", english: "heart", article: "das", gender: "n", example_de: "Mein Herz schlägt schnell.", example_en: "My heart beats fast.", level: "A2" },
+                { word: "der Körper", plural: "die Körper", english: "body", article: "der", gender: "m", example_de: "Der Körper ist stark.", example_en: "The body is strong.", level: "A1" },
+                { word: "der Körperteil", plural: "die Körperteile", english: "body part", article: "der", gender: "m", example_de: "Der Körperteil ist wichtig.", example_en: "The body part is important.", level: "A1" },
+                { word: "zu atmen, hat zugeatmet", plural: "zu atmen", english: "to breathe", article: "verb", gender: "v", example_de: "Ich atme tief ein.", example_en: "I breathe deeply.", level: "A2" },
+                { word: "auf machen, hat auf gemacht", plural: "auf machen", english: "to open", article: "verb", gender: "v", example_de: "Ich mache die Augen auf.", example_en: "I open my eyes.", level: "A1" },
+                { word: "der Arzt", plural: "die Ärzte", english: "doctor", article: "der", gender: "m", example_de: "Der Arzt ist freundlich.", example_en: "The doctor is friendly.", level: "A1" },
+                { word: "die Apotheke", plural: "die Apotheken", english: "pharmacy", article: "die", gender: "f", example_de: "Ich gehe zur Apotheke.", example_en: "I go to the pharmacy.", level: "A1" },
+                { word: "das Krankenhaus", plural: "die Krankenhäuser", english: "hospital", article: "das", gender: "n", example_de: "Das Krankenhaus ist groß.", example_en: "The hospital is big.", level: "A1" },
+                { word: "die Krankenschwester", plural: "die Krankenschwestern", english: "nurse (f)", article: "die", gender: "f", example_de: "Die Krankenschwester ist nett.", example_en: "The nurse is nice.", level: "A2" },
+                { word: "das Medikament", plural: "die Medikamente", english: "medicine", article: "das", gender: "n", example_de: "Ich nehme ein Medikament.", example_en: "I take a medicine.", level: "A2" },
+                { word: "der Schmerz", plural: "die Schmerzen", english: "pain", article: "der", gender: "m", example_de: "Ich habe Schmerzen.", example_en: "I have pain.", level: "A2" },
+                { word: "krank", plural: "krank", english: "sick", article: "adj", gender: "adj", example_de: "Ich bin krank.", example_en: "I am sick.", level: "A1" },
+                { word: "gesund", plural: "gesund", english: "healthy", article: "adj", gender: "adj", example_de: "Ich bin gesund.", example_en: "I am healthy.", level: "A1" },
+                { word: "die Sportart", plural: "die Sportarten", english: "type of sport", article: "die", gender: "f", example_de: "Die Sportart ist interessant.", example_en: "The type of sport is interesting.", level: "A1" },
+                { word: "der Lieblingssport", plural: "der Lieblingssport", english: "favorite sport", article: "der", gender: "m", example_de: "Fußball ist mein Lieblingssport.", example_en: "Football is my favorite sport.", level: "A1" },
+                { word: "das Pilates", plural: "das Pilates", english: "Pilates", article: "das", gender: "n", example_de: "Pilates ist gesund.", example_en: "Pilates is healthy.", level: "A1" },
+                { word: "das Yoga", plural: "das Yoga", english: "yoga", article: "das", gender: "n", example_de: "Yoga entspannt.", example_en: "Yoga relaxes.", level: "A1" },
+                { word: "das Basketball", plural: "das Basketball", english: "basketball (game)", article: "das", gender: "n", example_de: "Basketball ist spaßig.", example_en: "Basketball is fun.", level: "A1" },
+                { word: "das Fußball-Spiel", plural: "die Fußball-Spiele", english: "football match", article: "das", gender: "n", example_de: "Das Fußball-Spiel war gut.", example_en: "The football match was good.", level: "A1" },
+                { word: "das Tennis-match", plural: "die Tennis-matches", english: "tennis match", article: "das", gender: "n", example_de: "Das Tennis-match ist spannend.", example_en: "The tennis match is exciting.", level: "A1" },
+                { word: "legen, hat gelegt", plural: "legen", english: "to lay/put", article: "verb", gender: "v", example_de: "Ich lege mich ins Bett.", example_en: "I lay in bed.", level: "A1" },
+                { word: "trainieren, hat trainiert", plural: "trainieren", english: "to train", article: "verb", gender: "v", example_de: "Ich trainiere jeden Tag.", example_en: "I train every day.", level: "A1" },
+                { word: "laufen, du läufst, er läuft, ist gelaufen", plural: "laufen", english: "to run", article: "verb", gender: "v", example_de: "Ich laufe im Park.", example_en: "I run in the park.", level: "A1" },
+                { word: "kämpfen, hat gekämpft", plural: "kämpfen", english: "to fight", article: "verb", gender: "v", example_de: "Sie kämpfen im Ring.", example_en: "They fight in the ring.", level: "A2" },
+                { word: "heben, hat gehoben", plural: "heben", english: "to lift", article: "verb", gender: "v", example_de: "Ich hebe den Arm.", example_en: "I lift my arm.", level: "A1" },
+                { word: "entspannen, hat entspannt", plural: "entspannen", english: "to relax", article: "verb", gender: "v", example_de: "Ich entspanne mich.", example_en: "I relax.", level: "A1" }
+            ],
+            "Berufsleben": [
+                { word: "der Journalist", plural: "die Journalisten", english: "journalist (m)", article: "der", gender: "m", example_de: "Der Journalist schreibt Artikel.", example_en: "The journalist writes articles.", level: "A1" },
+                { word: "die Journalistin", plural: "die Journalistinnen", english: "journalist (f)", article: "die", gender: "f", example_de: "Die Journalistin ist bekannt.", example_en: "The journalist is famous.", level: "A1" },
+                { word: "der Pilot", plural: "die Piloten", english: "pilot (m)", article: "der", gender: "m", example_de: "Der Pilot fliegt das Flugzeug.", example_en: "The pilot flies the plane.", level: "A1" },
+                { word: "die Pilotin", plural: "die Pilotinnen", english: "pilot (f)", article: "die", gender: "f", example_de: "Die Pilotin ist erfahren.", example_en: "The pilot is experienced.", level: "A1" },
+                { word: "der Hausmann", plural: "die Hausmänner", english: "househusband", article: "der", gender: "m", example_de: "Der Hausmann kocht.", example_en: "The househusband cooks.", level: "A2" },
+                { word: "die Hausfrau", plural: "die Hausfrauen", english: "housewife", article: "die", gender: "f", example_de: "Die Hausfrau putzt das Haus.", example_en: "The housewife cleans the house.", level: "A1" },
+                { word: "der Schauspieler", plural: "die Schauspieler", english: "actor", article: "der", gender: "m", example_de: "Der Schauspieler ist berühmt.", example_en: "The actor is famous.", level: "A1" },
+                { word: "die Schauspielerin", plural: "die Schauspielerinnen", english: "actress", article: "die", gender: "f", example_de: "Die Schauspielerin spielt eine Rolle.", example_en: "The actress plays a role.", level: "A1" },
+                { word: "der Fitnesstrainer", plural: "die Fitnesstrainer", english: "fitness trainer (m)", article: "der", gender: "m", example_de: "Der Fitnesstrainer ist fit.", example_en: "The fitness trainer is fit.", level: "A1" },
+                { word: "die Fitnesstrainerin", plural: "die Fitnesstrainerinnen", english: "fitness trainer (f)", article: "die", gender: "f", example_de: "Die Fitnesstrainerin hilft mir.", example_en: "The fitness trainer helps me.", level: "A1" },
+                { word: "der Krankenpfleger", plural: "die Krankenpfleger", english: "male nurse", article: "der", gender: "m", example_de: "Der Krankenpfleger arbeitet im Krankenhaus.", example_en: "The male nurse works in the hospital.", level: "A2" },
+                { word: "der Automechaniker", plural: "die Automechaniker", english: "car mechanic (m)", article: "der", gender: "m", example_de: "Der Automechaniker repariert Autos.", example_en: "The car mechanic repairs cars.", level: "A1" },
+                { word: "die Automechanikerin", plural: "die Automechanikerinnen", english: "car mechanic (f)", article: "die", gender: "f", example_de: "Die Automechanikerin ist kompetent.", example_en: "The car mechanic is competent.", level: "A1" },
+                { word: "der Verkäufer", plural: "die Verkäufer", english: "salesman", article: "der", gender: "m", example_de: "Der Verkäufer ist freundlich.", example_en: "The salesman is friendly.", level: "A1" },
+                { word: "die Verkäuferin", plural: "die Verkäuferinnen", english: "saleswoman", article: "die", gender: "f", example_de: "Die Verkäuferin hilft mir.", example_en: "The saleswoman helps me.", level: "A1" },
+                { word: "die Küchenhilfe", plural: "die Küchenhilfen", english: "kitchen helper", article: "die", gender: "f", example_de: "Die Küchenhilfe arbeitet in der Küche.", example_en: "The kitchen helper works in the kitchen.", level: "A2" },
+                { word: "zusammen arbeiten, hat zusammengearbeitet", plural: "zusammen arbeiten", english: "to work together", article: "verb", gender: "v", example_de: "Wir arbeiten zusammen.", example_en: "We work together.", level: "A1" },
+                { word: "gearbeitet", plural: "gearbeitet", english: "worked", article: "verb", gender: "v", example_de: "Ich habe gearbeitet.", example_en: "I worked.", level: "A1" },
+                { word: "verdienen, hat verdient", plural: "verdienen", english: "to earn", article: "verb", gender: "v", example_de: "Er verdient viel Geld.", example_en: "He earns a lot of money.", level: "A2" },
+                { word: "planen, hat geplant", plural: "planen", english: "to plan", article: "verb", gender: "v", example_de: "Ich plane mein Wochenende.", example_en: "I plan my weekend.", level: "A1" },
+                { word: "schälen, hat geschält", plural: "schälen", english: "to peel", article: "verb", gender: "v", example_de: "Ich schäle die Kartoffeln.", example_en: "I peel the potatoes.", level: "A2" },
+                { word: "reisen, ist gereist / hat gereist", plural: "reisen", english: "to travel", article: "verb", gender: "v", example_de: "Ich reise gerne.", example_en: "I like to travel.", level: "A1" },
+                { word: "ist gereist", plural: "ist gereist", english: "has traveled", article: "verb", gender: "v", example_de: "Er ist gereist.", example_en: "He has traveled.", level: "A1" },
+                { word: "eine Auszeit nehmen", plural: "eine Auszeit nehmen", english: "to take a break/time off", article: "verb", gender: "v", example_de: "Ich nehme eine Auszeit.", example_en: "I take a break.", level: "A2" }
+            ]
+        };
+
+        // STATE MANAGEMENT
+        let currentVocabulary = [];
+        let currentCardIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let weakWords = new Set();
+        let progress = {};
+        let currentMode = 'flashcard';
+        let showExamples = true;
+
+        // INITIALIZE
+        function init() {
+            // Dynamically populate topic dropdown from data
+            const topicSelect = document.getElementById('topic-select');
+            Object.keys(vocabularyData).forEach(topic => {
+                const opt = document.createElement('option');
+                opt.value = topic;
+                opt.textContent = topic;
+                topicSelect.appendChild(opt);
+            });
+            loadProgress();
+            loadVocabulary();
+            updateStats();
+        }
+
+        // LOCAL STORAGE FUNCTIONS
+        function saveProgress() {
+            try {
+                localStorage.setItem('germanVocabProgress', JSON.stringify(progress));
+                localStorage.setItem('germanVocabWeakWords', JSON.stringify([...weakWords]));
+                localStorage.setItem('germanVocabScore', JSON.stringify(score));
+                localStorage.setItem('germanVocabStreak', JSON.stringify(streak));
+            } catch (e) {
+                console.log('LocalStorage not available:', e);
+            }
+        }
+
+        function loadProgress() {
+            try {
+                const savedProgress = localStorage.getItem('germanVocabProgress');
+                const savedWeak = localStorage.getItem('germanVocabWeakWords');
+                const savedScore = localStorage.getItem('germanVocabScore');
+                const savedStreak = localStorage.getItem('germanVocabStreak');
+
+                progress = savedProgress ? JSON.parse(savedProgress) : {};
+                weakWords = savedWeak ? new Set(JSON.parse(savedWeak)) : new Set();
+                score = savedScore ? JSON.parse(savedScore) : 0;
+                streak = savedStreak ? JSON.parse(savedStreak) : 0;
+            } catch (e) {
+                console.log('Could not load progress:', e);
+            }
+        }
+
+        function clearProgress() {
+            if (confirm('Clear all progress? This cannot be undone.')) {
+                try {
+                    localStorage.removeItem('germanVocabProgress');
+                    localStorage.removeItem('germanVocabWeakWords');
+                    localStorage.removeItem('germanVocabScore');
+                    localStorage.removeItem('germanVocabStreak');
+                } catch (e) {}
+                progress = {};
+                weakWords = new Set();
+                score = 0;
+                streak = 0;
+                loadVocabulary();
+                updateStats();
+            }
+        }
+
+        // VOCABULARY MANAGEMENT
+        function loadVocabulary() {
+            const topic = document.getElementById('topic-select').value;
+            const level = document.getElementById('level-select').value;
+
+            currentVocabulary = [];
+            for (let t in vocabularyData) {
+                if (!topic || topic === t) {
+                    vocabularyData[t].forEach(word => {
+                        if (!level || level === word.level) {
+                            currentVocabulary.push({ ...word, topic: t });
+                        }
+                    });
+                }
+            }
+
+            currentCardIndex = 0;
+            updateTopicInfo();
+            if (currentMode === 'flashcard') displayFlashcard();
+            else if (currentMode === 'quiz') displayQuiz();
+            else if (currentMode === 'article') displayArticleQuestion();
+            else if (currentMode === 'spelling') displaySpellingQuestion();
+        }
+
+        function updateTopicInfo() {
+            const topic = document.getElementById('topic-select').value;
+            const infoDiv = document.getElementById('topic-info');
+            if (topic && currentVocabulary.length > 0) {
+                const count = currentVocabulary.length;
+                const mastered = currentVocabulary.filter(w => progress[w.word]?.mastered).length;
+                infoDiv.innerHTML = `<h3>${topic}</h3><p>${count} words - ${mastered} mastered</p>`;
+            } else if (!topic) {
+                infoDiv.innerHTML = '<h3>All Topics</h3><p>' + currentVocabulary.length + ' total words</p>';
+            }
+        }
+
+        // FLASHCARD FUNCTIONS
+        function displayFlashcard() {
+            if (currentVocabulary.length === 0) {
+                document.getElementById('flashcard').innerHTML = '<p>No words to display. Select a topic and level.</p>';
+                return;
+            }
+
+            const card = currentVocabulary[currentCardIndex];
+            document.getElementById('flashcard').classList.remove('flipped');
+
+            document.getElementById('german-word').textContent = card.word;
+            document.getElementById('card-level').textContent = card.level;
+            document.getElementById('card-level-back').textContent = card.level;
+            document.getElementById('english-translation').textContent = card.english;
+            document.getElementById('article-display').textContent = card.article;
+
+            if (card.word !== card.plural) {
+                document.getElementById('plural-display').textContent = `Plural: ${card.plural}`;
+            } else {
+                document.getElementById('plural-display').textContent = '';
+            }
+
+            const showEx = document.getElementById('show-examples').checked;
+            if (showEx) {
+                document.getElementById('example-de').textContent = card.example_de;
+                document.getElementById('example-en').textContent = card.example_en;
+            } else {
+                document.getElementById('example-de').textContent = '';
+                document.getElementById('example-en').textContent = '';
+            }
+
+            updateCardCounter();
+            updateWeakWordsDisplay();
+        }
+
+        function toggleFlashcard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            const card = currentVocabulary[currentCardIndex];
+            if (!progress[card.word]) progress[card.word] = {};
+            progress[card.word].mastered = true;
+            progress[card.word].lastReviewed = new Date().toISOString();
+            weakWords.delete(card.word);
+
+            score++;
+            streak++;
+
+            currentCardIndex = (currentCardIndex + 1) % currentVocabulary.length;
+            displayFlashcard();
+            updateStats();
+            saveProgress();
+        }
+
+        function markAsWeak() {
+            const card = currentVocabulary[currentCardIndex];
+            weakWords.add(card.word);
+            if (!progress[card.word]) progress[card.word] = {};
+            progress[card.word].needsPractice = true;
+
+            streak = 0;
+            currentCardIndex = (currentCardIndex + 1) % currentVocabulary.length;
+            displayFlashcard();
+            updateStats();
+            saveProgress();
+        }
+
+        function updateCardCounter() {
+            const total = currentVocabulary.length;
+            const current = currentCardIndex + 1;
+            document.getElementById('card-counter').textContent = `Card ${current} of ${total}`;
+        }
+
+        function updateWeakWordsDisplay() {
+            const weakWordsDiv = document.getElementById('weak-words');
+            if (weakWords.size > 0) {
+                weakWordsDiv.classList.remove('hidden');
+                let html = '';
+                weakWords.forEach(word => {
+                    html += `<div class="weak-word-item"><span>${word}</span><button onclick="focusWord('${word}')" class="btn-small">Focus</button></div>`;
+                });
+                document.getElementById('weak-words-content').innerHTML = html;
+            } else {
+                weakWordsDiv.classList.add('hidden');
+            }
+        }
+
+        function focusWord(word) {
+            const index = currentVocabulary.findIndex(v => v.word === word);
+            if (index !== -1) {
+                currentCardIndex = index;
+                displayFlashcard();
+            }
+        }
+
+        // QUIZ FUNCTIONS
+        function displayQuiz() {
+            if (currentVocabulary.length === 0) {
+                document.getElementById('quiz-question').innerHTML = '<p>No words to display. Select a topic and level.</p>';
+                return;
+            }
+
+            const card = currentVocabulary[currentCardIndex];
+            const quizType = Math.random() > 0.5 ? 'german' : 'english';
+
+            let options = [card];
+            while (options.length < 4) {
+                const random = vocabularyData[Object.keys(vocabularyData)[Math.floor(Math.random() * Object.keys(vocabularyData).length)]][Math.floor(Math.random() * 20)];
+                if (!options.find(o => o.word === random.word)) options.push(random);
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            let questionText, correctAnswer;
+            if (quizType === 'german') {
+                questionText = `Find the German word for: <strong>${card.english}</strong>`;
+                correctAnswer = card.word;
+            } else {
+                questionText = `What does <strong>${card.word}</strong> mean?`;
+                correctAnswer = card.english;
+            }
+
+            document.getElementById('quiz-text').innerHTML = questionText;
+            document.getElementById('quiz-counter').textContent = `Question ${currentCardIndex + 1} of ${currentVocabulary.length}`;
+
+            let optionsHtml = '';
+            options.forEach(opt => {
+                const displayText = quizType === 'german' ? opt.word : opt.english;
+                optionsHtml += `<button class="quiz-btn" onclick="checkQuizAnswer('${displayText}', '${correctAnswer}', this)">${displayText}</button>`;
+            });
+            document.getElementById('quiz-options').innerHTML = optionsHtml;
+            document.getElementById('quiz-feedback').innerHTML = '';
+        }
+
+        function checkQuizAnswer(selected, correct, btn) {
+            const isCorrect = selected === correct;
+            if (isCorrect) {
+                btn.classList.add('correct');
+                document.getElementById('quiz-feedback').innerHTML = '<div class="feedback correct">Correct!</div>';
+                score++;
+                streak++;
+                const card = currentVocabulary[currentCardIndex];
+                if (!progress[card.word]) progress[card.word] = {};
+                progress[card.word].mastered = true;
+                weakWords.delete(card.word);
+            } else {
+                btn.classList.add('incorrect');
+                document.getElementById('quiz-feedback').innerHTML = `<div class="feedback incorrect">Incorrect! The answer is <strong>${correct}</strong></div>`;
+                streak = 0;
+                const card = currentVocabulary[currentCardIndex];
+                if (!progress[card.word]) progress[card.word] = {};
+                progress[card.word].needsPractice = true;
+                weakWords.add(card.word);
+            }
+            saveProgress();
+            updateStats();
+            setTimeout(() => {
+                currentCardIndex = (currentCardIndex + 1) % currentVocabulary.length;
+                displayQuiz();
+            }, 2000);
+        }
+
+        // ARTICLE PRACTICE
+        function displayArticleQuestion() {
+            if (currentVocabulary.length === 0) {
+                document.getElementById('article-question').innerHTML = '<p>No nouns to display. Select a topic with nouns.</p>';
+                return;
+            }
+
+            let card = currentVocabulary[currentCardIndex];
+            while (card.gender === 'v' || card.gender === 'adj') {
+                currentCardIndex = (currentCardIndex + 1) % currentVocabulary.length;
+                card = currentVocabulary[currentCardIndex];
+            }
+
+            const nounWithoutArticle = card.word.split(' ').slice(1).join(' ');
+            document.getElementById('article-question').innerHTML = `Select the correct article for: <strong>${nounWithoutArticle}</strong>`;
+            document.getElementById('article-counter').textContent = `Question ${currentCardIndex + 1} of ${currentVocabulary.length}`;
+
+            document.getElementById('article-options').innerHTML = `
+                <button class="quiz-btn" onclick="checkArticle('der', '${card.article}', this)">der</button>
+                <button class="quiz-btn" onclick="checkArticle('die', '${card.article}', this)">die</button>
+                <button class="quiz-btn" onclick="checkArticle('das', '${card.article}', this)">das</button>
+            `;
+            document.getElementById('article-feedback').innerHTML = '';
+        }
+
+        function checkArticle(selected, correct, btn) {
+            const isCorrect = selected === correct;
+            if (isCorrect) {
+                btn.classList.add('correct');
+                document.getElementById('article-feedback').innerHTML = '<div class="feedback correct">Correct!</div>';
+                score++;
+                streak++;
+                const card = currentVocabulary[currentCardIndex];
+                if (!progress[card.word]) progress[card.word] = {};
+                progress[card.word].mastered = true;
+                weakWords.delete(card.word);
+            } else {
+                btn.classList.add('incorrect');
+                document.getElementById('article-feedback').innerHTML = `<div class="feedback incorrect">Incorrect! The answer is <strong>${correct}</strong></div>`;
+                streak = 0;
+                const card = currentVocabulary[currentCardIndex];
+                if (!progress[card.word]) progress[card.word] = {};
+                progress[card.word].needsPractice = true;
+                weakWords.add(card.word);
+            }
+            saveProgress();
+            updateStats();
+            setTimeout(() => {
+                currentCardIndex = (currentCardIndex + 1) % currentVocabulary.length;
+                displayArticleQuestion();
+            }, 2000);
+        }
+
+        // SPELLING PRACTICE
+        function displaySpellingQuestion() {
+            if (currentVocabulary.length === 0) {
+                document.getElementById('spelling-question').innerHTML = '<p>No words to display. Select a topic and level.</p>';
+                return;
+            }
+
+            const card = currentVocabulary[currentCardIndex];
+            document.getElementById('spelling-question').innerHTML = `Type the German word for: <strong>${card.english}</strong>`;
+            document.getElementById('spelling-counter').textContent = `Question ${currentCardIndex + 1} of ${currentVocabulary.length}`;
+            document.getElementById('spelling-input').value = '';
+            document.getElementById('spelling-input').focus();
+            document.getElementById('spelling-feedback').innerHTML = '';
+        }
+
+        function checkSpelling() {
+            const card = currentVocabulary[currentCardIndex];
+            const input = document.getElementById('spelling-input').value.trim().toLowerCase();
+            const correct = card.word.toLowerCase();
+
+            const isCorrect = input === correct;
+            if (isCorrect) {
+                document.getElementById('spelling-feedback').innerHTML = '<div class="feedback correct">Correct!</div>';
+                score++;
+                streak++;
+                if (!progress[card.word]) progress[card.word] = {};
+                progress[card.word].mastered = true;
+                weakWords.delete(card.word);
+            } else {
+                document.getElementById('spelling-feedback').innerHTML = `<div class="feedback incorrect">Incorrect! The answer is <strong>${card.word}</strong></div>`;
+                streak = 0;
+                if (!progress[card.word]) progress[card.word] = {};
+                progress[card.word].needsPractice = true;
+                weakWords.add(card.word);
+            }
+            saveProgress();
+            updateStats();
+            setTimeout(() => {
+                currentCardIndex = (currentCardIndex + 1) % currentVocabulary.length;
+                displaySpellingQuestion();
+            }, 2000);
+        }
+
+        // PROGRESS DISPLAY
+        function displayProgress() {
+            let html = '<h3>Topic Progress</h3>';
+            for (let topic in vocabularyData) {
+                const words = vocabularyData[topic];
+                const mastered = words.filter(w => progress[w.word]?.mastered).length;
+                const percentage = Math.round((mastered / words.length) * 100);
+
+                html += `
+                    <div class="topic-progress">
+                        <div class="topic-name">${topic}</div>
+                        <div class="progress-bar" style="flex: 1; margin: 0 15px;">
+                            <div class="progress-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="topic-percentage">${mastered}/${words.length} (${percentage}%)</div>
+                    </div>
+                `;
+            }
+
+            if (weakWords.size > 0) {
+                html += '<h3 style="margin-top: 20px;">Words Needing Practice</h3>';
+                weakWords.forEach(word => {
+                    html += `<div class="weak-word-item"><span>${word}</span></div>`;
+                });
+            }
+
+            document.getElementById('progress-display').innerHTML = html;
+        }
+
+        // MODE SWITCHING
+        function switchMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(mode + '-mode').classList.add('active');
+            document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+
+            if (mode === 'flashcard') displayFlashcard();
+            else if (mode === 'quiz') displayQuiz();
+            else if (mode === 'article') displayArticleQuestion();
+            else if (mode === 'spelling') displaySpellingQuestion();
+            else if (mode === 'progress') displayProgress();
+        }
+
+        // STATISTICS
+        function updateStats() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = streak;
+            document.getElementById('card-count').textContent = currentVocabulary.length;
+
+            let mastered = 0;
+            for (let topic in vocabularyData) {
+                mastered += vocabularyData[topic].filter(w => progress[w.word]?.mastered).length;
+            }
+            document.getElementById('mastered-count').textContent = mastered;
+        }
+
+        // EVENT LISTENERS
+        document.getElementById('show-examples').addEventListener('change', () => {
+            showExamples = document.getElementById('show-examples').checked;
+            displayFlashcard();
+        });
+
+        // KEYBOARD SUPPORT
+        document.addEventListener('keydown', (e) => {
+            if (currentMode === 'flashcard' && e.key === ' ') {
+                e.preventDefault();
+                toggleFlashcard();
+            } else if (currentMode === 'spelling' && e.key === 'Enter') {
+                e.preventDefault();
+                checkSpelling();
+            }
+        });
+
+        // INITIALIZE ON LOAD
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
