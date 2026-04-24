@@ -156,6 +156,26 @@
     .card-face{padding:24px 20px;}
     .stats-bar{gap:16px;}
   }
+
+  /* ===== MOBILE / ANDROID SUPPORT ===== */
+  html{-webkit-text-size-adjust:100%;}
+  html,body{overflow-x:hidden;max-width:100vw;}
+  *{-webkit-tap-highlight-color:rgba(37,99,235,0.15);}
+  input,textarea,select{font-size:16px;}
+  img,table,pre{max-width:100%;box-sizing:border-box;}
+  @media(max-width:600px){
+    .app-header{padding:10px 12px;flex-wrap:wrap;gap:8px;}
+    .app-header h1{font-size:16px;}
+    button,.btn,.chip,.nav-btn{min-height:44px;}
+    .chips,.filter-chips{flex-wrap:wrap;gap:6px;}
+    .controls{flex-wrap:wrap;gap:8px;}
+    .controls .btn{flex:1 1 auto;}
+    .card-face{font-size:22px;}
+  }
+  @media(max-width:420px){
+    .main{padding:10px;}
+    .card-face{padding:18px 14px;}
+  }
 </style>
 </head>
 <body>

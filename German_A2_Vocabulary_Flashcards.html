@@ -436,6 +436,23 @@
                 flex-wrap: wrap;
             }
         }
+
+        /* ===== MOBILE / ANDROID SUPPORT ===== */
+        html { -webkit-text-size-adjust: 100%; }
+        html, body { overflow-x: hidden; max-width: 100vw; }
+        * { -webkit-tap-highlight-color: rgba(37,99,235,0.15); }
+        input, textarea, select { font-size: 16px; }
+        img, table, pre { max-width: 100%; box-sizing: border-box; }
+        @media (max-width: 600px) {
+            .header { padding: 1rem; }
+            button, .btn, .chip, .nav-btn, .filter-btn { min-height: 44px; }
+            .filter-chips, .chips { flex-wrap: wrap; gap: 6px; }
+            .navigation .btn { flex: 1 1 auto; }
+        }
+        @media (max-width: 420px) {
+            .container { padding: 0.75rem; }
+            .flashcard { padding: 1.25rem 0.75rem; }
+        }
     </style>
 </head>
 <body>

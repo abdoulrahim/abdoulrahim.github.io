@@ -58,6 +58,28 @@
             overflow-y: auto;
         }
 
+        .sidebar-toggle {
+            display: none;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 99;
+        }
+        .sidebar-overlay.show { display: block; }
+
         .sidebar-section {
             margin-bottom: 25px;
         }
@@ -439,10 +461,21 @@
             }
 
             .sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid #e0e0e0;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 85%;
+                max-width: 320px;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                border-right: 1px solid #e0e0e0;
+                border-bottom: none;
+                z-index: 100;
+                box-shadow: 2px 0 8px rgba(0,0,0,0.15);
             }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-toggle { display: inline-flex !important; }
 
             .header h1 {
                 font-size: 1.8em;
@@ -484,6 +517,30 @@
         .timer.critical {
             color: #dc3545;
         }
+
+        /* ===== MOBILE / ANDROID SUPPORT ===== */
+        html { -webkit-text-size-adjust: 100%; }
+        html, body { overflow-x: hidden; max-width: 100vw; }
+        * { -webkit-tap-highlight-color: rgba(102,126,234,0.2); }
+        input, textarea, select { font-size: 16px; }
+        img, table, pre { max-width: 100%; box-sizing: border-box; }
+        @media (max-width: 600px) {
+            .header { padding: 16px 12px; }
+            .header h1 { font-size: 1.4em; }
+            .content-area { padding: 14px !important; }
+            .mode-btn, button, .btn, .btn-submit, .btn-hint, .btn-back { min-height: 44px; }
+            .mode-grid { grid-template-columns: 1fr; gap: 12px; }
+            .sidebar { padding: 14px; }
+            .difficulty-options label, .tense-options label { padding: 8px 10px; }
+            .person-input { width: 100%; font-size: 16px; }
+            .conjugation-row { padding: 8px 0; }
+            .button-group { flex-wrap: wrap; gap: 8px; }
+            .button-group button { flex: 1 1 auto; }
+        }
+        @media (max-width: 420px) {
+            .content-area { padding: 10px !important; }
+            .header { padding: 12px 10px; }
+        }
     </style>
 </head>
 <body>
@@ -494,7 +551,8 @@
         </div>
 
         <div class="main-content">
-            <div class="sidebar">
+            <div class="sidebar-overlay" id="vct-overlay" onclick="vctCloseSidebar()"></div>
+            <div class="sidebar" id="vct-sidebar">
                 <div class="sidebar-section">
                     <div class="sidebar-title">Difficulty Level</div>
                     <div class="difficulty-options">
@@ -553,6 +611,7 @@
             </div>
 
             <div class="content-area">
+                <button class="sidebar-toggle" onclick="vctToggleSidebar()">☰ Settings</button>
                 <div class="welcome-screen" id="welcomeScreen">
                     <h2>Welcome to the German Verb Trainer!</h2>
                     <p>Choose a practice mode from the left sidebar to get started. Select your difficulty level and preferred tenses.</p>
@@ -968,6 +1027,20 @@
         const persons = ['ich', 'du', 'er/sie/es', 'wir', 'ihr', 'sie/Sie'];
         const tenses = ['präsens', 'perfekt', 'präteritum', 'konjunktiv'];
 
+        // Mobile sidebar toggle
+        function vctToggleSidebar() {
+            const sb = document.getElementById('vct-sidebar');
+            const ov = document.getElementById('vct-overlay');
+            sb.classList.toggle('open');
+            if (ov) ov.classList.toggle('show', sb.classList.contains('open'));
+        }
+        function vctCloseSidebar() {
+            const sb = document.getElementById('vct-sidebar');
+            const ov = document.getElementById('vct-overlay');
+            if (sb) sb.classList.remove('open');
+            if (ov) ov.classList.remove('show');
+        }
+
         // ============ PERSISTENCE ============
         const VCT_STATE_KEY = 'verbConjugationStateV1';
         function _loadVCT() {
@@ -1084,7 +1157,10 @@
                         this.showChallengeQuestion();
                     }
                 }
-                if (!opts.restoring) snapshotVCT();
+                if (!opts.restoring) {
+                    snapshotVCT();
+                    if (typeof vctCloseSidebar === 'function') vctCloseSidebar();
+                }
             },
 
             showQuickQuestion() {

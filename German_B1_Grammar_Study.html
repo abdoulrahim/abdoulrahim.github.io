@@ -45,6 +45,29 @@
             box-shadow: 2px 0 8px rgba(0,0,0,0.05);
         }
 
+        .sidebar-burger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px 12px;
+            margin-right: 8px;
+            color: var(--primary);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 99;
+        }
+        .sidebar-overlay.show { display: block; }
+        @media (max-width: 768px) {
+            .sidebar-burger { display: inline-flex !important; }
+        }
+
         .sidebar-header {
             padding: 24px 20px;
             border-bottom: 2px solid var(--primary-bg);
@@ -524,11 +547,37 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
+
+        /* ===== MOBILE / ANDROID SUPPORT ===== */
+        html { -webkit-text-size-adjust: 100%; }
+        html, body { overflow-x: hidden; max-width: 100vw; }
+        * { -webkit-tap-highlight-color: rgba(37,99,235,0.15); }
+        input, textarea, select { font-size: 16px; }
+        img, table, pre { max-width: 100%; box-sizing: border-box; }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); position: fixed; z-index: 100; width: 85%; max-width: 320px; height: 100vh; }
+            .sidebar.open { transform: translateX(0); }
+            .main { margin-left: 0 !important; }
+            .topbar .burger, .header .burger { display: inline-flex !important; }
+        }
+        @media (max-width: 600px) {
+            .header, .topbar { padding: 10px 12px; }
+            .main, .content { padding: 14px !important; }
+            .btn, button, .option, .nav-item, .tab { min-height: 44px; }
+            .options, .mc-options { grid-template-columns: 1fr !important; }
+            .exercise { padding: 14px 12px; }
+            .buttons { flex-wrap: wrap; gap: 8px; }
+            .buttons .btn { flex: 1 1 auto; }
+        }
+        @media (max-width: 420px) {
+            .main, .content { padding: 10px !important; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="sidebar">
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+        <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h1>Grammatik aktiv</h1>
                 <p>B1 Grammatik</p>
@@ -538,9 +587,12 @@
 
         <div class="main-content">
             <div class="content-header">
-                <div>
-                    <h1 id="lessonTitle">Willkommen</h1>
-                    <p id="lessonDescription"></p>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <button class="sidebar-burger" onclick="toggleSidebar()" aria-label="Menü">☰</button>
+                    <div>
+                        <h1 id="lessonTitle">Willkommen</h1>
+                        <p id="lessonDescription"></p>
+                    </div>
                 </div>
                 <div class="progress-display">
                     <strong id="progressText">0/12 abgeschlossen</strong>
@@ -1173,6 +1225,21 @@
 
             renderTabs();
             selectTab('grammar');
+            closeSidebar();
+        }
+
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('sidebar-overlay');
+            sb.classList.toggle('open');
+            if (ov) ov.classList.toggle('show', sb.classList.contains('open'));
+        }
+
+        function closeSidebar() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('sidebar-overlay');
+            if (sb) sb.classList.remove('open');
+            if (ov) ov.classList.remove('show');
         }
 
         // RENDER TABS
