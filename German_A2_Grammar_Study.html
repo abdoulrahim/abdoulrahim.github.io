@@ -678,7 +678,7 @@
                 `,
                 exercises: [
                     { q: 'Die Katze sitzt _____ dem Sofa.', options: ['auf dem', 'auf den', 'auf die'], correct: 0, difficulty: 'easy', explanation: 'Sitzt = Dativ (location). auf + dem = auf dem' },
-                    { q: 'Ich fahre _____ die Schule.', options: ['zu der', 'zu die', 'zu den'], correct: 0, difficulty: 'easy', explanation: 'Fahre (movement) needs Akkusativ. But we use "zu" which contracts to "zur" in Akkusativ: zu der' },
+                    { q: 'Ich fahre _____ Schule.', options: ['zur', 'zum', 'zu den'], correct: 0, difficulty: 'easy', explanation: '"zu" takes Dativ. With feminine "die Schule": zu + der contracts to zur. So: zur Schule.' },
                     { q: 'Er legt das Buch _____ den Tisch.', options: ['auf dem', 'auf den', 'auf der'], correct: 1, difficulty: 'easy', explanation: 'Legt = movement INTO position. Needs Akkusativ: auf + den = auf den' },
                     { q: 'Sie arbeitet _____ dem Büro.', options: ['in dem', 'in den', 'in die'], correct: 0, difficulty: 'easy', explanation: 'Arbeitet = location. Dativ: in + dem = im (aber "im Büro")' },
                     { q: 'Der Vogel fliegt _____ den Baum.', options: ['in den', 'in dem', 'in der'], correct: 0, difficulty: 'medium', explanation: 'Fliegt = movement INTO position. Akkusativ: in + den = in den' },
@@ -719,7 +719,7 @@
                     { q: 'Ich fahre _____ die Nordsee (coast).', options: ['nach', 'an', 'in'], correct: 1, difficulty: 'medium', explanation: 'Going to a coast: an+Akk. (an die Nordsee)' },
                     { q: 'Das Haus liegt _____ der Nordsee.', options: ['an der', 'auf der', 'bei der'], correct: 0, difficulty: 'medium', explanation: 'Location at coast: an+Dativ (an der Nordsee)' },
                     { q: 'Er kommt _____ dem Supermarkt.', options: ['von', 'aus', 'zu'], correct: 0, difficulty: 'hard', explanation: 'From a location/place: von+Dativ (von dem = vom)' },
-                    { q: 'Wohin gehen Sie? _____ Zahnarzt.', options: ['Zu dem', 'Zum', 'Zum'], correct: 1, difficulty: 'hard', explanation: 'To a person (dentist): zu+Dativ. zu+dem = zum' },
+                    { q: 'Wohin gehen Sie? _____ Zahnarzt.', options: ['Zu dem', 'Zum', 'Zur'], correct: 1, difficulty: 'hard', explanation: 'To a person (dentist): zu+Dativ. zu+dem = zum' },
                     { q: 'Die Insel liegt _____ dem Meer.', options: ['in', 'auf', 'an'], correct: 2, difficulty: 'hard', explanation: 'An island in the sea: an+Dativ. (an dem Meer)' }
                 ]
             },
@@ -744,13 +744,13 @@
                     { q: 'Ich sehe die _____ Frau. (schön)', options: ['schöne', 'schöner', 'schönem'], correct: 0, difficulty: 'easy', explanation: 'die (definite) + feminine accusative. Article shows gender, so adjective = -e' },
                     { q: 'Der _____ Mann ist alt. (jung)', options: ['jungen', 'junge', 'junger'], correct: 1, difficulty: 'easy', explanation: 'Der (definite) + masculine nominative. Article shows gender, so adjective = -e' },
                     { q: 'Ich kenne einen _____ Professor. (intelligent)', options: ['intelligenten', 'intelligente', 'intelligenter'], correct: 0, difficulty: 'medium', explanation: 'einen (indefinite masculine accusative). Adjective must show case: -en' },
-                    { q: 'Die _____ Kinder spielen. (klein)', options: ['kleine', 'kleines', 'kleinen'], correct: 0, difficulty: 'medium', explanation: 'die (definite) + plural nominative. With definite article, plural = -en... wait, but nominative! It\'s -e with definite' },
-                    { q: 'Wir essen einen _____ Apfel. (rot)', options: ['roten', 'rote', 'rotem'], correct: 0, difficulty: 'medium', explanation: 'einen (indefinite neuter accusative). Adjective takes masculine form: -en' },
+                    { q: 'Die _____ Kinder spielen. (klein)', options: ['kleine', 'kleines', 'kleinen'], correct: 2, difficulty: 'medium', explanation: 'die (definite) + plural nominative. With definite article in nominative plural: -en' },
+                    { q: 'Wir essen einen _____ Apfel. (rot)', options: ['roten', 'rote', 'rotem'], correct: 0, difficulty: 'medium', explanation: 'einen (indefinite masculine accusative; der Apfel is masculine). Adjective ending: -en' },
                     { q: 'Sie liebt ihren _____ Freund. (beste)', options: ['besten', 'beste', 'bestem'], correct: 0, difficulty: 'medium', explanation: 'ihren (possessive accusative masculine). Adjective: -en' },
                     { q: 'Das ist eine _____ Idee. (brillant)', options: ['brillante', 'brillantes', 'brillanten'], correct: 0, difficulty: 'hard', explanation: 'eine (indefinite feminine nominative). Adjective takes feminine form: -e' },
                     { q: 'Der _____ Student studiert viel. (fleißig)', options: ['fleißigen', 'fleißige', 'fleißiger'], correct: 1, difficulty: 'hard', explanation: 'Der (definite masculine nominative). With definite article nominative: -e' },
                     { q: 'Ich sehe einen _____ See. (blau)', options: ['blauen', 'blaue', 'blauem'], correct: 0, difficulty: 'hard', explanation: 'einen (masculine accusative). Adjective: -en' },
-                    { q: 'Das _____ Haus ist teuer. (alt)', options: ['alte', 'altes', 'altem'], correct: 1, difficulty: 'hard', explanation: 'Das (definite neuter nominative). With definite article: -e... wait, neuter! Actually -e still' },
+                    { q: 'Das _____ Haus ist teuer. (alt)', options: ['alte', 'altes', 'altem'], correct: 0, difficulty: 'hard', explanation: 'Das (definite neuter nominative). With a definite article, the adjective ending is -e: das alte Haus.' },
                     { q: 'Ich kenne eine _____ Lehrerin. (gut)', options: ['gute', 'guter', 'guten'], correct: 0, difficulty: 'hard', explanation: 'eine (indefinite feminine nominative). Adjective takes feminine form: -e' }
                 ]
             },
@@ -773,8 +773,8 @@
                 exercises: [
                     { q: 'Ich gebe dem _____ Kind einen Apfel. (klug)', options: ['klugen', 'kluge', 'kluger'], correct: 0, difficulty: 'easy', explanation: 'dem (definite dative neuter). Dativ always: -en' },
                     { q: 'Ich spreche mit der _____ Frau. (jung)', options: ['junge', 'jungen', 'junger'], correct: 1, difficulty: 'easy', explanation: 'der (definite dative feminine). Dativ always: -en' },
-                    { q: 'Er sitzt neben einem _____ Auto. (teuer)', options: ['teueren', 'teure', 'teuerem'], correct: 0, difficulty: 'easy', explanation: 'einem (indefinite dative neuter). Dativ always: -en' },
-                    { q: 'Das Mädchen tanzt mit dem _____ Junge. (freundlich)', options: ['freundlichen', 'freundliche', 'freundlicher'], correct: 0, difficulty: 'medium', explanation: 'dem (definite dative masculine). Dativ always: -en' },
+                    { q: 'Er sitzt neben einem _____ Auto. (teuer)', options: ['teuren', 'teure', 'teuerem'], correct: 0, difficulty: 'easy', explanation: 'einem (indefinite dative neuter). Dativ always: -en. Note: teuer drops the -e- before endings → teuren.' },
+                    { q: 'Das Mädchen tanzt mit dem _____ Jungen. (freundlich)', options: ['freundlichen', 'freundliche', 'freundlicher'], correct: 0, difficulty: 'medium', explanation: 'dem (definite dative masculine). Dativ always: -en. "Junge" is n-Deklination → Jungen in Dativ.' },
                     { q: 'Ich helfe einer _____ Person. (alt)', options: ['alten', 'alte', 'altem'], correct: 0, difficulty: 'medium', explanation: 'einer (indefinite dative feminine). Dativ always: -en' },
                     { q: 'Sie erzählt dem _____ Publikum eine Geschichte. (zahlreich)', options: ['zahlreiche', 'zahlreichen', 'zahlreichem'], correct: 1, difficulty: 'medium', explanation: 'dem (definite dative singular, but used for publikum). Dativ always: -en' },
                     { q: 'Ich danke dir für deine _____ Hilfe. (groß)', options: ['großen', 'große', 'großer'], correct: 0, difficulty: 'medium', explanation: 'Possessive dative feminine. Dativ: -en' },
@@ -805,12 +805,12 @@
                 exercises: [
                     { q: 'Mein Haus ist groß. Dein Haus ist _____.', options: ['großer', 'großem', 'große'], correct: 0, difficulty: 'easy', explanation: 'Comparative form: groß → größer' },
                     { q: 'Ein Auto ist schnell. Ein Zug ist _____.', options: ['schneller', 'schnellstem', 'schnellsten'], correct: 0, difficulty: 'easy', explanation: 'Comparative form: schnell → schneller' },
-                    { q: 'Dieses Restaurant ist teuer. Das andere ist noch _____.', options: ['teuer', 'teuerer', 'teuersten'], correct: 1, difficulty: 'easy', explanation: 'Comparative form: teuer → teuerer' },
+                    { q: 'Dieses Restaurant ist teuer. Das andere ist noch _____.', options: ['teuer', 'teurer', 'teuersten'], correct: 1, difficulty: 'easy', explanation: 'Comparative form: teuer → teurer (the -e- is dropped before -er).' },
                     { q: 'Das ist der _____ Berg der Welt. (hoch)', options: ['hochste', 'höchste', 'hohem'], correct: 1, difficulty: 'medium', explanation: 'Superlative: hoch → höchste. With article, needs adjective ending: der höchste' },
                     { q: 'Diese Geschichte ist interessant. Jene ist _____.', options: ['interessanter', 'interessantest', 'interessante'], correct: 0, difficulty: 'medium', explanation: 'Comparative: interessant → interessanter' },
                     { q: 'Peter ist alt. Maria ist _____ als Peter.', options: ['älter', 'altere', 'ältesten'], correct: 0, difficulty: 'medium', explanation: 'Comparative with umlaut: alt → älter' },
                     { q: 'Das ist das _____ Buch, das ich kenne. (gut)', options: ['bessere', 'beste', 'guter'], correct: 1, difficulty: 'medium', explanation: 'Superlative irregular: gut → besser → beste. With article: das beste' },
-                    { q: 'Dieses Zimmer ist klein. Das andere ist _____ als dieses.', options: ['kleines', 'kleinere', 'kleinster'], correct: 1, difficulty: 'hard', explanation: 'Comparative with als: klein → kleiner. But "kleinere" is accusative plural form... Actually just "kleiner"' },
+                    { q: 'Dieses Zimmer ist klein. Das andere ist _____ als dieses.', options: ['kleines', 'kleiner', 'kleinster'], correct: 1, difficulty: 'hard', explanation: 'Comparative with als: klein → kleiner. Use the predicative (uninflected) form after "ist".' },
                     { q: 'Der Weg ist kurz. Dieser Weg ist _____.', options: ['kürzern', 'kürzer', 'kürzeste'], correct: 1, difficulty: 'hard', explanation: 'Comparative with umlaut: kurz → kürzer' },
                     { q: 'Das ist der _____ Student in der Klasse. (intelligent)', options: ['intelligenteste', 'intelligentesten', 'intelligenter'], correct: 0, difficulty: 'hard', explanation: 'Superlative nominative singular masculine: der intelligenteste. Adjective ending -e' },
                     { q: 'Anna ist die _____ Schülerin. (fleißig)', options: ['fleißigste', 'fleißigeren', 'fleißige'], correct: 0, difficulty: 'hard', explanation: 'Superlative feminine nominative: die fleißigste' },
@@ -912,11 +912,11 @@
                     { q: 'Obwohl das Wetter schlecht ist, _____ wir spazieren.', options: ['gehen', 'wir gehen', 'gehen wir'], correct: 0, difficulty: 'medium', explanation: 'obwohl clause with main clause. Main clause has verb at V2: wir gehen' },
                     { q: 'Wenn _____, rufe ich dich an.', options: ['ich Zeit habe', 'ich habe Zeit', 'ich Zeit haben'], correct: 0, difficulty: 'medium', explanation: 'wenn clause: verb at END. ich Zeit habe' },
                     { q: 'Er sagt, dass er morgen _____.', options: ['komm', 'kommt', 'zu kommen'], correct: 1, difficulty: 'medium', explanation: 'dass clause: verb kommt at END' },
-                    { q: 'Weil ich nicht schwimmen _____, gehe ich nicht ins Wasser.', options: ['kann', 'kannen', 'können'], correct: 0, difficulty: 'hard', explanation: 'weil clause with modal: kann (to swim) at END' },
+                    { q: 'Weil ich nicht schwimmen _____, gehe ich nicht ins Wasser.', options: ['kann', 'konnten', 'können'], correct: 0, difficulty: 'hard', explanation: 'weil clause with modal: kann (to swim) at END' },
                     { q: 'Das Wetter ist schön. Deshalb _____ wir spazieren.', options: ['gehen wir', 'wir gehen', 'gehen'], correct: 0, difficulty: 'hard', explanation: 'deshalb (position 1): verb at V2. gehen wir' },
                     { q: 'Ich hoffe, dass du bald _____.', options: ['besser wirst', 'besser werden', 'wirst besser'], correct: 0, difficulty: 'hard', explanation: 'dass clause: besser wirst (modal-like auxiliary + adjective) at END' },
                     { q: 'Als ich nach Hause kam, _____ bereits dunkel.', options: ['war es', 'es war', 'war'], correct: 1, difficulty: 'hard', explanation: 'als clause (main clause follows): verb at V2 in main clause. es war' },
-                    { q: 'Sie sagt, dass sie arbeiten _____.', options: ['will', 'wollen', 'muß'], correct: 0, difficulty: 'hard', explanation: 'dass clause with modal: will (want to work) at END' }
+                    { q: 'Sie sagt, dass sie arbeiten _____.', options: ['will', 'wollen', 'muss'], correct: 0, difficulty: 'hard', explanation: 'dass clause with modal: will (want to work) at END' }
                 ]
             },
             {
@@ -986,6 +986,7 @@
                 ]
             },
             {
+                id: 11,
                 title: 'Reflexive Verben',
                 subtitle: 'Sie wäscht sich',
                 level: 'A2',
@@ -1004,6 +1005,7 @@
                 ]
             },
             {
+                id: 12,
                 title: 'Zeitengebrauch: Perfekt vs. Präteritum',
                 subtitle: 'Wann benutzt man was?',
                 level: 'A2',
@@ -1018,6 +1020,7 @@
                 ]
             },
             {
+                id: 13,
                 title: 'Partikeln: denn, mal, doch, ja',
                 subtitle: 'Was heißt das denn?',
                 level: 'A2',
@@ -1032,6 +1035,7 @@
                 ]
             },
             {
+                id: 14,
                 title: 'Negationswörter',
                 subtitle: 'Nicht, nichts, noch nicht, nicht mehr',
                 level: 'A2',
@@ -1049,13 +1053,54 @@
 
         // ============ STATE ============
         let currentLesson = null;
+        let currentTabIdx = 0;
         let currentDifficultyFilter = 'all';
         let mcShuffleMap = {};
+
+        // ============ PERSISTENCE ============
+        const A2_STATE_KEY = 'a2GrammarAppStateV1';
+        function _loadA2State() {
+            try { return JSON.parse(localStorage.getItem(A2_STATE_KEY)) || { lessons: {} }; }
+            catch { return { lessons: {} }; }
+        }
+        let __a2State = null;
+        function _getA2State() { if (!__a2State) __a2State = _loadA2State(); return __a2State; }
+        let __a2Timer = null;
+        function persistA2() { try { localStorage.setItem(A2_STATE_KEY, JSON.stringify(_getA2State())); } catch {} }
+        function persistA2Debounced() { clearTimeout(__a2Timer); __a2Timer = setTimeout(persistA2, 180); }
+        function getA2Lesson(id) {
+            const s = _getA2State();
+            if (!s.lessons[id]) s.lessons[id] = { exercises: {}, scrollY: 0 };
+            return s.lessons[id];
+        }
+        function getA2Ex(id, ei) {
+            const ls = getA2Lesson(id);
+            if (!ls.exercises[ei]) ls.exercises[ei] = { shuffledIndices: null, selected: null, checked: false, correct: null };
+            return ls.exercises[ei];
+        }
 
         // ============ INITIALIZATION ============
         document.addEventListener('DOMContentLoaded', function() {
             initSidebar();
             updateStats();
+            // Restore last-viewed lesson / tab / filter
+            const saved = _getA2State();
+            if (saved.currentDifficultyFilter) currentDifficultyFilter = saved.currentDifficultyFilter;
+            if (typeof saved.currentTabIdx === 'number') currentTabIdx = saved.currentTabIdx;
+            if (saved.currentLessonId && lessons.find(l => l.id === saved.currentLessonId)) {
+                startLesson(saved.currentLessonId, { restoring: true });
+            }
+            // Debounced scroll persistence
+            let __a2ScrollTimer = null;
+            window.addEventListener('scroll', function () {
+                if (!currentLesson) return;
+                clearTimeout(__a2ScrollTimer);
+                __a2ScrollTimer = setTimeout(function () {
+                    const ls = getA2Lesson(currentLesson.id);
+                    ls.scrollY = window.scrollY || window.pageYOffset || 0;
+                    persistA2Debounced();
+                }, 250);
+            }, { passive: true });
         });
 
         function initSidebar() {
@@ -1076,9 +1121,21 @@
             document.getElementById('sidebar').classList.remove('open');
         }
 
-        function startLesson(lessonId) {
+        function startLesson(lessonId, opts) {
+            opts = opts || {};
             currentLesson = lessons.find(l => l.id === lessonId);
-            currentDifficultyFilter = 'all';
+            if (!currentLesson) return;
+            if (!opts.restoring) {
+                currentDifficultyFilter = 'all';
+                currentTabIdx = 0;
+            }
+
+            // Persist lesson selection
+            const st = _getA2State();
+            st.currentLessonId = lessonId;
+            st.currentDifficultyFilter = currentDifficultyFilter;
+            st.currentTabIdx = currentTabIdx;
+            persistA2();
 
             document.getElementById('welcome').style.display = 'none';
             document.getElementById('lesson-view').style.display = 'block';
@@ -1092,13 +1149,27 @@
                 }
             });
 
-            closeSidebar();
-            renderTab(0);
+            if (!opts.restoring) closeSidebar();
+            // Activate correct tab button
+            const tabBtns = document.querySelectorAll('.tabs .tab');
+            tabBtns.forEach((t, i) => t.classList.toggle('active', i === currentTabIdx));
+            renderTab(currentTabIdx);
+
+            // Restore scroll position after the render settles
+            if (opts.restoring) {
+                const ls = getA2Lesson(lessonId);
+                const y = ls.scrollY || 0;
+                requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, y)));
+            }
         }
 
         function switchTab(button, tabIndex) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             button.classList.add('active');
+            currentTabIdx = tabIndex;
+            const st = _getA2State();
+            st.currentTabIdx = tabIndex;
+            persistA2();
             renderTab(tabIndex);
         }
 
@@ -1150,11 +1221,19 @@
                         <div class="question-text">${exercise.q}</div>
                         <div class="options">`;
 
-                // Shuffle options and track mapping
-                const indices = exercise.options.map((_, i) => i);
-                for (let i = indices.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [indices[i], indices[j]] = [indices[j], indices[i]];
+                // Shuffle options and track mapping — or restore saved order
+                const exState = getA2Ex(currentLesson.id, idx);
+                let indices;
+                if (Array.isArray(exState.shuffledIndices) && exState.shuffledIndices.length === exercise.options.length) {
+                    indices = exState.shuffledIndices.slice();
+                } else {
+                    indices = exercise.options.map((_, i) => i);
+                    for (let i = indices.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [indices[i], indices[j]] = [indices[j], indices[i]];
+                    }
+                    exState.shuffledIndices = indices.slice();
+                    persistA2Debounced();
                 }
                 const newCorrectIdx = indices.indexOf(exercise.correct);
                 mcShuffleMap[idx] = newCorrectIdx;
@@ -1179,12 +1258,69 @@
 
             html += '</div>';
             content.innerHTML = html;
+
+            // Reflect active difficulty button
+            const dBtns = content.querySelectorAll('.difficulty-filter button');
+            const dMap = { all: 0, easy: 1, medium: 2, hard: 3 };
+            dBtns.forEach(b => b.classList.remove('active'));
+            const di = dMap[currentDifficultyFilter] ?? 0;
+            if (dBtns[di]) dBtns[di].classList.add('active');
+
+            // Restore previously saved selections / results
+            restoreA2ExerciseUI();
+        }
+
+        function restoreA2ExerciseUI() {
+            if (!currentLesson) return;
+            const ls = getA2Lesson(currentLesson.id);
+            currentLesson.exercises.forEach((exercise, idx) => {
+                if (currentDifficultyFilter !== 'all' && exercise.difficulty !== currentDifficultyFilter) return;
+                const ex = ls.exercises[idx];
+                if (!ex) return;
+                const exerciseEl = document.getElementById(`exercise-${idx}`);
+                if (!exerciseEl) return;
+                const optionEls = exerciseEl.querySelectorAll('.option');
+                // Re-apply selection
+                if (typeof ex.selected === 'number' && optionEls[ex.selected]) {
+                    optionEls[ex.selected].classList.add('selected');
+                    optionEls[ex.selected].dataset.selected = ex.selected;
+                }
+                // Re-apply checked result
+                if (ex.checked) {
+                    const correctIdx = parseInt(optionEls[0]?.dataset.correct);
+                    if (ex.correct === true) {
+                        if (optionEls[ex.selected]) optionEls[ex.selected].classList.add('correct');
+                    } else {
+                        if (typeof ex.selected === 'number' && optionEls[ex.selected]) {
+                            optionEls[ex.selected].classList.add('incorrect');
+                        }
+                        if (!isNaN(correctIdx) && optionEls[correctIdx]) {
+                            optionEls[correctIdx].classList.add('correct');
+                        }
+                    }
+                    const feedback = document.getElementById(`feedback-${idx}`);
+                    const explanation = document.getElementById(`explanation-${idx}`);
+                    if (feedback) {
+                        feedback.classList.add('show');
+                        feedback.classList.toggle('correct', !!ex.correct);
+                        feedback.classList.toggle('incorrect', !ex.correct);
+                        feedback.textContent = ex.correct ? '✓ Richtig!' : '✗ Falsch!';
+                    }
+                    if (explanation) {
+                        explanation.classList.add('visible');
+                        explanation.textContent = `💡 ${exercise.explanation}`;
+                    }
+                }
+            });
         }
 
         function setDifficultyFilter(filter) {
             currentDifficultyFilter = filter;
+            const st = _getA2State();
+            st.currentDifficultyFilter = filter;
+            persistA2();
             document.querySelectorAll('.difficulty-filter button').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if (event && event.target) event.target.classList.add('active');
             renderExercises();
         }
 
@@ -1194,6 +1330,15 @@
             question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             element.dataset.selected = oIdx;
+            // Persist
+            if (currentLesson) {
+                const ex = getA2Ex(currentLesson.id, exIdx);
+                ex.selected = oIdx;
+                // A new selection invalidates previous check result
+                ex.checked = false;
+                ex.correct = null;
+                persistA2Debounced();
+            }
         }
 
         function checkExercise(exIdx) {
@@ -1207,8 +1352,9 @@
             const correctIdx = parseInt(optionsDiv.querySelector('.option').dataset.correct);
 
             let correct = false;
+            let selectedIdx = null;
             if (selected) {
-                const selectedIdx = parseInt(selected.dataset.selected);
+                selectedIdx = parseInt(selected.dataset.selected);
                 if (selectedIdx === correctIdx) {
                     correct = true;
                     selected.classList.add('correct');
@@ -1226,6 +1372,13 @@
             explanation.classList.add('visible');
             explanation.textContent = `💡 ${exercise.explanation}`;
 
+            // Persist
+            const ex = getA2Ex(currentLesson.id, exIdx);
+            ex.selected = selectedIdx;
+            ex.checked = true;
+            ex.correct = correct;
+            persistA2();
+
             if (correct) {
                 updateProgress(exIdx);
             }
@@ -1239,6 +1392,14 @@
             });
             document.getElementById(`feedback-${exIdx}`).classList.remove('show', 'correct', 'incorrect');
             document.getElementById(`explanation-${exIdx}`).classList.remove('visible');
+            // Persist (preserve shuffle)
+            if (currentLesson) {
+                const ex = getA2Ex(currentLesson.id, exIdx);
+                ex.selected = null;
+                ex.checked = false;
+                ex.correct = null;
+                persistA2();
+            }
         }
 
         // ============ PROGRESS ============

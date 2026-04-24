@@ -122,7 +122,7 @@ de: [
 {w:"erst einmal",e:"first of all",g:"Adverb phrase"},
 {w:"den",e:"the",g:"Article, definite, maskulin Akkusativ"},
 {w:"Computer",e:"computer",g:"Noun, der Computer (maskulin), Akkusativ"},
-{w:"ein.",e:"on (separable prefix)",g:"Trennbares Präfix of einschalten, goes to end"}
+{w:"ein.",e:"(separable prefix of einschalten)",g:"Trennbares Präfix of einschalten, goes to end"}
 ],
 en: "I usually arrive at the office around eight o'clock and first turn on the computer."
 },
@@ -1418,12 +1418,12 @@ en: "Friday is my favorite day."
 {
 de: [
 {w:"Manchmal",e:"Sometimes",g:"Adverb of frequency"},
-{w:"lade",e:"invite",g:"Verb, laden (einladen, trennbar), 1st pers. sing. Präsens"},
+{w:"lade",e:"invite",g:"Verb, einladen (trennbar), 1st pers. sing. Präsens"},
 {w:"ich",e:"I",g:"Pronoun, Nominativ"},
 {w:"Freunde",e:"friends",g:"Noun, Plural Akkusativ"},
-{w:"ein.",e:"in (separable prefix).",g:"Trennbares Präfix of einladen, goes to end"}
+{w:"ein.",e:"(separable prefix of einladen).",g:"Trennbares Präfix of einladen, goes to end"}
 ],
-en: "Sometimes I invite friends in."
+en: "Sometimes I invite friends over."
 },
 {
 de: [
@@ -1521,7 +1521,7 @@ stories.forEach((s, i) => {
   storiesDiv.innerHTML += html;
 });
 
-function esc(s) { return s.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;'); }
+function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
 
 function getGrammarClass(g) {
   const gl = g.toLowerCase();

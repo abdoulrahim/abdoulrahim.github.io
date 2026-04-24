@@ -409,10 +409,10 @@ const lessons = [
         instruction: 'Choose the correct form. Is it the subject (nominativ) or object (akkusativ)?',
         difficulty: 'hard',
         items: [
-          { question: 'Maria kommt. ___ ist neu hier.', options: ['Sie','Sie','Ihr','Ihnen'], answer: 'Sie', explanation: 'Subject = nominative. "She" = nominative "Sie". Use nominative for the person doing the action.' },
+          { question: 'Maria kommt. ___ ist neu hier.', options: ['Sie','Ihnen','Ihr','sie'], answer: 'Sie', explanation: 'Subject = nominative. "She" = nominative "Sie". Use nominative for the person doing the action.' },
           { question: 'Ich kenne Marco. ___ sehe ich oft.', options: ['Ihn','Ihm','Er','Dich'], answer: 'Ihn', explanation: 'Object = accusative. "I see him often" - Marco is the direct object. "Er" (nominative) becomes "ihn" (accusative).' },
           { question: '___ gebe dir ein Geschenk.', options: ['Ich','Mich','Mir','Du'], answer: 'Ich', explanation: 'Subject of the sentence = nominative "ich". "I give you a gift" - the subject is doing the giving.' },
-          { question: 'Mein Bruder möchte ___. Du magst ___!', options: ['dich / ihn','du / er','dir / ihm','dich / ihn'], answer: 'dich / ihn', explanation: 'Both are accusative objects. "My brother wants you, he likes him" - wants and likes take accusative objects.' }
+          { question: 'Mein Bruder möchte ___. Du magst ___!', options: ['dich / ihn','du / er','dir / ihm','dein / sein'], answer: 'dich / ihn', explanation: 'Both are accusative objects. "My brother wants you, he likes him" - wants and likes take accusative objects.' }
         ]
       },
       {
@@ -435,7 +435,7 @@ const lessons = [
           { question: 'Der Tisch ist braun. ___ ist alt.', options: ['Er','Sie','Es','Sie (Pl.)'], answer: 'Er', explanation: '"Der Tisch" is masculine (der), so use "er" (it). Masculine articles (der, ein) = "er" pronoun.' },
           { question: 'Die Lampe funktioniert nicht. ___ ist kaputt.', options: ['Er','Sie','Es','Ihn'], answer: 'Sie', explanation: '"Die Lampe" is feminine (die), so use "sie" (it). Feminine articles (die, eine) = "sie" pronoun.' },
           { question: 'Das Buch ist interessant. ___ ist auf Deutsch.', options: ['Er','Sie','Es','Ihn'], answer: 'Es', explanation: '"Das Buch" is neuter (das), so use "es" (it). Neuter articles (das, ein) = "es" pronoun.' },
-          { question: 'Die Stühle sind neu. ___ sind sehr komfortabel.', options: ['Er','Sie','Es','Sie'], answer: 'Sie', explanation: 'Plural nouns of any gender use "sie" (they). "Die Stühle" (plural) = "sie". Plural article (die, Plural) = "sie".' }
+          { question: 'Die Stühle sind neu. ___ sind sehr komfortabel.', options: ['Er','Sie','Es','Wir'], answer: 'Sie', explanation: 'Plural nouns of any gender use "sie" (they). "Die Stühle" (plural) = "sie". Plural article (die, Plural) = "sie".' }
         ]
       },
       {
@@ -443,7 +443,7 @@ const lessons = [
         instruction: 'Fill in the correct pronouns. Pay attention to subject vs. object.',
         difficulty: 'medium',
         items: [
-          { before: '___ kenne Marco sehr gut.', after: '___ sehe ___ oft.', answer: 'Ich|ihn', explanation: '"Ich" is the subject (nominative). "Ihn" is the accusative object (what I see). Pattern: subject→object requires the change from "er" to "ihn".' },
+          { before: '___ kenne Marco sehr gut.', after: '___ sehe ___ oft.', answer: 'Ich|Ich|ihn', explanation: '"Ich" is the subject (nominative) in both sentences. "Ihn" is the accusative object (what I see). Pattern: subject→object requires the change from "er" to "ihn".' },
           { before: 'Meine Schwester mag Musik.', after: '___ höre ___ jeden Tag.', answer: 'Sie|sie', explanation: '"Sie" is the subject (she). Second "sie" is accusative object (music = die Musik, feminine). Notice same form but different function!' },
           { before: 'Das ist mein Freund Peter.', after: 'Kennst ___, ___?', answer: 'du|ihn', explanation: '"Du" is nominative (you). "Ihn" is accusative object (you know him). Er→ihn is the key accusative change.' }
         ]
@@ -542,9 +542,9 @@ const lessons = [
         difficulty: 'medium',
         items: [
           { question: 'Die Kinder ___ sehr schnell. (laufen)', options: ['läufen','lauft','laufe','laufen'], answer: 'laufen', explanation: '"Die Kinder" (they, plural) = wir/sie/Sie form = -en. Laufen stays laufen in plural form (regular conjugation).' },
-          { question: '___ du auch Deutsch? (sprechen)', options: ['Sprichst','Sprichst','Sprecht','Spreche'], answer: 'Sprichst', explanation: '"Du" with "sprechen" = du sprichst. Note: "sprechen" has a vowel change (e→i) in du/er/sie/es forms. See Lesson 4 for more!' },
+          { question: '___ du auch Deutsch? (sprechen)', options: ['Sprechst','Sprichst','Sprecht','Spreche'], answer: 'Sprichst', explanation: '"Du" with "sprechen" = du sprichst. Note: "sprechen" has a vowel change (e→i) in du/er/sie/es forms. See Lesson 4 for more!' },
           { question: 'Mein Sohn ___ im Park. (spielen)', options: ['spielst','spielet','spielt','spiele'], answer: 'spielt', explanation: '"Mein Sohn" = 3rd person singular (er) = -t. Er/sie/es spielt = He/she/it plays.' },
-          { question: 'Ihr ___ das Buch? (lesen)', options: ['lesest','lest','lesetI am not getting','Ihr lest'], answer: 'lest', explanation: '"Ihr" (you plural, informal) = same as er/sie/es ending = -t (not -est). Ihr lest = You all read.' }
+          { question: 'Ihr ___ das Buch? (lesen)', options: ['lesest','lest','leset','liest'], answer: 'lest', explanation: '"Ihr" (you plural, informal) = same as er/sie/es ending = -t (not -est). Ihr lest = You all read.' }
         ]
       },
       {
@@ -942,8 +942,8 @@ const lessons = [
         items: [
           { question: 'können: du ___', options: ['kannst','kannnst','kannt','kennt'], answer: 'kannst', explanation: 'Du kannst = you can. Note: double "nn" in können only appears before "st" and "sst": du kannst, ihr könnt (no double t).' },
           { question: 'müssen: ihr ___', options: ['musset','müsst','musst','müssen'], answer: 'müsst', explanation: 'Ihr müsst = you (plural) must. Modal verbs take umlaut in some forms: können→könnt, müssen→müsst, dürfen→dürft.' },
-          { question: 'dürfen: ich ___', options: ['darfe','darf','darf','derfst'], answer: 'darf', explanation: 'Ich darf = I may/am allowed. Dürfen: ich darf, du darfst, er/sie/es darf, wir dürfen, ihr dürft, sie/Sie dürfen.' },
-          { question: 'wollen: sie (pl) ___', options: ['wollen','wollst','wolt','wollen'], answer: 'wollen', explanation: 'Sie wollen = they want. Plural (and Sie formal) = wollen (same as infinitive for wollen).' }
+          { question: 'dürfen: ich ___', options: ['darfe','darf','darfst','derfst'], answer: 'darf', explanation: 'Ich darf = I may/am allowed. Dürfen: ich darf, du darfst, er/sie/es darf, wir dürfen, ihr dürft, sie/Sie dürfen.' },
+          { question: 'wollen: sie (pl) ___', options: ['wollen','willst','wollt','wolle'], answer: 'wollen', explanation: 'Sie wollen = they want. Plural (and Sie formal) = wollen (same as infinitive for wollen).' }
         ]
       },
       {
@@ -973,8 +973,8 @@ const lessons = [
         instruction: 'Practice all 5 modal verbs with their conjugations.',
         difficulty: 'hard',
         items: [
-          { before: 'Was ___ du machen? - Ich ___ arbeiten, aber ich ___ nicht arbeiten. Ich ___ viel lernen.', after: '(wollen / müssen / können / sollen)', answer: 'willst|will|muss|soll', explanation: 'What do you want to do? I want to work, but I must learn. (Negative must not shown: nicht muss = nicht arbeiten kannst)' },
-          { before: '___ ich Saft trinken? - Ja, du ___ Saft trinken!', after: '(dürfen/können)', answer: 'Darf/kannst', explanation: 'May I drink juice? Yes, you can! Both "darf" (permission) and "kannst" (ability) work. Darf is better for "may I?"' }
+          { before: 'Was ___ du machen? - Ich ___ arbeiten, aber ich ___ auch lernen. Ich ___ viel lernen.', after: '(wollen / müssen / wollen / sollen)', answer: 'willst|muss|will|soll', explanation: 'What do you want to do? I must work, but I also want to learn. I should learn a lot.' },
+          { before: '___ ich Saft trinken? - Ja, du ___ Saft trinken!', after: '(dürfen/können)', answer: 'Darf|kannst', explanation: 'May I drink juice? Yes, you can! "Darf" (permission) for the question, "kannst" (ability) for the answer.' }
         ]
       },
       {
@@ -1949,7 +1949,7 @@ const lessons = [
           { question: 'Ich kaufe ___ Flasche Wein. (die)', options: ['eine','einen','ein','einer'], answer: 'eine', explanation: 'Feminine: eine (same as nominative). "Ich kaufe eine Flasche Wein".' },
           { question: 'Walter kauft ___ Joghurt. (der - but it\'s masculine)', options: ['einen','ein','eine','einer'], answer: 'einen', explanation: 'Masculine accusative: einen. "Walter kauft einen Joghurt" = Walter buys yogurt.' },
           { question: 'Ich habe ___ Auto. (das)', options: ['ein','einen','eine','einem'], answer: 'ein', explanation: 'Neuter: ein (same as nominative). "Ich habe ein Auto" = I have a car.' },
-          { question: 'Sie kauft ___ Tisch. (der)', options: ['einen','ein','eine','einen'], answer: 'einen', explanation: 'Masculine accusative: einen (changes!). "Sie kauft einen Tisch" = She buys a table.' }
+          { question: 'Sie kauft ___ Tisch. (der)', options: ['einen','ein','eine','einem'], answer: 'einen', explanation: 'Masculine accusative: einen (changes!). "Sie kauft einen Tisch" = She buys a table.' }
         ]
       },
       {
@@ -1957,7 +1957,7 @@ const lessons = [
         instruction: 'Fill in the correct article (subject vs. object).',
         difficulty: 'hard',
         items: [
-          { before: '', after: 'Mann isst ___ Fisch. (Subject: der, Object: der)', answer: 'Der|den', explanation: 'Subject (nominative) = der, object (accusative) = den. "Der Mann isst den Fisch."' },
+          { before: '___ Mann isst ___ Fisch. (Subject: der, Object: der)', after: '', answer: 'Der|den', explanation: 'Subject (nominative) = der, object (accusative) = den. "Der Mann isst den Fisch."' },
           { before: 'Meine Mutter hat', after: 'Bruder. (subject: der)', answer: 'einen', explanation: 'Object in accusative: einen. "Meine Mutter hat einen Bruder" = My mother has a brother.' }
         ]
       }
@@ -2541,10 +2541,10 @@ const lessons = [
         instruction: 'Fill in the correct form of sein + Partizip Perfekt.',
         difficulty: 'medium',
         items: [
-          { before: 'Wir', after: 'nach Italien ___. (fliegen)', answer: 'sind|geflogen', explanation: 'fliegen → sind geflogen (movement + irregular). We flew to Italy.' },
-          { before: 'Er', after: 'gestern ___. (ankommen)', answer: 'ist|angekommen', explanation: 'ankommen → ist angekommen (separable + sein). He arrived yesterday.' },
-          { before: 'Die Kinder', after: 'schnell ___. (laufen)', answer: 'sind|gelaufen', explanation: 'laufen → sind gelaufen (movement). The children ran fast.' },
-          { before: 'Ich', after: 'um 6 Uhr ___. (aufstehen)', answer: 'bin|aufgestanden', explanation: 'aufstehen → bin aufgestanden (separable, change of state). I got up at 6.' }
+          { before: 'Wir ___ nach Italien ___. (fliegen)', after: '', answer: 'sind|geflogen', explanation: 'fliegen → sind geflogen (movement + irregular). We flew to Italy.' },
+          { before: 'Er ___ gestern ___. (ankommen)', after: '', answer: 'ist|angekommen', explanation: 'ankommen → ist angekommen (separable + sein). He arrived yesterday.' },
+          { before: 'Die Kinder ___ schnell ___. (laufen)', after: '', answer: 'sind|gelaufen', explanation: 'laufen → sind gelaufen (movement). The children ran fast.' },
+          { before: 'Ich ___ um 6 Uhr ___. (aufstehen)', after: '', answer: 'bin|aufgestanden', explanation: 'aufstehen → bin aufgestanden (separable, change of state). I got up at 6.' }
         ]
       }
     ,
@@ -2772,7 +2772,7 @@ const lessons = [
         difficulty: 'easy',
         items: [
           { question: '"With the teacher" — correct:', options: ['mit dem Lehrer','mit den Lehrer','mit der Lehrer','mit die Lehrer'], answer: 'mit dem Lehrer', explanation: 'mit takes dative: "mit dem Lehrer".' },
-          { question: '"Without my sister" — correct:', options: ['ohne meine Schwester','ohne meiner Schwester','ohne mein Schwester','ohne meine Schwester'], answer: 'ohne meine Schwester', explanation: 'Note: ohne can take accusative too, but here dative form "meiner" would be: "ohne meiner Schwester".' }
+          { question: '"Without my sister" — correct:', options: ['ohne meine Schwester','ohne meiner Schwester','ohne mein Schwester','ohne meinen Schwester'], answer: 'ohne meine Schwester', explanation: '"ohne" takes accusative. "Schwester" is feminine: die → die (acc) → meine. So: "ohne meine Schwester".' }
         ]
       },
       {
@@ -3023,7 +3023,7 @@ const lessons = [
         difficulty: 'medium',
         items: [
           { question: 'Du → fahren (drive)', options: ['du fahren','du fährst','du fahrt','du fahrst'], answer: 'du fährst', explanation: 'a→ä in du/er/sie/es: du fährst, er/sie/es fährt.' },
-          { question: 'Er → schlafen (sleep)', options: ['er schlafen','er schlaft','er schläft','er schlaft'], answer: 'er schläft', explanation: 'a→ä: er schläft.' }
+          { question: 'Er → schlafen (sleep)', options: ['er schlafen','er schlaft','er schläft','er schläfet'], answer: 'er schläft', explanation: 'a→ä: er schläft.' }
         ]
       },
       {
@@ -3591,8 +3591,8 @@ const lessons = [
           { question: 'Wie geht es ___?', options: ['mir','mich','meinen','ich'], answer: 'mir', explanation: 'gehen + Dativ. "Wie geht es dir?" = How are you? "Wie geht es mir?" = How am I?' },
           { question: 'Ich helfe ___. (you sg.)', options: ['dir','dich','deinen','du'], answer: 'dir', explanation: 'helfen + Dativ. "Ich helfe dir." = I help you.' },
           { question: 'Das gefällt ___. (him)', options: ['ihm','ihn','seinen','er'], answer: 'ihm', explanation: 'gefallen + Dativ. "Das gefällt ihm." = He likes that.' },
-          { question: 'Das gehört ___. (her)', options: ['ihr','sie','ihren','sie'], answer: 'ihr', explanation: 'gehören + Dativ. "Das gehört ihr." = That belongs to her.' },
-          { question: 'Ich zeige ___ das Buch. (you pl.)', options: ['euch','euch','euren','ihr'], answer: 'euch', explanation: 'zeigen + Dativ. "Ich zeige euch das Buch." = I show you (all) the book.' }
+          { question: 'Das gehört ___. (her)', options: ['ihr','sie','ihren','ihrer'], answer: 'ihr', explanation: 'gehören + Dativ. "Das gehört ihr." = That belongs to her.' },
+          { question: 'Ich zeige ___ das Buch. (you pl.)', options: ['euch','euer','euren','ihr'], answer: 'euch', explanation: 'zeigen + Dativ. "Ich zeige euch das Buch." = I show you (all) the book.' }
         ]
       },
       {
@@ -3801,7 +3801,7 @@ const lessons = [
         instruction: 'Choose the correct feminine form.',
         difficulty: 'easy',
         items: [
-          { question: 'Der Lehrer → die ___', options: ['Lehrerin','Lehrerin','Lehre','Lehring'], answer: 'Lehrerin', explanation: 'Add -in to the masculine. "Der Lehrer → die Lehrerin" = The teacher (f.).' },
+          { question: 'Der Lehrer → die ___', options: ['Lehrerinn','Lehrerin','Lehre','Lehring'], answer: 'Lehrerin', explanation: 'Add -in to the masculine. "Der Lehrer → die Lehrerin" = The teacher (f.).' },
           { question: 'Der Arzt → die ___', options: ['Arztin','Ärztin','Artzen','Ärzterin'], answer: 'Ärztin', explanation: 'Add -in + umlaut ä. "Der Arzt → die Ärztin" = The doctor (f.).' },
           { question: 'Der Freund → die ___', options: ['Freund','Freundin','Freudin','Freunde'], answer: 'Freundin', explanation: 'Add -in. "Der Freund → die Freundin" = The friend (f.).' },
           { question: 'Der Koch → die ___', options: ['Kochen','Köchin','Kochin','Köchem'], answer: 'Köchin', explanation: 'Add -in + umlaut ö. "Der Koch → die Köchin" = The cook (f.).' }
@@ -4085,7 +4085,7 @@ const lessons = [
         instruction: 'What is the pattern for würde?',
         difficulty: 'hard',
         items: [
-          { question: 'würde conjugation: ich würde, du ___, er würde', options: ['würdst','würdest','würdest','würdest'], answer: 'würdest', explanation: 'du würdest (informal sg). Pattern: ich würde, du würdest, er/sie/es würde, wir würden, ihr würdet, sie würden.' }
+          { question: 'würde conjugation: ich würde, du ___, er würde', options: ['würdst','würdest','würde','würdet'], answer: 'würdest', explanation: 'du würdest (informal sg). Pattern: ich würde, du würdest, er/sie/es würde, wir würden, ihr würdet, sie würden.' }
         ]
       }]
   },
@@ -4351,7 +4351,7 @@ const lessons = [
         difficulty: 'medium',
         items: [
           { question: 'How do you say "Anna\'s friend" in German?', options: ['der Freund von Anna','Annas Freund','Freund Annas','Anna\'s Freund'], answer: 'Annas Freund', explanation: 'Genitive with names: Name + -s + Noun. "Annas Freund" = Anna\'s friend (preferred in German).' },
-          { question: 'How do you say "Peter\'s car"?', options: ['Das Auto von Peter','Peters Auto','Peters Auto','Auto Peter'], answer: 'Peters Auto', explanation: 'Genitive: Peter + -s + Auto. "Peters Auto" = Peter\'s car.' }
+          { question: 'How do you say "Peter\'s car"?', options: ['Das Auto von Peter','Peters Auto','das Peter Auto','Auto Peter'], answer: 'Peters Auto', explanation: 'Genitive: Peter + -s + Auto. "Peters Auto" = Peter\'s car. (Also acceptable colloquially: "das Auto von Peter".)' }
         ]
       },
       {
@@ -4409,6 +4409,62 @@ let completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '[
 let totalScore = parseInt(localStorage.getItem('totalScore') || '0');
 let exerciseStates = {};
 
+// ========== PERSISTENCE ==========
+// Everything the user does (current lesson, tab, filter, typed answers, MC/match
+// selections, check results, shuffled option order, scroll position) is persisted
+// to localStorage under a single key. On page load we hydrate and resume.
+const APP_STATE_KEY = 'a1GrammarAppStateV1';
+let __appState = null; // lazy
+
+function _loadPersistedState() {
+  try {
+    const raw = localStorage.getItem(APP_STATE_KEY);
+    if (!raw) return { currentLessonId: null, currentTab: 'grammar', currentDifficulty: 'all', scrollY: 0, lessons: {} };
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') throw new Error('bad state');
+    if (!parsed.lessons) parsed.lessons = {};
+    return parsed;
+  } catch { return { currentLessonId: null, currentTab: 'grammar', currentDifficulty: 'all', scrollY: 0, lessons: {} }; }
+}
+function _getAppState() {
+  if (!__appState) __appState = _loadPersistedState();
+  return __appState;
+}
+let __saveTimer = null;
+function persistAppState() {
+  try { localStorage.setItem(APP_STATE_KEY, JSON.stringify(_getAppState())); } catch {}
+}
+function persistAppStateDebounced() {
+  clearTimeout(__saveTimer);
+  __saveTimer = setTimeout(persistAppState, 180);
+}
+function getLessonState(lessonId) {
+  const s = _getAppState();
+  if (!s.lessons[lessonId]) s.lessons[lessonId] = { exercises: {}, scrollY: 0 };
+  return s.lessons[lessonId];
+}
+function getExState(lessonId, ei) {
+  const ls = getLessonState(lessonId);
+  if (!ls.exercises[ei]) ls.exercises[ei] = {
+    checked: false, score: 0,
+    fillValues: {}, fillResults: {},
+    mcShuffled: {}, mcSelection: {}, mcResults: {},
+    matchSelections: {}, matchResults: {},
+    explanationsVisible: {}
+  };
+  return ls.exercises[ei];
+}
+function resetExState(lessonId, ei) {
+  const ls = getLessonState(lessonId);
+  ls.exercises[ei] = {
+    checked: false, score: 0,
+    fillValues: {}, fillResults: {},
+    mcShuffled: {}, mcSelection: {}, mcResults: {},
+    matchSelections: {}, matchResults: {},
+    explanationsVisible: {}
+  };
+}
+
 // ========== NAVIGATION ==========
 function renderNav() {
   const sections = [
@@ -4462,7 +4518,7 @@ function showWelcome() {
   document.getElementById('topbarTitle').textContent = 'Grammatik aktiv A1';
   document.getElementById('contentArea').innerHTML = `
     <div class="welcome-card">
-      <h2>Willkommen, Abdoulrahim!</h2>
+      <h2>Willkommen!</h2>
       <p>Your interactive German A1 grammar study tool — based on Grammatik aktiv</p>
       <button class="btn-start" onclick="openLesson(1)">Start Learning →</button>
     </div>
@@ -4483,13 +4539,40 @@ function showWelcome() {
 }
 
 // ========== LESSON VIEW ==========
-function openLesson(id) {
+function openLesson(id, opts) {
   currentLesson = lessons.find(l => l.id === id);
-  currentTab = 'grammar';
+  // Opening a lesson fresh defaults to grammar tab, unless we're restoring
+  // from saved state in which case we keep whatever tab was last viewed.
+  if (!(opts && opts.restoring)) currentTab = 'grammar';
   exerciseStates = {};
+  // Rehydrate in-memory MC/match selections from persisted state
+  mcSelections = {};
+  mcShuffledOptions = {};
+  matchSelections = {};
+  matchPending = {};
+  const ls = getLessonState(id);
+  Object.keys(ls.exercises || {}).forEach(ei => {
+    const st = ls.exercises[ei];
+    Object.keys(st.mcSelection || {}).forEach(ii => { mcSelections[`${ei}_${ii}`] = st.mcSelection[ii]; });
+    Object.keys(st.mcShuffled || {}).forEach(ii => { mcShuffledOptions[`${ei}_${ii}`] = st.mcShuffled[ii]; });
+    if (st.matchSelections && Object.keys(st.matchSelections).length) {
+      matchSelections[ei] = {};
+      Object.keys(st.matchSelections).forEach(li => { matchSelections[ei][li] = st.matchSelections[li]; });
+    }
+    exerciseStates[`${id}_${ei}`] = { checked: !!st.checked, score: st.score || 0 };
+  });
+  _getAppState().currentLessonId = id;
+  _getAppState().currentTab = currentTab;
+  persistAppState();
   closeSidebar();
   renderLesson();
   renderNav();
+  // Restore scroll after render — use RAF so layout settles first.
+  if (opts && opts.restoring && typeof ls.scrollY === 'number') {
+    requestAnimationFrame(() => { requestAnimationFrame(() => { window.scrollTo(0, ls.scrollY); }); });
+  } else {
+    window.scrollTo(0, 0);
+  }
 }
 
 function renderLesson() {
@@ -4519,7 +4602,9 @@ function renderLesson() {
 function switchTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
+  if (typeof event !== 'undefined' && event && event.target) event.target.classList.add('active');
+  _getAppState().currentTab = tab;
+  persistAppState();
   renderTab();
 }
 
@@ -4532,6 +4617,8 @@ function renderTab() {
       </div>`;
   } else {
     renderExercises(container);
+    // After the exercises DOM is in place, re-apply any saved values/classes.
+    restoreExerciseUI();
   }
 }
 
@@ -4544,6 +4631,8 @@ function filterDifficulty(level) {
     const itemDiff = item.dataset.difficulty;
     item.style.display = (level === 'all' || itemDiff === level) ? '' : 'none';
   });
+  _getAppState().currentDifficulty = level;
+  persistAppState();
 }
 
 // ========== EXERCISE RENDERING ==========
@@ -4551,12 +4640,13 @@ function renderExercises(container) {
   let html = '';
   const exs = currentLesson.exercises;
 
-  // Add difficulty filter
+  // Add difficulty filter — mark the saved filter level as active.
+  const lvl = currentDifficulty || 'all';
   html += `<div class="difficulty-filter">
-    <button class="active" data-level="all" onclick="filterDifficulty('all')">All Levels</button>
-    <button data-level="easy" onclick="filterDifficulty('easy')">Easy</button>
-    <button data-level="medium" onclick="filterDifficulty('medium')">Medium</button>
-    <button data-level="hard" onclick="filterDifficulty('hard')">Hard</button>
+    <button class="${lvl==='all'?'active':''}" data-level="all" onclick="filterDifficulty('all')">All Levels</button>
+    <button class="${lvl==='easy'?'active':''}" data-level="easy" onclick="filterDifficulty('easy')">Easy</button>
+    <button class="${lvl==='medium'?'active':''}" data-level="medium" onclick="filterDifficulty('medium')">Medium</button>
+    <button class="${lvl==='hard'?'active':''}" data-level="hard" onclick="filterDifficulty('hard')">Hard</button>
   </div>`;
 
   exs.forEach((ex, ei) => {
@@ -4592,15 +4682,69 @@ function renderExercises(container) {
   </div>`;
 
   container.innerHTML = html;
+
+  // Apply current difficulty filter visibility
+  if (lvl !== 'all') {
+    document.querySelectorAll('.exercise-item').forEach(item => {
+      if (item.dataset.difficulty !== lvl) item.style.display = 'none';
+    });
+  }
+
+  // Wire up auto-save on every fill input as user types
+  document.querySelectorAll('.fill-input').forEach(inp => {
+    inp.addEventListener('input', onFillInput);
+  });
 }
+
+// Persist fill input value as the user types
+function onFillInput(e) {
+  const inp = e.target;
+  // id format: fill_${ei}_${ii}_${p}
+  const m = inp.id.match(/^fill_(\d+)_(\d+)_(\d+)$/);
+  if (!m) return;
+  const ei = m[1], ii = m[2], p = m[3];
+  if (!currentLesson) return;
+  const est = getExState(currentLesson.id, ei);
+  if (!est.fillValues[ii]) est.fillValues[ii] = {};
+  est.fillValues[ii][p] = inp.value;
+  // Typing invalidates any previously-saved correctness for that blank
+  if (est.fillResults[ii] && est.fillResults[ii][p]) {
+    delete est.fillResults[ii][p];
+    inp.classList.remove('correct','incorrect');
+    inp.title = '';
+  }
+  persistAppStateDebounced();
+}
+
+function _escAttr(v){ return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
 function renderFillExercise(ex, ei) {
   let html = '';
+  const est = currentLesson ? getExState(currentLesson.id, ei) : null;
   ex.items.forEach((item, ii) => {
+    const before = item.before || '';
+    const after = item.after || '';
+    // If before/after contain explicit ___ markers, turn each one into its own input.
+    // Otherwise, fall back to the legacy single-input layout between before and after.
+    const hasExplicitBlanks = (before + ' ' + after).indexOf('___') !== -1;
+    const saved = (est && est.fillValues && est.fillValues[ii]) ? est.fillValues[ii] : {};
+    let sentHtml = '';
+    if (hasExplicitBlanks) {
+      const full = before + (after ? ' ' + after : '');
+      const parts = full.split('___');
+      for (let p = 0; p < parts.length; p++) {
+        sentHtml += parts[p];
+        if (p < parts.length - 1) {
+          const v = saved[p] !== undefined ? ` value="${_escAttr(saved[p])}"` : '';
+          sentHtml += `<input type="text" id="fill_${ei}_${ii}_${p}" class="fill-input" placeholder="..." autocomplete="off"${v} onkeydown="if(event.key==='Enter')checkExercise(${ei})">`;
+        }
+      }
+    } else {
+      const v = saved[0] !== undefined ? ` value="${_escAttr(saved[0])}"` : '';
+      sentHtml = `${before} <input type="text" id="fill_${ei}_${ii}_0" class="fill-input" placeholder="..." autocomplete="off"${v} onkeydown="if(event.key==='Enter')checkExercise(${ei})"> ${after}`;
+    }
     html += `<div style="margin-bottom:16px;">
-      <div class="fill-sentence">
-        ${item.before} <input type="text" id="fill_${ei}_${ii}" placeholder="..." autocomplete="off" onkeydown="if(event.key==='Enter')checkExercise(${ei})"> ${item.after}
-      </div>
+      <div class="fill-sentence">${sentHtml}</div>
       <div class="explanation-box" id="explain_${ei}_${ii}">${item.explanation || ''}</div>
     </div>`;
   });
@@ -4609,12 +4753,20 @@ function renderFillExercise(ex, ei) {
 
 function renderMCExercise(ex, ei) {
   let html = '';
+  const est = currentLesson ? getExState(currentLesson.id, ei) : null;
   ex.items.forEach((item, ii) => {
-    // Shuffle options so correct answer isn't always first
-    const shuffled = [...item.options];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    // Use saved shuffled order if available (so the MC selection index still
+    // maps to the same option after a refresh). Otherwise shuffle fresh and save.
+    let shuffled;
+    if (est && est.mcShuffled && Array.isArray(est.mcShuffled[ii]) && est.mcShuffled[ii].length === item.options.length) {
+      shuffled = est.mcShuffled[ii].slice();
+    } else {
+      shuffled = [...item.options];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      if (est) { est.mcShuffled[ii] = shuffled.slice(); }
     }
     mcShuffledOptions[`${ei}_${ii}`] = shuffled;
     html += `<div style="margin-bottom:16px;">
@@ -4625,6 +4777,7 @@ function renderMCExercise(ex, ei) {
       <div class="explanation-box" id="explain_${ei}_${ii}">${item.explanation || ''}</div>
     </div>`;
   });
+  if (currentLesson) persistAppStateDebounced();
   return html;
 }
 
@@ -4648,9 +4801,19 @@ function selectMC(ei, ii, oi) {
   mcSelections[key] = oi;
   const shuffled = mcShuffledOptions[key] || currentLesson.exercises[ei].items[ii].options;
   shuffled.forEach((_, o) => {
-    document.getElementById(`mc_${ei}_${ii}_${o}`).classList.remove('selected');
+    const el = document.getElementById(`mc_${ei}_${ii}_${o}`);
+    if (el) el.classList.remove('selected','correct','incorrect');
   });
-  document.getElementById(`mc_${ei}_${ii}_${oi}`).classList.add('selected');
+  const tgt = document.getElementById(`mc_${ei}_${ii}_${oi}`);
+  if (tgt) tgt.classList.add('selected');
+  // Persist: changing selection clears any prior check result for this item
+  if (currentLesson) {
+    const est = getExState(currentLesson.id, ei);
+    est.mcSelection[ii] = oi;
+    if (est.mcResults[ii]) delete est.mcResults[ii];
+    if (est.explanationsVisible[ii]) delete est.explanationsVisible[ii];
+    persistAppStateDebounced();
+  }
 }
 
 // ========== MATCHING SELECTION ==========
@@ -4684,6 +4847,15 @@ function selectMatch(ei, side, idx) {
     document.getElementById(`mr_${ei}_${matchPending[ei].right}`).classList.remove('selected');
 
     matchPending[ei] = {};
+
+    // Persist matches for this exercise
+    if (currentLesson) {
+      const est = getExState(currentLesson.id, ei);
+      est.matchSelections = Object.assign({}, matchSelections[ei] || {});
+      // Clearing prior check results since pairings changed
+      est.matchResults = {};
+      persistAppStateDebounced();
+    }
   }
 }
 
@@ -4693,29 +4865,67 @@ function checkExercise(ei) {
   let correct = 0;
   let total = ex.items ? ex.items.length : (ex.left ? ex.left.length : 0);
 
+  const est = getExState(currentLesson.id, ei);
+
   if (ex.type === 'fill') {
     ex.items.forEach((item, ii) => {
-      const input = document.getElementById(`fill_${ei}_${ii}`);
-      const val = input.value.trim();
-      // Handle answers with " ... " for separable verbs
-      const answers = item.answer.split('|').map(a => a.trim().toLowerCase());
-      const isCorrect = answers.some(a => val.toLowerCase() === a) ||
-                         val.toLowerCase().replace(/\s+/g,' ') === item.answer.toLowerCase().replace(/\s+/g,' ');
-      input.classList.remove('correct','incorrect');
-      input.classList.add(isCorrect ? 'correct' : 'incorrect');
-      if (!isCorrect) input.title = `Answer: ${item.answer}`;
+      const before = item.before || '';
+      const after = item.after || '';
+      const hasExplicitBlanks = (before + ' ' + after).indexOf('___') !== -1;
+      // Determine number of inputs rendered and collect them.
+      const inputs = [];
+      let p = 0;
+      while (true) {
+        const el = document.getElementById(`fill_${ei}_${ii}_${p}`);
+        if (!el) break;
+        inputs.push(el);
+        p++;
+      }
+      // Answers may be pipe-separated.
+      // - Multi-blank items: treat as positional (one answer per blank).
+      // - Single-blank items: treat pipe-parts as alternatives (legacy behavior).
+      const answerParts = item.answer.split('|').map(a => a.trim());
+      let allCorrect = true;
+      if (!est.fillValues[ii]) est.fillValues[ii] = {};
+      est.fillResults[ii] = {};
+      inputs.forEach((input, bi) => {
+        const val = input.value.trim();
+        // Save value
+        est.fillValues[ii][bi] = input.value;
+        let expected;
+        if (inputs.length > 1) {
+          if (answerParts.length === inputs.length) {
+            expected = [answerParts[bi]];
+          } else if (answerParts.length === 1) {
+            expected = [answerParts[0]];
+          } else {
+            // Fallback: accept any answer part at any position (graceful degradation).
+            expected = answerParts.slice();
+          }
+        } else {
+          // Single input: any of the pipe-parts counts (alternatives).
+          expected = answerParts.slice();
+        }
+        // Case-sensitive comparison: in German, capitalization is meaningful
+        // (e.g. "Sie" = formal you / they vs. "sie" = she; "Ihnen" formal vs "ihnen" informal).
+        const isCorrect = expected.some(a => val === a) ||
+                           (inputs.length === 1 &&
+                            val.replace(/\s+/g,' ') === item.answer.replace(/\s+/g,' '));
+        input.classList.remove('correct','incorrect');
+        input.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (!isCorrect) input.title = `Answer: ${expected.join(' / ')}`; else input.title = '';
+        est.fillResults[ii][bi] = isCorrect ? 'correct' : 'incorrect';
+        if (!isCorrect) allCorrect = false;
+      });
 
-      // Show explanation if correct
+      // Show explanation if every blank in the item is correct.
       const expBox = document.getElementById(`explain_${ei}_${ii}`);
       if (expBox) {
-        if (isCorrect) {
-          expBox.classList.add('visible');
-        } else {
-          expBox.classList.remove('visible');
-        }
+        if (allCorrect) { expBox.classList.add('visible'); est.explanationsVisible[ii] = true; }
+        else { expBox.classList.remove('visible'); delete est.explanationsVisible[ii]; }
       }
 
-      if (isCorrect) correct++;
+      if (allCorrect) correct++;
     });
   } else if (ex.type === 'mc') {
     ex.items.forEach((item, ii) => {
@@ -4723,6 +4933,7 @@ function checkExercise(ei) {
       const shuffled = mcShuffledOptions[key] || item.options;
       shuffled.forEach((opt, oi) => {
         const el = document.getElementById(`mc_${ei}_${ii}_${oi}`);
+        if (!el) return;
         el.classList.remove('correct','incorrect','selected');
         if (opt === item.answer) el.classList.add('correct');
         else if (mcSelections[key] === oi) el.classList.add('incorrect');
@@ -4732,37 +4943,40 @@ function checkExercise(ei) {
       const isCorrect = mcSelections[key] !== undefined && shuffled[mcSelections[key]] === item.answer;
       const expBox = document.getElementById(`explain_${ei}_${ii}`);
       if (expBox) {
-        if (isCorrect) {
-          expBox.classList.add('visible');
-        } else {
-          expBox.classList.remove('visible');
-        }
+        if (isCorrect) { expBox.classList.add('visible'); est.explanationsVisible[ii] = true; }
+        else { expBox.classList.remove('visible'); delete est.explanationsVisible[ii]; }
       }
-
+      est.mcResults[ii] = isCorrect ? 'correct' : 'incorrect';
       if (isCorrect) correct++;
     });
   } else if (ex.type === 'matching') {
     const sel = matchSelections[ei] || {};
+    est.matchResults = {};
     ex.answers.forEach((correctRight, leftIdx) => {
       const ml = document.getElementById(`ml_${ei}_${leftIdx}`);
       const mr = document.getElementById(`mr_${ei}_${sel[leftIdx] !== undefined ? sel[leftIdx] : -1}`);
       if (sel[leftIdx] === correctRight) {
-        ml.classList.add('matched');
-        ml.style.borderColor = 'var(--success)';
-        ml.style.background = 'var(--success-bg)';
+        if (ml) { ml.classList.add('matched'); ml.style.borderColor = 'var(--success)'; ml.style.background = 'var(--success-bg)'; }
         if (mr) { mr.style.borderColor = 'var(--success)'; mr.style.background = 'var(--success-bg)'; }
+        est.matchResults[leftIdx] = 'correct';
         correct++;
       } else {
-        ml.style.borderColor = 'var(--error)';
-        ml.style.background = 'var(--error-bg)';
+        if (ml) { ml.style.borderColor = 'var(--error)'; ml.style.background = 'var(--error-bg)'; }
+        est.matchResults[leftIdx] = 'incorrect';
       }
     });
   }
 
   const fb = document.getElementById(`feedback_${ei}`);
   const pct = Math.round((correct / total) * 100);
-  fb.className = `feedback show ${pct >= 70 ? 'success' : 'error'}`;
-  fb.innerHTML = `${correct}/${total} correct (${pct}%)${pct === 100 ? ' — Perfect! 🌟' : pct >= 70 ? ' — Good job! 👍' : ' — Keep practicing! Hover over red fields to see answers.'}`;
+  const fbClass = `feedback show ${pct >= 70 ? 'success' : 'error'}`;
+  const fbHtml = `${correct}/${total} correct (${pct}%)${pct === 100 ? ' — Perfect! 🌟' : pct >= 70 ? ' — Good job! 👍' : ' — Keep practicing! Hover over red fields to see answers.'}`;
+  fb.className = fbClass;
+  fb.innerHTML = fbHtml;
+
+  // Persist feedback so it survives a refresh
+  est.feedbackClass = fbClass;
+  est.feedbackHtml = fbHtml;
 
   // Track completion
   const stateKey = `${currentLesson.id}_${ei}`;
@@ -4772,6 +4986,8 @@ function checkExercise(ei) {
     totalScore += correct;
     localStorage.setItem('totalScore', totalScore);
   }
+  est.checked = true;
+  est.score = correct;
 
   // Check if all exercises done with decent score
   const allDone = currentLesson.exercises.every((_, i) => exerciseStates[`${currentLesson.id}_${i}`]?.checked);
@@ -4784,17 +5000,30 @@ function checkExercise(ei) {
     renderNav();
   }
   updateProgress();
+  persistAppState();
 }
 
 function resetExercise(ei) {
   const ex = currentLesson.exercises[ei];
   const stateKey = `${currentLesson.id}_${ei}`;
   exerciseStates[stateKey] = { checked: false, score: 0 };
+  // Preserve the shuffled MC order (so options don't re-shuffle on reset) but
+  // wipe everything else the user might have entered for this exercise.
+  const existingShuffle = (getLessonState(currentLesson.id).exercises[ei] || {}).mcShuffled || {};
+  resetExState(currentLesson.id, ei);
+  getExState(currentLesson.id, ei).mcShuffled = existingShuffle;
 
   if (ex.type === 'fill') {
     ex.items.forEach((_, ii) => {
-      const input = document.getElementById(`fill_${ei}_${ii}`);
-      input.value = ''; input.classList.remove('correct','incorrect'); input.title = '';
+      let p = 0;
+      while (true) {
+        const input = document.getElementById(`fill_${ei}_${ii}_${p}`);
+        if (!input) break;
+        input.value = ''; input.classList.remove('correct','incorrect'); input.title = '';
+        p++;
+      }
+      const expBox = document.getElementById(`explain_${ei}_${ii}`);
+      if (expBox) expBox.classList.remove('visible');
     });
   } else if (ex.type === 'mc') {
     ex.items.forEach((item, ii) => {
@@ -4818,6 +5047,7 @@ function resetExercise(ei) {
 
   document.getElementById(`feedback_${ei}`).classList.remove('show');
   document.getElementById('lessonScore')?.classList.remove('show');
+  persistAppState();
 }
 
 // ========== SIDEBAR TOGGLE ==========
@@ -4830,8 +5060,122 @@ function closeSidebar() {
   document.getElementById('overlay').classList.remove('show');
 }
 
+// ========== RESTORE EXERCISE UI ==========
+// After renderExercises builds the DOM, re-apply all saved per-exercise state:
+// typed fill values, MC selections, check results (correct/incorrect highlights),
+// matching pairs, per-item feedback, and visible explanations.
+function restoreExerciseUI() {
+  if (!currentLesson) return;
+  const ls = getLessonState(currentLesson.id);
+  currentLesson.exercises.forEach((ex, ei) => {
+    const est = ls.exercises[ei];
+    if (!est) return;
+
+    if (ex.type === 'fill') {
+      ex.items.forEach((item, ii) => {
+        const vals = (est.fillValues || {})[ii] || {};
+        const res  = (est.fillResults || {})[ii] || {};
+        let p = 0;
+        while (true) {
+          const input = document.getElementById(`fill_${ei}_${ii}_${p}`);
+          if (!input) break;
+          if (vals[p] !== undefined) input.value = vals[p];
+          if (res[p]) {
+            input.classList.add(res[p]);
+            if (res[p] === 'incorrect') {
+              // Title shows expected answer — reconstruct quickly
+              const parts = item.answer.split('|').map(a => a.trim());
+              const inputsCount = (() => { let n=0; while(document.getElementById(`fill_${ei}_${ii}_${n}`)) n++; return n; })();
+              let expected;
+              if (inputsCount > 1 && parts.length === inputsCount) expected = [parts[p]];
+              else expected = parts.slice();
+              input.title = `Answer: ${expected.join(' / ')}`;
+            }
+          }
+          p++;
+        }
+        if (est.explanationsVisible && est.explanationsVisible[ii]) {
+          const box = document.getElementById(`explain_${ei}_${ii}`);
+          if (box) box.classList.add('visible');
+        }
+      });
+    } else if (ex.type === 'mc') {
+      ex.items.forEach((item, ii) => {
+        const sel = (est.mcSelection || {})[ii];
+        const result = (est.mcResults || {})[ii];
+        const shuffled = mcShuffledOptions[`${ei}_${ii}`] || item.options;
+        if (result) {
+          // Show full correct/incorrect after check
+          shuffled.forEach((opt, oi) => {
+            const el = document.getElementById(`mc_${ei}_${ii}_${oi}`);
+            if (!el) return;
+            el.classList.remove('correct','incorrect','selected');
+            if (opt === item.answer) el.classList.add('correct');
+            else if (sel === oi) el.classList.add('incorrect');
+          });
+        } else if (sel !== undefined) {
+          // Just selected, not yet checked
+          const el = document.getElementById(`mc_${ei}_${ii}_${sel}`);
+          if (el) el.classList.add('selected');
+        }
+        if (est.explanationsVisible && est.explanationsVisible[ii]) {
+          const box = document.getElementById(`explain_${ei}_${ii}`);
+          if (box) box.classList.add('visible');
+        }
+      });
+    } else if (ex.type === 'matching') {
+      const sel = est.matchSelections || {};
+      const res = est.matchResults || {};
+      Object.keys(sel).forEach(li => {
+        const ri = sel[li];
+        const ml = document.getElementById(`ml_${ei}_${li}`);
+        const mr = document.getElementById(`mr_${ei}_${ri}`);
+        if (ml) ml.classList.add('matched');
+        if (mr) mr.classList.add('matched');
+        const r = res[li];
+        if (r === 'correct') {
+          if (ml) { ml.style.borderColor = 'var(--success)'; ml.style.background = 'var(--success-bg)'; }
+          if (mr) { mr.style.borderColor = 'var(--success)'; mr.style.background = 'var(--success-bg)'; }
+        } else if (r === 'incorrect') {
+          if (ml) { ml.style.borderColor = 'var(--error)'; ml.style.background = 'var(--error-bg)'; }
+        }
+      });
+    }
+
+    // Per-exercise feedback text (N/M correct)
+    if (est.feedbackHtml) {
+      const fb = document.getElementById(`feedback_${ei}`);
+      if (fb) { fb.className = est.feedbackClass || 'feedback show'; fb.innerHTML = est.feedbackHtml; }
+    }
+  });
+}
+
+// ========== SCROLL PERSISTENCE ==========
+let __scrollTimer = null;
+window.addEventListener('scroll', () => {
+  clearTimeout(__scrollTimer);
+  __scrollTimer = setTimeout(() => {
+    const s = _getAppState();
+    s.scrollY = window.scrollY;
+    if (currentLesson) {
+      const ls = getLessonState(currentLesson.id);
+      ls.scrollY = window.scrollY;
+    }
+    persistAppState();
+  }, 250);
+}, { passive: true });
+
 // ========== INIT ==========
-showWelcome();
+(function initApp() {
+  const saved = _getAppState();
+  if (saved.currentTab) currentTab = saved.currentTab;
+  if (saved.currentDifficulty) currentDifficulty = saved.currentDifficulty;
+  if (saved.currentLessonId && lessons.find(l => l.id === saved.currentLessonId)) {
+    openLesson(saved.currentLessonId, { restoring: true });
+  } else {
+    showWelcome();
+  }
+})();
 </script>
 </body>
 </html>

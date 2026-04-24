@@ -307,7 +307,7 @@ const nouns = [
   {noun:'Fahrkarte',article:'die',en:'ticket',plural:'Fahrkarten',cat:'Reisen',tip:'Compound: die Karte → die Fahrkarte.',
    sent:'Ich habe ___ Fahrkarte vergessen.',sentEn:'I forgot the ticket.'},
   {noun:'Verspätung',article:'die',en:'delay',plural:'Verspätungen',cat:'Reisen',tip:'-ung → always die.',
-   sent:'___ Zug hat 20 Minuten ___.',sentEn:'The train has 20 minutes delay.',sentBlank:'Verspätung'},
+   sent:'Der Zug hat 20 Minuten ___.',sentEn:'The train has 20 minutes delay.',sentBlank:'Verspätung'},
   {noun:'Grenze',article:'die',en:'border',plural:'Grenzen',cat:'Reisen',tip:'-e ending → often die.',
    sent:'___ Grenze ist nicht weit.',sentEn:'The border is not far.'},
   // Natur
@@ -433,6 +433,20 @@ let speedTimer=null;
 let speedTime=30;
 let speedScore=0;
 
+// ========== POSITION PERSISTENCE ==========
+const ART_POS_KEY = 'a2ArtPosV1';
+function savePos() {
+  try {
+    localStorage.setItem(ART_POS_KEY, JSON.stringify({
+      mode, idx, activeFilter,
+      order: filtered.map(n => n.noun)
+    }));
+  } catch {}
+}
+function loadPos() {
+  try { const r = localStorage.getItem(ART_POS_KEY); return r ? JSON.parse(r) : null; } catch { return null; }
+}
+
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
 
 // ========== FILTERS ==========
@@ -446,6 +460,7 @@ function setFilter(c){
   activeFilter=c;
   filtered=c==='Alle'?[...nouns]:nouns.filter(x=>x.cat===c);
   shuffle(filtered);idx=0;answered=false;
+  savePos();
   renderFilters();render();
 }
 
@@ -456,7 +471,9 @@ function setMode(m){
   document.querySelectorAll('.mode-tab').forEach((t,i)=>{
     t.classList.toggle('active',['gender','sentences','speed'][i]===m);
   });
-  shuffle(filtered);render();
+  shuffle(filtered);
+  savePos();
+  render();
 }
 
 // ========== RENDER ==========
@@ -565,7 +582,8 @@ function checkSentence(answer){
   const val=input.value.trim();
   if(!val)return;
   answered=true;
-  const correct=val.toLowerCase()===answer.toLowerCase();
+  // Case-sensitive: der/die/das capitalization matters (and nouns are always capitalized in German).
+  const correct=val===answer;
   input.classList.add(correct?'correct':'incorrect');
   input.disabled=true;
   const res=document.getElementById('sentResult');
@@ -650,7 +668,9 @@ function endSpeed(){
 // ========== NAVIGATION ==========
 function go(dir){
   idx+=dir;if(idx<0)idx=0;
-  answered=false;render();
+  answered=false;
+  savePos();
+  render();
 }
 
 function showDone(){
@@ -700,9 +720,31 @@ document.addEventListener('keydown',e=>{
 });
 
 // ========== INIT ==========
-shuffle(filtered);
-renderFilters();
-render();
+(function initArtApp(){
+  const saved = loadPos();
+  if (saved && saved.order && Array.isArray(saved.order)) {
+    if (typeof saved.activeFilter === 'string') activeFilter = saved.activeFilter;
+    const byName = Object.create(null);
+    nouns.forEach(n => { byName[n.noun] = n; });
+    const restored = saved.order.map(k => byName[k]).filter(Boolean);
+    if (restored.length === 0) {
+      filtered = activeFilter === 'Alle' ? [...nouns] : nouns.filter(x => x.cat === activeFilter);
+      shuffle(filtered);
+    } else {
+      filtered = restored;
+    }
+    if (typeof saved.idx === 'number') idx = Math.min(Math.max(saved.idx, 0), Math.max(filtered.length - 1, 0));
+    if (typeof saved.mode === 'string') mode = saved.mode;
+    document.querySelectorAll('.mode-tab').forEach((t,i)=>{
+      t.classList.toggle('active',['gender','sentences','speed'][i]===mode);
+    });
+  } else {
+    shuffle(filtered);
+  }
+  renderFilters();
+  render();
+  savePos();
+})();
 </script>
 </body>
 </html>
